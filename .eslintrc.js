@@ -12,7 +12,7 @@ module.exports = {
 	},
 	parserOptions: {
         sourceType: 'module',
-        ecmaVersion: 2016,
+        ecmaVersion: 2015,
         
 	},
 	rules: {
