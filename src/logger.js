@@ -4,7 +4,7 @@ const consoleLog = console.log; // eslint-disable-line no-console
 
 /**
  * prints to console in red.
- * 
+ *
  * @param {string} errorMessage the message that is printed.
  */
 function error( errorMessage ) {
@@ -13,7 +13,7 @@ function error( errorMessage ) {
 
 /**
  * prints to console in yellow.
- * 
+ *
  * @param {string} warnMessage the message that is printed.
  */
 function warn( warnMessage ) {
@@ -22,7 +22,7 @@ function warn( warnMessage ) {
 
 /**
  * prints to console in white.
- * 
+ *
  * @param {string} logMessage the message that is printed.
  */
 function log( logMessage ) {
