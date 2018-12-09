@@ -1,0 +1,21 @@
+{
+	"editor.formatOnSave": true,
+	"[javascript]": {
+		"editor.formatOnSave": true
+	},
+	"eslint.autoFixOnSave": false,
+	"eslint.alwaysShowStatus": true,
+	"eslint.nodePath": "node_modules",
+	"eslint.options": {
+		"configFile": ".eslintrc.js"
+	},
+	"prettier.eslintIntegration": true,
+	"prettier.tabWidth": 4,
+	"prettier.endOfLine": "lf",
+	"prettier.semi": true,
+	"prettier.printWidth": 120,
+	"prettier.singleQuote": true,
+	"prettier.trailingComma": "es5",
+	"prettier.useTabs": true,
+	"javascript.format.enable": false
+}

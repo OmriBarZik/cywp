@@ -1,26 +1,25 @@
 // credit Elementor - https://github.com/pojome/elementor
 
 module.exports = {
-    env: {
-        es6: true,
-        node: true
-    },
-    extends: 'eslint:recommended',
+	env: {
+		es6: true,
+		node: true,
+	},
+	extends: 'eslint:recommended',
 	globals: {
 		require: true,
 		module: true,
 	},
 	parserOptions: {
-        sourceType: 'module',
-        ecmaVersion: 2015,
-        
+		sourceType: 'module',
+		ecmaVersion: 2015,
 	},
 	rules: {
 		// custom canceled rules
 		'no-var': 'error',
 		'vars-on-top': 'error',
-		'computed-property-spacing': [ 'error', 'always' ],
-		'comma-dangle': [ 'error', 'always-multiline' ],
+		'computed-property-spacing': ['error', 'always'],
+		'comma-dangle': ['error', 'always-multiline'],
 		'no-undef': 'off',
 		'no-unused-vars': 'error',
 		'dot-notation': 'error',
@@ -29,24 +28,24 @@ module.exports = {
 		'no-mixed-operators': 'error',
 		'no-nested-ternary': 'error',
 		'no-cond-assign': 'error',
-		'space-in-parens': [ 'error', 'always', { 'exceptions': [ 'empty' ] } ],
+		'space-in-parens': ['error', 'always', { exceptions: ['empty'] }],
 		'no-multi-spaces': 'error',
 		'semi-spacing': 'error',
-		'quote-props': [ 'error', 'as-needed' ],
-		indent: [ 'error', 'tab', { SwitchCase: 1 } ],
+		'quote-props': ['error', 'as-needed'],
+		indent: ['error', 'tab', { SwitchCase: 1 }],
 		'no-mixed-spaces-and-tabs': 'error',
-		'padded-blocks': [ 'error', 'never' ],
+		'padded-blocks': ['error', 'never'],
 		'one-var-declaration-per-line': 'error',
 		'no-extra-semi': 'error',
 		'key-spacing': 'error',
-		'array-bracket-spacing': [ 'error', 'always' ],
+		'array-bracket-spacing': ['error', 'always'],
 		'no-else-return': 'error',
 		'no-console': 'error',
 		//end of custom canceled rules
-		'arrow-parens': [ 'error', 'always' ],
+		'arrow-parens': ['error', 'always'],
 		'arrow-spacing': 'error',
-		'brace-style': [ 'error', '1tbs' ],
-		camelcase: [ 'error', { properties: 'never' } ],
+		'brace-style': ['error', '1tbs'],
+		camelcase: ['error', { properties: 'never' }],
 		'comma-spacing': 'error',
 		'comma-style': 'error',
 		'eol-last': 'error',
@@ -63,13 +62,14 @@ module.exports = {
 		'no-duplicate-case': 'error',
 		'no-eval': 'error',
 		'no-fallthrough': 'error',
-		'no-multiple-empty-lines': [ 'error', { max: 1 } ],
+		'no-multiple-empty-lines': ['error', { max: 1 }],
 		'no-multi-str': 'off',
 		'no-redeclare': 'error',
 		'no-restricted-syntax': [
 			'error',
 			{
-				selector: 'CallExpression[callee.name=/^__|_n|_x$/]:not([arguments.0.type=/^Literal|BinaryExpression$/])',
+				selector:
+					'CallExpression[callee.name=/^__|_n|_x$/]:not([arguments.0.type=/^Literal|BinaryExpression$/])',
 				message: 'Translate function arguments must be string literals.',
 			},
 			{
@@ -88,26 +88,36 @@ module.exports = {
 		'no-unused-expressions': 'error',
 		'no-useless-return': 'error',
 		'no-whitespace-before-property': 'error',
-		'object-curly-spacing': [ 'error', 'always' ],
+		'object-curly-spacing': ['error', 'always'],
 		'prefer-const': 'warn',
-		quotes: [ 'error', 'single', { allowTemplateLiterals: true, avoidEscape: true } ],
+		quotes: ['error', 'single', { allowTemplateLiterals: true, avoidEscape: true }],
 		semi: 'error',
-		'space-before-blocks': [ 'error', 'always' ],
-		'space-before-function-paren': [ 'error', {
-			anonymous: 'never',
-			named: 'never',
-			asyncArrow: 'always',
-		} ],
-		'space-infix-ops': [ 'error', { int32Hint: false } ],
-		'space-unary-ops': [ 'error', {
-			overrides: {
-				'!': true,
-				yield: true,
+		'space-before-blocks': ['error', 'always'],
+		'space-before-function-paren': [
+			'error',
+			{
+				anonymous: 'never',
+				named: 'never',
+				asyncArrow: 'always',
 			},
-		} ],
+		],
+		'space-infix-ops': ['error', { int32Hint: false }],
+		'space-unary-ops': [
+			'error',
+			{
+				overrides: {
+					'!': true,
+					yield: true,
+				},
+			},
+		],
 		'valid-typeof': 'error',
-		yoda: [ 'error', 'always', {
-			'onlyEquality': true,
-		} ],
+		yoda: [
+			'error',
+			'always',
+			{
+				onlyEquality: true,
+			},
+		],
 	},
 };
