@@ -6,7 +6,7 @@
 
 module.exports = {
 	diff: true,
-	extension: ['js'],
+	extension: ['spec.js'],
 	opts: './test/mocha.opts',
 	package: './package.json',
 	reporter: 'spec',
