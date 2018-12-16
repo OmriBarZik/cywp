@@ -1,6 +1,5 @@
 const consoleLog = console.log; // eslint-disable-line no-console
 const processExit = process.exit;
-process.LOG = [];
 
 before( () => {
 	process.exit = ( exitCode ) => {
@@ -10,6 +9,7 @@ before( () => {
 } );
 
 beforeEach( () => {
+	process.LOG = [];
 	console.log = ( ...message ) => { // eslint-disable-line no-console
 		consoleLog( ...message );
 		process.LOG.push( ...message );
