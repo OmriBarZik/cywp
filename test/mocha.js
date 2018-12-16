@@ -17,7 +17,7 @@ beforeEach( () => {
 } );
 
 afterEach( () => {
-	console.log = consoleLog(); // eslint-disable-line no-console
+	console.log = consoleLog; // eslint-disable-line no-console
 } );
 
 after( () => {
