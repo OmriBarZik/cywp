@@ -1,6 +1,8 @@
 const chalk = require( 'chalk' );
 
-const consoleLog = console.log; // eslint-disable-line no-console
+const consoleLog = ( message ) => {
+	console.log( message ); // eslint-disable-line no-console
+};
 
 /**
  * prints to console in red.
