@@ -11,7 +11,6 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "chalk": "^2.4.1",
     "command-exists": "^1.2.8",
     "cypress": "3.1.3"
   },
