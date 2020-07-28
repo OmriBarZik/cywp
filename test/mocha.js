@@ -1,25 +1,27 @@
-const consoleLog = console.log; // eslint-disable-line no-console
-const processExit = process.exit;
+/* eslint-disable mocha/no-hooks-for-single-case, mocha/no-top-level-hooks */
 
-before( () => {
-	process.exit = ( exitCode ) => {
-		process.EXIT = exitCode;
-		throw new Error( 'EXIT-TEST-' + exitCode );
-	};
-} );
+const consoleLog = console.log // eslint-disable-line no-console
+const processExit = process.exit
 
-beforeEach( () => {
-	process.LOG = [];
-	console.log = ( ...message ) => { // eslint-disable-line no-console
-		consoleLog( ...message );
-		process.LOG.push( ...message );
-	};
-} );
+before(function () {
+  process.exit = (exitCode) => {
+    process.EXIT = exitCode
+    throw new Error('EXIT-TEST-' + exitCode)
+  }
+})
 
-afterEach( () => {
-	console.log = consoleLog; // eslint-disable-line no-console
-} );
+beforeEach(function () {
+  process.LOG = []
+  console.log = (...message) => { // eslint-disable-line no-console
+    consoleLog(...message)
+    process.LOG.push(...message)
+  }
+})
 
-after( () => {
-	process.exit = processExit;
-} );
+afterEach(function () {
+  console.log = consoleLog // eslint-disable-line no-console
+})
+
+after(function () {
+  process.exit = processExit
+})

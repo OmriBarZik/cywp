@@ -6,6 +6,6 @@
   "eslint.alwaysShowStatus": true,
   "eslint.nodePath": "node_modules",
   "eslint.options": {
-    "configFile": ".eslintrc.js"
+    "configFile": ".eslintrc.json"
   }
 }
