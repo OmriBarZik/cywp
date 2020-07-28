@@ -1,4 +1,3 @@
-const logger = require( './logger' );
 const commandExists = require( 'command-exists' );
 
 const missingDependencies = [];
@@ -11,8 +10,8 @@ async function verify() {
 	await Promise.all( [ verifyCommand( 'git' ), verifyCommand( 'docker' ), verifyCommand( 'docker-compose' ) ] );
 
 	if ( missingDependencies.length ) {
-		logger.error( `The dependencies [ ${missingDependencies.join( ' | ' )} ] are missing` );
-		logger.error( 'please install them and try again' );
+		// eslint-disable-next-line no-console
+		console.error( `The dependencies [ ${missingDependencies.join( ' | ' )} ] are missing\nplease install them and try again` );
 		process.exit( 1 );
 	}
 }
