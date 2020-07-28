@@ -1,32 +1,16 @@
 const logger = require( './logger' );
-const commandExists = require( 'command-exists' ).sync;
+const commandExists = require( 'command-exists' );
 
 const missingDependencies = [];
 
-function verifyDocker() {
-	if ( ! commandExists( 'docker' ) ) {
-		missingDependencies.push( 'docker' );
-	}
+function verifyCommand( command ) {
+	return commandExists( command ).catch( () => missingDependencies.push( command ) );
 }
 
-function verifyDockerCompose() {
-	if ( ! commandExists( 'docker-compose' ) ) {
-		missingDependencies.push( 'docker-compose' );
-	}
-}
+async function verify() {
+	await Promise.all( [ verifyCommand( 'git' ), verifyCommand( 'docker' ), verifyCommand( 'docker-compose' ) ] );
 
-function verifyGit() {
-	if ( ! commandExists( 'git' ) ) {
-		missingDependencies.push( 'git' );
-	}
-}
-
-function verify() {
-	verifyDocker();
-	verifyDockerCompose();
-	verifyGit();
-
-	if ( missingDependencies ) {
+	if ( missingDependencies.length ) {
 		logger.error( `The dependencies [ ${missingDependencies.join( ' | ' )} ] are missing` );
 		logger.error( 'please install them and try again' );
 		process.exit( 1 );
