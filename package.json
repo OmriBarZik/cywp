@@ -17,5 +17,17 @@
   "devDependencies": {
     "eslint": "7.5.0",
     "mocha": "8.0.1"
+  },
+  "eslintConfig": {
+    "env": {
+      "node": true,
+      "es6": true,
+      "mocha": true
+    },
+    "extends": "eslint:recommended",
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaVersion": 2018
+    }
   }
 }
