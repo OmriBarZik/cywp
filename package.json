@@ -7,7 +7,8 @@
   "license": "MIT",
   "scripts": {
     "start": "node index",
-    "test": "mocha"
+    "test": "mocha",
+    "lint": "eslint ."
   },
   "dependencies": {
     "chalk": "^2.4.1",
