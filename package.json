@@ -8,11 +8,13 @@
   "scripts": {
     "start": "node index",
     "test": "mocha",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "dependencies": {
     "command-exists": "1.2.9",
-    "cypress": "4.11.0"
+    "cypress": "4.11.0",
+    "dockerode": "^3.2.1"
   },
   "devDependencies": {
     "eslint": "7.5.0",
