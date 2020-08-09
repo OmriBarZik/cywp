@@ -16,6 +16,9 @@
     "cypress": "4.11.0",
     "dockerode": "^3.2.1"
   },
+  "bin": {
+    "cywp": "./bin/cywp.js"
+  },
   "devDependencies": {
     "eslint": "7.5.0",
     "eslint-config-standard": "^14.1.1",
