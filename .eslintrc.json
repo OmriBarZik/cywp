@@ -13,6 +13,7 @@
         "sourceType": "module"
     },
     "rules": {
+        "yoda": ["error", "always"]
     },
     "plugins": [
         "mocha"

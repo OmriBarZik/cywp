@@ -1,4 +1,5 @@
 {
+  "editor.insertSpaces": true,
   "editor.defaultFormatter": "dbaeumer.vscode-eslint",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
