@@ -106,4 +106,4 @@ function processCreateContainerOptions (options) {
   return args
 }
 
-module.exports = Docker
+module.exports = { Docker, processCreateContainerOptions }

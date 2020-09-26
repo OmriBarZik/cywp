@@ -1,14 +1,8 @@
 const assert = require('assert')
-const Container = require('../../../src/docker/containers/container')
+const processOptions = require('../../src/docker/docker').processCreateContainerOptions
 
 describe('Container', function () {
   describe('#processOptions()', function () {
-    let processOptions
-
-    before(function () {
-      processOptions = Container.prototype.processOptions
-    })
-
     describe('##Errors', function () {
       it('should throw error when value not present', function () {
         assert.throws(() => { processOptions() }, Error)
