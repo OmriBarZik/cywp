@@ -125,19 +125,6 @@ class Container {
   }
 }
 
-class MysqlContainer extends Container {
-  constructor (name, port) {
-    super()
-    this.prosses = spawn('docker',
-      ['--name', `cywp-${name}`,
-        '-p', `${port}:3306`,
-        '-e', 'MYSQL_ROOT_PASSWORD=cywp',
-        '--net=cywp-network',
-        'mysql:5.7'
-      ])
-  }
-}
-
 // const pop = new Container({
 //   exposePorts: [{ docker: 80, host: 8080 }],
 //   environmentVariables: [
@@ -153,4 +140,4 @@ class MysqlContainer extends Container {
 //   name: 'cywp-twentyseventeen'
 // })
 
-module.exports = { Container, MysqlContainer }
+module.exports = Container
