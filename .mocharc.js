@@ -5,13 +5,13 @@
 // Otherwise, JSON or YAML is recommended.
 
 module.exports = {
-	diff: true,
-	extension: ['spec.js'],
-	opts: './test/mocha.opts',
-	package: './package.json',
-	reporter: 'spec',
-	slow: 75,
-	timeout: 2000,
+  diff: true,
+  extension: ['js'],
+  package: './package.json',
+  reporter: 'spec',
+  slow: 75,
+  timeout: 2000,
   ui: 'bdd',
-  require: ['test/mocha.js'],
-};
+  'watch-files': ['lib/**/*.js', 'test/**/*.js'],
+  'watch-ignore': ['lib/vendor']
+}

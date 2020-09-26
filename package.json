@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node index",
-    "test": "mocha",
+    "test": "mocha --recursive",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
