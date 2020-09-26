@@ -19,11 +19,19 @@ const { spawn } = require('child_process')
 
 class Container {
   /**
-  * opstion
-  * @param {ContainerOptions} options
+  * Create and run a new docker contianer.
+  * @param {ContainerOptions} options the docker container options
   */
   constructor (options) {
     const spawnArgs = this.processOptions(options)
+
+    this.exposePorts = options.exposePorts
+    this.environmentVariables = options.environmentVariables
+    this.volumes = options.volumes
+    this.network = options.network
+    this.image = options.image
+    this.name = options.name
+
     this.process = spawn('docker', spawnArgs)
 
     this.process.stdout.on('data', (data) => {
