@@ -5,7 +5,7 @@ class MysqlContainer extends Container {
     super({
       image: 'mysql:5.7',
       name: `cywp-${name}`,
-      network: 'cywp',
+      network: 'cywp-network',
       exposePorts: [
         { host: port, docker: 3306 }
       ],
