@@ -1,5 +1,5 @@
 const assert = require('assert')
-const { Container } = require('../../../src/docker/containers/container')
+const Container = require('../../../src/docker/containers/container')
 
 describe('Container', function () {
   describe('#processOptions()', function () {
@@ -17,7 +17,7 @@ describe('Container', function () {
       it('should throw error when image value is not present', function () {
         assert.throws(() => { processOptions({}) }, Error)
 
-        assert.throws(() => { processOptions({ iamge: '' }) }, Error)
+        assert.throws(() => { processOptions({ image: '' }) }, Error)
       })
 
       it('should throw error when volumes is not an array', function () {
