@@ -1,5 +1,5 @@
+const Container = require('./container') // eslint-disable-line no-unused-vars
 const { Docker } = require('../docker')
-// const Container = require('./container')
 
 /**
  * Create mysql continer.
