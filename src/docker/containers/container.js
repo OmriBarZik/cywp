@@ -10,8 +10,20 @@ class Container {
     this.options = options
   }
 
-  close () {
+  start () {
+    const start = spawn('docker', ['container', 'start', this.options.dockerId])
 
+    start.stdout.on('data', (data) => {
+      console.log(data.toString())
+    })
+
+    start.stderr.on('data', (data) => {
+      console.log(data.toString())
+    })
+
+    start.on('close', (code) => {
+      console.log(`prosses ended on status ${code}`)
+    })
   }
 }
 
