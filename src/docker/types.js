@@ -13,4 +13,5 @@
  * @property {string} network - the network the contianer is in.
  * @property {string} image - the name if the docker image.
  * @property {string} name - name of the container.
+ * @property {string} dockerId - the contaider id, set when the continer is created.
  */

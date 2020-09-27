@@ -4,30 +4,31 @@ const { spawn } = require('child_process')
 
 class Docker {
   /**
-   * Create docker container
-   * @param {ContainerOptions} options docker container options
+   * Create a docker container
+   * @param {ContainerOptions} options - docker container options
+   * @param {boolean} run - should the container run at the instance of creation.
    * @returns {Promise<Container>} return promise for continer object
    */
-  CreateContainer (options) {
+  CreateContainer (options, run = false) {
     let stderr = ''
     let stdout = ''
 
-    const args = processCreateContainerOptions(options)
+    const args = processCreateContainerOptions(options, run)
 
-    spawn('docker', args)
+    const process = spawn('docker', args)
 
-    this.process.stdout.on('data', (data) => {
+    process.stdout.on('data', (data) => {
       stdout += data
     })
 
-    this.process.stderr.on('data', (data) => {
+    process.stderr.on('data', (data) => {
       stderr += data
     })
 
-    this.process.on('close', (code) => {
-      return new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
+      process.on('close', (code) => {
         if (code) {
-          reject(stderr)
+          return reject(stderr)
         }
 
         options.dockerId = stdout
@@ -38,8 +39,8 @@ class Docker {
   }
 }
 
-function processCreateContainerOptions (options) {
-  const args = ['container', 'create']
+function processCreateContainerOptions (options, run) {
+  const args = run ? ['run', '-d'] : ['container', 'create']
 
   if (!options || !options.image) {
     throw new Error('options.image must be provided!\nexample:\nnew Container({image = \'wordpress:latest\'})')
