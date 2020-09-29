@@ -34,4 +34,4 @@ jobs:
       - name: "Run tests"
         run: npm test
       - name: upload coverage
-      run: npm run coverage
+        run: npm run coverage
