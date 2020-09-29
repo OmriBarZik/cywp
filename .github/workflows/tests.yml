@@ -33,10 +33,5 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: "Run tests"
         run: npm test
-  
-  coverage:
-    runs-on: ubuntu-latest
-    needs: test
-    steps:
-      - name: run coverage
-        run: npm run coverage
+      - name: upload coverage
+      run: npm run coverage
