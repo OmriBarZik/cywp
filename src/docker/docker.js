@@ -31,7 +31,7 @@ class Docker {
           return reject(stderr)
         }
 
-        options.dockerId = stdout
+        options.dockerId = stdout.replace('\n', '')
 
         resolve(new Container(options))
       })
