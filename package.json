@@ -8,6 +8,7 @@
   "scripts": {
     "start": "node index",
     "test": "mocha --recursive",
+    "coverage": "nyc --reporter=lcov npm run test && codecov",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
