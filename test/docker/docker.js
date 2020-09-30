@@ -1,4 +1,4 @@
-const assert = require('assert')
+const assert = require('chai').assert
 const { spawnSync } = require('child_process')
 const { Docker } = require('../../src/docker/docker')
 const CreateContainer = Docker.prototype.CreateContainer
@@ -151,7 +151,8 @@ describe('Container', function () {
 
       return CreateContainer({ image: 'hello-world', name: 'test' }).then(
         () => Promise.reject(new Error('Expected method to reject.')),
-        err => assert.ifError(err))
+        err => assert.isNotEmpty(err)
+      )
     })
 
     it('should create runnig docker continer', async function () {
