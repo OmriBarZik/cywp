@@ -42,7 +42,7 @@ class Docker {
 /**
  * create from the option object string array of arguments for the spwan function.
  * @param {ContainerOptions} options - docker container options
- * @param {*} run - should the container run at the instance of creation.
+ * @param {Boolean} run - should the container run at the instance of creation.
  * @returns {string[]} array of arguments
  */
 function processCreateContainerOptions (options, run) {
