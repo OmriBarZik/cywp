@@ -28,7 +28,8 @@ class Docker {
     return new Promise((resolve, reject) => {
       process.on('close', (code) => {
         if (code) {
-          return reject(stderr)
+          reject(stderr)
+          return
         }
 
         options.dockerId = stdout.replace('\n', '')
