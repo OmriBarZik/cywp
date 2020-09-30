@@ -9,6 +9,23 @@
 			"request": "launch",
 			"name": "Launch Program",
 			"program": "${workspaceFolder}/index.js"
-		}
+		},
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Mocha All",
+			"program": "${workspaceFolder}/node_modules/mocha/bin/_mocha",
+			"args": [
+					"--timeout",
+					"999999",
+					"--recursive",
+					"${workspaceFolder}/test"
+			],
+			"console": "integratedTerminal",
+			"internalConsoleOptions": "neverOpen",
+			"skipFiles": [
+					"<node_internals>/**/*.js"
+			]
+	},
 	]
 }
