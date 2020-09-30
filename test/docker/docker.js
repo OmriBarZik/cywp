@@ -1,5 +1,8 @@
 const assert = require('assert')
-const processOptions = require('../../src/docker/docker').processCreateContainerOptions
+const { spawnSync } = require('child_process')
+const { Docker } = require('../../src/docker/docker')
+const CreateContainer = Docker.prototype.CreateContainer
+const { processCreateContainerOptions: processOptions } = require('../../src/docker/docker')
 
 describe('Container', function () {
   describe('#processOptions()', function () {
@@ -122,6 +125,46 @@ describe('Container', function () {
         assert.notStrictEqual(arr.indexOf('-p'), -1)
         assert.strictEqual(arr.indexOf('-p') < arr.lastIndexOf('-p'), true)
       })
+    })
+  })
+
+  describe('#CreateContainer', function () {
+    let dockerIds
+
+    before(function () {
+      dockerIds = []
+    })
+
+    it('should create docker continer', async function () {
+      const continer = await CreateContainer({ image: 'hello-world' })
+      const continerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${continer.options.dockerId}`, '--filter', 'status=created'])
+
+      dockerIds.push(continer.options.dockerId)
+
+      assert.notStrictEqual(continerCheck.stdout.length, 0)
+    })
+
+    it('should throw reject for creating continer with the same name', async function () {
+      const continer = await CreateContainer({ image: 'hello-world', name: 'test' })
+
+      dockerIds.push(continer.options.dockerId)
+
+      return CreateContainer({ image: 'hello-world', name: 'test' }).then(
+        () => Promise.reject(new Error('Expected method to reject.')),
+        err => assert.ifError(err))
+    })
+
+    it('should create runnig docker continer', async function () {
+      const continer = await CreateContainer({ image: 'hello-world' }, true)
+      const continerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${continer.options.dockerId}`, '--filter', 'status=exited'])
+
+      dockerIds.push(continer.options.dockerId)
+
+      assert.notStrictEqual(continerCheck.stdout.length, 0)
+    })
+
+    after(function () {
+      spawnSync('docker', ['rm', '-f'].concat(dockerIds))
     })
   })
 })
