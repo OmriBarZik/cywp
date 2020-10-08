@@ -10,19 +10,30 @@ class Container {
     this.options = options
   }
 
+  /**
+   * Start the contianer.
+   * @returns {Promise<Container>} Return the current conitner.
+   */
   start () {
+    let stderr = ''
+
     const start = spawn('docker', ['container', 'start', this.options.dockerId])
 
-    start.stdout.on('data', (data) => {
-      console.log(data.toString())
-    })
-
     start.stderr.on('data', (data) => {
-      console.log(data.toString())
+      stderr += data
     })
 
-    start.on('close', (code) => {
-      console.log(`prosses ended on status ${code}`)
+    return new Promise((resolve, reject) => {
+      process.on('close', (code) => {
+        if (code) {
+          reject(stderr)
+          return
+        }
+
+        this.options.status = 'started'
+
+        resolve(this)
+      })
     })
   }
 }
