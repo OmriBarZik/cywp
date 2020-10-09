@@ -30,23 +30,5 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^26.5.2"
-  },
-  "mocha": {
-    "diff": true,
-    "extension": [
-      "js"
-    ],
-    "package": "./package.json",
-    "reporter": "spec",
-    "slow": 75,
-    "timeout": 10000,
-    "ui": "bdd",
-    "watch-files": [
-      "lib/**/*.js",
-      "test/**/*.js"
-    ],
-    "watch-ignore": [
-      "lib/vendor"
-    ]
   }
 }
