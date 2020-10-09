@@ -48,7 +48,7 @@ class Docker {
  * @returns {string[]} array of arguments
  */
 function processCreateContainerOptions (options, run) {
-  const args = run ? ['run', '-d'] : ['container', 'create']
+  const args = run ? ['container', 'run', '--detach'] : ['container', 'create']
 
   if (!options || !options.image) {
     throw new Error('options.image must be provided!\nexample:\nnew Container({image = \'wordpress:latest\'})')
