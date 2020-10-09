@@ -46,7 +46,13 @@
       "sourceType": "module"
   },
   "rules": {
-      "yoda": ["error", "always"]
+      "yoda": ["error", "always"],
+      "comma-dangle": [
+        "error", {
+          "arrays": "always-multiline",
+          "objects": "always-multiline"
+        }
+      ]
   },
   "plugins": [
       "jest"

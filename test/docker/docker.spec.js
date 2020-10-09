@@ -113,8 +113,8 @@ describe('Container', () => {
           image: 'image-test',
           volumes: [
             { host: 'volume-1-host', docker: 'volume-1-docker' },
-            { docker: 'volume-2-docker', host: 'volume-2-host' }
-          ]
+            { docker: 'volume-2-docker', host: 'volume-2-host' },
+          ],
         })
 
         expect(arr.indexOf('volume-1-host:volume-1-docker')).not.toBe(-1)
@@ -128,8 +128,8 @@ describe('Container', () => {
           image: 'image-test',
           environmentVariables: [
             { name: 'env-1-name', value: 'env-1-value' },
-            { value: 'env-2-value', name: 'env-2-name' }
-          ]
+            { value: 'env-2-value', name: 'env-2-name' },
+          ],
         })
 
         expect(arr.indexOf('env-1-name=env-1-value')).not.toBe(-1)
@@ -143,8 +143,8 @@ describe('Container', () => {
           image: 'image-test',
           exposePorts: [
             { host: 'port-1-host', docker: 'port-1-docker' },
-            { docker: 'port-2-docker', host: 'port-2-host' }
-          ]
+            { docker: 'port-2-docker', host: 'port-2-host' },
+          ],
         })
 
         expect(arr.indexOf('port-1-host:port-1-docker')).not.toBe(-1)
