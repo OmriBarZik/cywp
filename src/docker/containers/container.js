@@ -54,6 +54,8 @@ class Container {
 
     stopArgs.push('--time', time)
 
+    stopArgs.push(this.options.dockerId)
+
     const stop = spawn('docker', stopArgs)
 
     return this.ReturnPromise(stop, () => {
@@ -79,6 +81,8 @@ class Container {
     if (options.tail) { logsAgrs.push('--tail', options.tail) }
     if (options.timestamps) { logsAgrs.push('--since', options.timestamps) }
 
+    logsAgrs.push(this.options.dockerId)
+
     const logs = spawn('docker', logsAgrs)
 
     logs.stdout.on('data', (data) => {
@@ -86,6 +90,38 @@ class Container {
     })
 
     return this.ReturnPromise(logs, () => stdout)
+  }
+
+  /**
+   * inspect the continer.
+   *
+   * @param {string} [format] Format the output using the given Go template.
+   * @returns {string|object} continer info.
+   */
+  inspect (format) {
+    const inspectAgrs = ['container', 'inspect']
+    let stdout = ''
+
+    if (format) { inspectAgrs.push('--format', format) }
+
+    inspectAgrs.push(this.options.dockerId)
+
+    const inspect = spawn('docker', inspectAgrs)
+
+    inspect.stdout.on('data', (data) => {
+      stdout += data
+    })
+
+    return this.ReturnPromise(inspect, () => {
+      return JSON.parse(JSON.stringify(stdout))
+    })
+  }
+
+  status () {
+    return this.inspect('{{.State.Status}}').then(status => {
+      this.options.status = status
+      return status
+    })
   }
 
   /**
