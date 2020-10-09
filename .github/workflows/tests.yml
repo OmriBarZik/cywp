@@ -40,11 +40,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Run tests
-        if: ${{ matrix.node-version != 12.x }}
+        if: ${{ matrix.node-version != '12.x' }}
         run: npm test
 
       - name: Run test coverage
-        if: ${{ matrix.node-version == 12.x }}
+        if: ${{ matrix.node-version == '12.x' }}
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
         run: npm run coverage:ci
