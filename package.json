@@ -21,6 +21,7 @@
     "cywp": "./bin/cywp.js"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.14",
     "codecov": "^3.7.2",
     "eslint": "7.5.0",
     "eslint-config-standard": "^14.1.1",
