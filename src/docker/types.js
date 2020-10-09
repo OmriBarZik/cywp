@@ -14,5 +14,5 @@
  * @property {string} image - the name if the docker image.
  * @property {string} name - name of the container.
  * @property {string} dockerId - the container id, set when the continer is created.
- * @property {string} status - the container status (created|started|removed)
+ * @property {string} status - the container status (created|started|removed|stoped)
  */
