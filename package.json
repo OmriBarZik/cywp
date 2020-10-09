@@ -32,6 +32,44 @@
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^26.5.2"
   },
+  "eslintConfig": {
+    "extends": [
+      "standard"
+    ],
+    "parserOptions": {
+      "ecmaVersion": 2018,
+      "sourceType": "module"
+    },
+    "plugins": [
+      "jest"
+    ],
+    "env": {
+      "es6": true,
+      "node": true,
+      "jest/globals": true
+    },
+    "rules": {
+      "yoda": [
+        "error",
+        "always"
+      ],
+      "function-call-argument-newline": [
+        "error",
+        "never"
+      ],
+      "function-paren-newline": [
+        "error",
+        "never"
+      ],
+      "comma-dangle": [
+        "error",
+        {
+          "arrays": "always-multiline",
+          "objects": "always-multiline"
+        }
+      ]
+    }
+  },
   "jest": {
     "coverageDirectory": "coverage",
     "coverageProvider": "v8",

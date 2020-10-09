@@ -1,12 +1,9 @@
 {
   "editor.insertSpaces": true,
-  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+  "[javascript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    },
   },
   "eslint.alwaysShowStatus": true,
-  "eslint.nodePath": "node_modules",
-  "eslint.options": {
-    "configFile": ".eslintrc.json"
-  }
 }

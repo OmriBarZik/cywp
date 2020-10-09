@@ -13,11 +13,11 @@ function CreateMysqlContainer (name, port, run = false) {
     name: `cywp-${name}-mysql`,
     network: 'cywp-network',
     exposePorts: [
-      { host: port, docker: 3306 }
+      { host: port, docker: 3306 },
     ],
     environmentVariables: [
-      { name: 'MYSQL_ROOT_PASSWORD', value: 'cywp' }
-    ]
+      { name: 'MYSQL_ROOT_PASSWORD', value: 'cywp' },
+    ],
   }, run)
 }
 
@@ -33,14 +33,14 @@ function CreateWordpressContainer (name, port, run = false) {
     environmentVariables: [
       { name: 'WORDPRESS_DB_HOST', value: 'cywp-mysql:3306' },
       { name: 'WORDPRESS_DB_PASSWORD', value: 'cywp' },
-      { name: 'WORDPRESS_DB_NAME', value: 'cywp-twentyseventeen-db' }
+      { name: 'WORDPRESS_DB_NAME', value: 'cywp-twentyseventeen-db' },
     ],
     volumes: [
-      { host: 'cywp-twentyseventeen-volume', docker: '/var/www/html' }
+      { host: 'cywp-twentyseventeen-volume', docker: '/var/www/html' },
     ],
     image: 'wordpress',
     network: 'cywp-network',
-    name: `cywp-${name}-wordpress`
+    name: `cywp-${name}-wordpress`,
   }, run)
 }
 
