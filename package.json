@@ -9,7 +9,7 @@
     "start": "node index",
     "test": "jest",
     "coverage": "jest --coverage",
-    "coverage:ci": "jest --coverage && codecov",
+    "coverage:ci": "npm run coverage && codecov",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
