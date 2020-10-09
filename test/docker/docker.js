@@ -172,19 +172,13 @@ describe('Container', () => {
       expect(container.options.status).toEqual('created')
     })
 
-    it(
-      'should throw reject for creating continer with the same name',
-      async () => {
-        const continer = await CreateContainer({ image: 'hello-world', name: 'test' })
+    it('should throw reject for creating continer with the same name', async () => {
+      const continer = await CreateContainer({ image: 'hello-world', name: 'test' })
 
-        dockerIds.push(continer.options.dockerId)
+      dockerIds.push(continer.options.dockerId)
 
-        return CreateContainer({ image: 'hello-world', name: 'test' }).then(
-          () => Promise.reject(new Error('Expected method to reject.')),
-          err => assert.isNotEmpty(err)
-        )
-      }
-    )
+      return expect(CreateContainer({ image: 'hello-world', name: 'test' })).rejects.not.toBeNull()
+    })
 
     it('should create runnig docker continer', async () => {
       const continer = await CreateContainer({ image: 'hello-world' }, true)
