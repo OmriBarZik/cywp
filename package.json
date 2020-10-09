@@ -37,26 +37,38 @@
       "es6": true,
       "node": true,
       "jest/globals": true
-  },
-  "extends": [
+    },
+    "extends": [
       "standard"
-  ],
-  "parserOptions": {
+    ],
+    "parserOptions": {
       "ecmaVersion": 2018,
       "sourceType": "module"
-  },
-  "rules": {
-      "yoda": ["error", "always"],
+    },
+    "rules": {
+      "yoda": [
+        "error",
+        "always"
+      ],
+      "function-call-argument-newline": [
+        "error",
+        "never"
+      ],
+      "function-paren-newline": [
+        "error",
+        "never"
+      ],
       "comma-dangle": [
-        "error", {
+        "error",
+        {
           "arrays": "always-multiline",
           "objects": "always-multiline"
         }
       ]
-  },
-  "plugins": [
+    },
+    "plugins": [
       "jest"
-  ]
+    ]
   },
   "jest": {
     "coverageDirectory": "coverage",

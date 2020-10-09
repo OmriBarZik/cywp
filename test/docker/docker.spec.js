@@ -20,71 +20,43 @@ describe('Container', () => {
         expect(() => { processOptions({ image: 'test', volumes: 'fail test' }) }).toThrow()
       })
 
-      it(
-        'should throw error when environmentVariables is not an array',
-        () => {
-          expect(
-            () => { processOptions({ image: 'test', environmentVariables: 'fail test' }) }
-          ).toThrow()
-        }
-      )
+      it('should throw error when environmentVariables is not an array', () => {
+        expect(() => { processOptions({ image: 'test', environmentVariables: 'fail test' }) }).toThrow()
+      })
 
       it('should throw error when exposePorts is not an array', () => {
         expect(() => { processOptions({ image: 'test', exposePorts: 'fail test' }) }).toThrow()
       })
 
-      it(
-        'should throw error when volumes is not made of a spsific object array',
-        () => {
-          expect(() => { processOptions({ image: 'test', volumes: [{}] }) }).toThrow()
+      it('should throw error when volumes is not made of a spsific object array', () => {
+        expect(() => { processOptions({ image: 'test', volumes: [{}] }) }).toThrow()
 
-          expect(
-            () => { processOptions({ image: 'test', volumes: [{ docker: 'docker' }] }) }
-          ).toThrow()
+        expect(() => { processOptions({ image: 'test', volumes: [{ docker: 'docker' }] }) }).toThrow()
 
-          expect(() => { processOptions({ image: 'test', volumes: [{ host: 'host' }] }) }).toThrow()
+        expect(() => { processOptions({ image: 'test', volumes: [{ host: 'host' }] }) }).toThrow()
 
-          expect(() => { processOptions({ image: 'test', volumes: [{ error: 'error' }] }) }).toThrow()
-        }
-      )
+        expect(() => { processOptions({ image: 'test', volumes: [{ error: 'error' }] }) }).toThrow()
+      })
 
-      it(
-        'should throw error when environmentVariables is not made of a spsific object array',
-        () => {
-          expect(() => { processOptions({ image: 'test', environmentVariables: [{}] }) }).toThrow()
+      it('should throw error when environmentVariables is not made of a spsific object array', () => {
+        expect(() => { processOptions({ image: 'test', environmentVariables: [{}] }) }).toThrow()
 
-          expect(
-            () => { processOptions({ image: 'test', environmentVariables: [{ name: 'docker' }] }) }
-          ).toThrow()
+        expect(() => { processOptions({ image: 'test', environmentVariables: [{ name: 'docker' }] }) }).toThrow()
 
-          expect(
-            () => { processOptions({ image: 'test', environmentVariables: [{ value: 'host' }] }) }
-          ).toThrow()
+        expect(() => { processOptions({ image: 'test', environmentVariables: [{ value: 'host' }] }) }).toThrow()
 
-          expect(
-            () => { processOptions({ image: 'test', environmentVariables: [{ error: 'error' }] }) }
-          ).toThrow()
-        }
-      )
+        expect(() => { processOptions({ image: 'test', environmentVariables: [{ error: 'error' }] }) }).toThrow()
+      })
 
-      it(
-        'should throw error when exposePorts is not made of a spsific object array',
-        () => {
-          expect(() => { processOptions({ image: 'test', exposePorts: [{}] }) }).toThrow()
+      it('should throw error when exposePorts is not made of a spsific object array', () => {
+        expect(() => { processOptions({ image: 'test', exposePorts: [{}] }) }).toThrow()
 
-          expect(
-            () => { processOptions({ image: 'test', exposePorts: [{ host: 'docker' }] }) }
-          ).toThrow()
+        expect(() => { processOptions({ image: 'test', exposePorts: [{ host: 'docker' }] }) }).toThrow()
 
-          expect(
-            () => { processOptions({ image: 'test', exposePorts: [{ docker: 'host' }] }) }
-          ).toThrow()
+        expect(() => { processOptions({ image: 'test', exposePorts: [{ docker: 'host' }] }) }).toThrow()
 
-          expect(
-            () => { processOptions({ image: 'test', exposePorts: [{ error: 'error' }] }) }
-          ).toThrow()
-        }
-      )
+        expect(() => { processOptions({ image: 'test', exposePorts: [{ error: 'error' }] }) }).toThrow()
+      })
     })
 
     describe('##Returns', () => {
