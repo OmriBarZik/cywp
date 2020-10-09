@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "start": "node index",
-    "test": "mocha --recursive",
+    "test": "jest",
     "coverage": "nyc --reporter=html npm run test",
     "coverage:ci": "nyc --reporter=lcov npm run test && codecov",
     "lint": "eslint .",
@@ -26,6 +26,7 @@
     "eslint": "7.5.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^24.1.0",
     "eslint-plugin-mocha": "^8.0.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
