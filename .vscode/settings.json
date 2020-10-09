@@ -5,8 +5,5 @@
     "source.fixAll.eslint": true
   },
   "eslint.alwaysShowStatus": true,
-  "eslint.nodePath": "node_modules",
-  "eslint.options": {
-    "configFile": ".eslintrc.json"
-  }
+  "eslint.nodePath": "node_modules"
 }

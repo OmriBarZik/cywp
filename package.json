@@ -32,6 +32,26 @@
     "eslint-plugin-standard": "^4.0.1",
     "jest": "^26.5.2"
   },
+  "eslintConfig": {
+    "env": {
+      "es6": true,
+      "node": true,
+      "jest/globals": true
+  },
+  "extends": [
+      "standard"
+  ],
+  "parserOptions": {
+      "ecmaVersion": 2018,
+      "sourceType": "module"
+  },
+  "rules": {
+      "yoda": ["error", "always"]
+  },
+  "plugins": [
+      "jest"
+  ]
+  },
   "jest": {
     "coverageDirectory": "coverage",
     "coverageProvider": "v8",
