@@ -1,87 +1,114 @@
-const assert = require('chai').assert
 const { spawnSync } = require('child_process')
 const { Docker } = require('../../src/docker/docker')
 const CreateContainer = Docker.prototype.CreateContainer
 const { processCreateContainerOptions: processOptions } = require('../../src/docker/docker')
 
-describe('Container', function () {
-  describe('#processOptions()', function () {
-    describe('##Errors', function () {
-      it('should throw error when value not present', function () {
-        assert.throws(() => { processOptions() }, Error)
+describe('Container', () => {
+  describe('#processOptions()', () => {
+    describe('##Errors', () => {
+      it('should throw error when value not present', () => {
+        expect(() => { processOptions() }).toThrow()
       })
 
-      it('should throw error when image value is not present', function () {
-        assert.throws(() => { processOptions({}) }, Error)
+      it('should throw error when image value is not present', () => {
+        expect(() => { processOptions({}) }).toThrow()
 
-        assert.throws(() => { processOptions({ image: '' }) }, Error)
+        expect(() => { processOptions({ image: '' }) }).toThrow()
       })
 
-      it('should throw error when volumes is not an array', function () {
-        assert.throws(() => { processOptions({ image: 'test', volumes: 'fail test' }) }, Error)
+      it('should throw error when volumes is not an array', () => {
+        expect(() => { processOptions({ image: 'test', volumes: 'fail test' }) }).toThrow()
       })
 
-      it('should throw error when environmentVariables is not an array', function () {
-        assert.throws(() => { processOptions({ image: 'test', environmentVariables: 'fail test' }) }, Error)
+      it(
+        'should throw error when environmentVariables is not an array',
+        () => {
+          expect(
+            () => { processOptions({ image: 'test', environmentVariables: 'fail test' }) }
+          ).toThrow()
+        }
+      )
+
+      it('should throw error when exposePorts is not an array', () => {
+        expect(() => { processOptions({ image: 'test', exposePorts: 'fail test' }) }).toThrow()
       })
 
-      it('should throw error when exposePorts is not an array', function () {
-        assert.throws(() => { processOptions({ image: 'test', exposePorts: 'fail test' }) }, Error)
-      })
+      it(
+        'should throw error when volumes is not made of a spsific object array',
+        () => {
+          expect(() => { processOptions({ image: 'test', volumes: [{}] }) }).toThrow()
 
-      it('should throw error when volumes is not made of a spsific object array', function () {
-        assert.throws(() => { processOptions({ image: 'test', volumes: [{}] }) }, Error)
+          expect(
+            () => { processOptions({ image: 'test', volumes: [{ docker: 'docker' }] }) }
+          ).toThrow()
 
-        assert.throws(() => { processOptions({ image: 'test', volumes: [{ docker: 'docker' }] }) }, Error)
+          expect(() => { processOptions({ image: 'test', volumes: [{ host: 'host' }] }) }).toThrow()
 
-        assert.throws(() => { processOptions({ image: 'test', volumes: [{ host: 'host' }] }) }, Error)
+          expect(() => { processOptions({ image: 'test', volumes: [{ error: 'error' }] }) }).toThrow()
+        }
+      )
 
-        assert.throws(() => { processOptions({ image: 'test', volumes: [{ error: 'error' }] }) }, Error)
-      })
+      it(
+        'should throw error when environmentVariables is not made of a spsific object array',
+        () => {
+          expect(() => { processOptions({ image: 'test', environmentVariables: [{}] }) }).toThrow()
 
-      it('should throw error when environmentVariables is not made of a spsific object array', function () {
-        assert.throws(() => { processOptions({ image: 'test', environmentVariables: [{}] }) }, Error)
+          expect(
+            () => { processOptions({ image: 'test', environmentVariables: [{ name: 'docker' }] }) }
+          ).toThrow()
 
-        assert.throws(() => { processOptions({ image: 'test', environmentVariables: [{ name: 'docker' }] }) }, Error)
+          expect(
+            () => { processOptions({ image: 'test', environmentVariables: [{ value: 'host' }] }) }
+          ).toThrow()
 
-        assert.throws(() => { processOptions({ image: 'test', environmentVariables: [{ value: 'host' }] }) }, Error)
+          expect(
+            () => { processOptions({ image: 'test', environmentVariables: [{ error: 'error' }] }) }
+          ).toThrow()
+        }
+      )
 
-        assert.throws(() => { processOptions({ image: 'test', environmentVariables: [{ error: 'error' }] }) }, Error)
-      })
+      it(
+        'should throw error when exposePorts is not made of a spsific object array',
+        () => {
+          expect(() => { processOptions({ image: 'test', exposePorts: [{}] }) }).toThrow()
 
-      it('should throw error when exposePorts is not made of a spsific object array', function () {
-        assert.throws(() => { processOptions({ image: 'test', exposePorts: [{}] }) }, Error)
+          expect(
+            () => { processOptions({ image: 'test', exposePorts: [{ host: 'docker' }] }) }
+          ).toThrow()
 
-        assert.throws(() => { processOptions({ image: 'test', exposePorts: [{ host: 'docker' }] }) }, Error)
+          expect(
+            () => { processOptions({ image: 'test', exposePorts: [{ docker: 'host' }] }) }
+          ).toThrow()
 
-        assert.throws(() => { processOptions({ image: 'test', exposePorts: [{ docker: 'host' }] }) }, Error)
-
-        assert.throws(() => { processOptions({ image: 'test', exposePorts: [{ error: 'error' }] }) }, Error)
-      })
+          expect(
+            () => { processOptions({ image: 'test', exposePorts: [{ error: 'error' }] }) }
+          ).toThrow()
+        }
+      )
     })
 
-    describe('##Returns', function () {
-      it('should contains docker image name', function () {
+    describe('##Returns', () => {
+      it('should contains docker image name', () => {
         const arr = processOptions({ image: 'image-test' })
 
-        assert.notStrictEqual(arr.indexOf('image-test'), -1)
+        expect(arr.indexOf('image-test')).not.toBe(-1)
       })
 
-      it('should contains continer name argument', function () {
+      it('should contains continer name argument', () => {
         const arr = processOptions({ image: 'image-test', name: 'name-test' })
 
-        assert.notStrictEqual(arr.indexOf('name-test'), -1)
-        assert.notStrictEqual(arr.indexOf('--name'), -1)
+        expect(arr.indexOf('name-test')).not.toBe(-1)
+        expect(arr.indexOf('--name')).not.toBe(-1)
       })
 
-      it('should contains continer network argument', function () {
+      it('should contains continer network argument', () => {
         const arr = processOptions({ image: 'image-test', network: 'network-test' })
 
-        assert.notStrictEqual(arr.indexOf('network-test'), -1)
-        assert.notStrictEqual(arr.indexOf('--net'), -1)
+        expect(arr.indexOf('network-test')).not.toBe(-1)
+        expect(arr.indexOf('--net')).not.toBe(-1)
       })
 
-      it('should contains continer volume arguments', function () {
+      it('should contains continer volume arguments', () => {
         const arr = processOptions({
           image: 'image-test',
           volumes: [
@@ -90,13 +117,13 @@ describe('Container', function () {
           ]
         })
 
-        assert.notStrictEqual(arr.indexOf('volume-1-host:volume-1-docker'), -1)
-        assert.notStrictEqual(arr.indexOf('volume-2-host:volume-2-docker'), -1)
-        assert.notStrictEqual(arr.indexOf('-v'), -1)
-        assert.strictEqual(arr.indexOf('-v') < arr.lastIndexOf('-v'), true)
+        expect(arr.indexOf('volume-1-host:volume-1-docker')).not.toBe(-1)
+        expect(arr.indexOf('volume-2-host:volume-2-docker')).not.toBe(-1)
+        expect(arr.indexOf('-v')).not.toBe(-1)
+        expect(arr.indexOf('-v') < arr.lastIndexOf('-v')).toBe(true)
       })
 
-      it('should contains continer environment variables arguments', function () {
+      it('should contains continer environment variables arguments', () => {
         const arr = processOptions({
           image: 'image-test',
           environmentVariables: [
@@ -105,13 +132,13 @@ describe('Container', function () {
           ]
         })
 
-        assert.notStrictEqual(arr.indexOf('env-1-name=env-1-value'), -1)
-        assert.notStrictEqual(arr.indexOf('env-2-name=env-2-value'), -1)
-        assert.notStrictEqual(arr.indexOf('-e'), -1)
-        assert.strictEqual(arr.indexOf('-e') < arr.lastIndexOf('-e'), true)
+        expect(arr.indexOf('env-1-name=env-1-value')).not.toBe(-1)
+        expect(arr.indexOf('env-2-name=env-2-value')).not.toBe(-1)
+        expect(arr.indexOf('-e')).not.toBe(-1)
+        expect(arr.indexOf('-e') < arr.lastIndexOf('-e')).toBe(true)
       })
 
-      it('should contains continer expose ports arguments', function () {
+      it('should contains continer expose ports arguments', () => {
         const arr = processOptions({
           image: 'image-test',
           exposePorts: [
@@ -120,53 +147,56 @@ describe('Container', function () {
           ]
         })
 
-        assert.notStrictEqual(arr.indexOf('port-1-host:port-1-docker'), -1)
-        assert.notStrictEqual(arr.indexOf('port-2-host:port-2-docker'), -1)
-        assert.notStrictEqual(arr.indexOf('-p'), -1)
-        assert.strictEqual(arr.indexOf('-p') < arr.lastIndexOf('-p'), true)
+        expect(arr.indexOf('port-1-host:port-1-docker')).not.toBe(-1)
+        expect(arr.indexOf('port-2-host:port-2-docker')).not.toBe(-1)
+        expect(arr.indexOf('-p')).not.toBe(-1)
+        expect(arr.indexOf('-p') < arr.lastIndexOf('-p')).toBe(true)
       })
     })
   })
 
-  describe('#CreateContainer', function () {
+  describe('#CreateContainer', () => {
     let dockerIds
 
-    before(function () {
+    beforeAll(() => {
       dockerIds = []
     })
 
-    it('should create docker continer', async function () {
+    it('should create docker continer', async () => {
       const container = await CreateContainer({ image: 'hello-world' })
       const continerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=created'])
 
       dockerIds.push(container.options.dockerId)
 
-      assert.notStrictEqual(continerCheck.stdout.length, 0)
-      assert.deepEqual(container.options.status, 'created')
+      expect(continerCheck.stdout.length).not.toBe(0)
+      expect(container.options.status).toEqual('created')
     })
 
-    it('should throw reject for creating continer with the same name', async function () {
-      const continer = await CreateContainer({ image: 'hello-world', name: 'test' })
+    it(
+      'should throw reject for creating continer with the same name',
+      async () => {
+        const continer = await CreateContainer({ image: 'hello-world', name: 'test' })
 
-      dockerIds.push(continer.options.dockerId)
+        dockerIds.push(continer.options.dockerId)
 
-      return CreateContainer({ image: 'hello-world', name: 'test' }).then(
-        () => Promise.reject(new Error('Expected method to reject.')),
-        err => assert.isNotEmpty(err)
-      )
-    })
+        return CreateContainer({ image: 'hello-world', name: 'test' }).then(
+          () => Promise.reject(new Error('Expected method to reject.')),
+          err => assert.isNotEmpty(err)
+        )
+      }
+    )
 
-    it('should create runnig docker continer', async function () {
+    it('should create runnig docker continer', async () => {
       const continer = await CreateContainer({ image: 'hello-world' }, true)
       const continerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${continer.options.dockerId}`, '--filter', 'status=exited'])
 
       dockerIds.push(continer.options.dockerId)
 
-      assert.notStrictEqual(continerCheck.stdout.length, 0)
-      assert.deepEqual(continer.options.status, 'started')
+      expect(continerCheck.stdout.length).not.toBe(0)
+      expect(continer.options.status).toEqual('started')
     })
 
-    after(function () {
+    afterAll(() => {
       spawnSync('docker', ['rm', '-f'].concat(dockerIds))
     })
   })
