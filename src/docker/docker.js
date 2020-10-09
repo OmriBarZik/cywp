@@ -28,10 +28,12 @@ class Docker {
     return new Promise((resolve, reject) => {
       process.on('close', (code) => {
         if (code) {
-          return reject(stderr)
+          reject(stderr)
+          return
         }
 
-        options.dockerId = stdout
+        options.dockerId = stdout.replace('\n', '')
+        options.status = run ? 'started' : 'created'
 
         resolve(new Container(options))
       })
@@ -39,8 +41,14 @@ class Docker {
   }
 }
 
+/**
+ * create from the option object string array of arguments for the spwan function.
+ * @param {ContainerOptions} options - docker container options
+ * @param {Boolean} run - should the container run at the instance of creation.
+ * @returns {string[]} array of arguments
+ */
 function processCreateContainerOptions (options, run) {
-  const args = run ? ['run', '-d'] : ['container', 'create']
+  const args = run ? ['container', 'run', '--detach'] : ['container', 'create']
 
   if (!options || !options.image) {
     throw new Error('options.image must be provided!\nexample:\nnew Container({image = \'wordpress:latest\'})')

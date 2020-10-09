@@ -58,4 +58,4 @@ jobs:
       - name: upload coverage
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: npm run coverage
+        run: npm run coverage:ci

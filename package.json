@@ -8,7 +8,8 @@
   "scripts": {
     "start": "node index",
     "test": "mocha --recursive",
-    "coverage": "nyc --reporter=lcov npm run test && codecov",
+    "coverage": "nyc --reporter=html npm run test",
+    "coverage:ci": "nyc --reporter=lcov npm run test && codecov",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -20,6 +21,7 @@
     "cywp": "./bin/cywp.js"
   },
   "devDependencies": {
+    "chai": "^4.2.0",
     "codecov": "^3.7.2",
     "eslint": "7.5.0",
     "eslint-config-standard": "^14.1.1",
@@ -39,7 +41,7 @@
     "package": "./package.json",
     "reporter": "spec",
     "slow": 75,
-    "timeout": 2000,
+    "timeout": 10000,
     "ui": "bdd",
     "watch-files": [
       "lib/**/*.js",
