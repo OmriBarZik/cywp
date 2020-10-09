@@ -23,6 +23,17 @@ class Container {
       stderr += data
     })
 
+    return this.ReturnPromise(start, stderr, () => { this.options.status = 'started' })
+  }
+
+  /**
+   * Return the chiild process as promise.
+   *
+   * @param {import('child_process').ChildProcessWithoutNullStreams} process the child process thats running.
+   * @param {string} stderr the error massage the process throw.
+   * @param {Function} callback callback that run in the process is succsesful.
+   */
+  ReturnPromise (process, stderr, callback) {
     return new Promise((resolve, reject) => {
       process.on('close', (code) => {
         if (code) {
@@ -30,7 +41,7 @@ class Container {
           return
         }
 
-        this.options.status = 'started'
+        callback()
 
         resolve(this)
       })
