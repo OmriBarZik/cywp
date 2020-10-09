@@ -2,11 +2,10 @@
     "env": {
         "es6": true,
         "node": true,
-        "mocha": true
+        "jest": true
     },
     "extends": [
-        "standard",
-        "plugin:mocha/recommended"
+        "standard"
     ],
     "parserOptions": {
         "ecmaVersion": 2018,
@@ -16,6 +15,6 @@
         "yoda": ["error", "always"]
     },
     "plugins": [
-        "mocha"
+        "jest"
     ]
 }
