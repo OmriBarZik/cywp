@@ -142,6 +142,7 @@ describe('Container', function () {
       dockerIds.push(continer.options.dockerId)
 
       assert.notStrictEqual(continerCheck.stdout.length, 0)
+      assert.deepEqual(continer.options.status, 'created')
     })
 
     it('should throw reject for creating continer with the same name', async function () {
@@ -162,6 +163,7 @@ describe('Container', function () {
       dockerIds.push(continer.options.dockerId)
 
       assert.notStrictEqual(continerCheck.stdout.length, 0)
+      assert.deepEqual(continer.options.status, 'started')
     })
 
     after(function () {
