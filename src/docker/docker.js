@@ -33,6 +33,7 @@ class Docker {
         }
 
         options.dockerId = stdout.replace('\n', '')
+        options.status = run ? 'started' : 'created'
 
         resolve(new Container(options))
       })
