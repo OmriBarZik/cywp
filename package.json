@@ -8,8 +8,8 @@
   "scripts": {
     "start": "node index",
     "test": "jest",
-    "coverage": "nyc --reporter=html npm run test",
-    "coverage:ci": "nyc --reporter=lcov npm run test && codecov",
+    "coverage": "jest --coverage",
+    "coverage:ci": "jest --coverage && codecov",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
