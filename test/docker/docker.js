@@ -136,13 +136,13 @@ describe('Container', function () {
     })
 
     it('should create docker continer', async function () {
-      const continer = await CreateContainer({ image: 'hello-world' })
-      const continerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${continer.options.dockerId}`, '--filter', 'status=created'])
+      const container = await CreateContainer({ image: 'hello-world' })
+      const continerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=created'])
 
-      dockerIds.push(continer.options.dockerId)
+      dockerIds.push(container.options.dockerId)
 
       assert.notStrictEqual(continerCheck.stdout.length, 0)
-      assert.deepEqual(continer.options.status, 'created')
+      assert.deepEqual(container.options.status, 'created')
     })
 
     it('should throw reject for creating continer with the same name', async function () {
