@@ -1,5 +1,4 @@
 const { Docker } = require('../src/docker/docker')
-require('../src/docker/types')
 
 const containerIDs = {}
 
@@ -8,7 +7,7 @@ const containerIDs = {}
    * @param {string} test - Test suites name.
    * @param {ContainerOptions} options - docker container options
    * @param {boolean} run - should the container run at the instance of creation.
-   * @returns {Promise<Container>} return promise for continer object
+   * @returns {import('../src/docker/containers/container')} return promise for continer object
    */
 async function CreateContainer (test, option, run = false) {
   if (typeof undefined === typeof containerIDs[test]) {
