@@ -2,10 +2,20 @@ const commandExists = require('command-exists')
 
 const missingDependencies = []
 
+/**
+ * Checks whatever the given command exsists, if not. the name fo the
+ * command will be added to the missingDependencies array
+ *
+ * @param {string} command - the command
+ * @returns {Promise<string>} - retrun if the command exsists.
+ */
 function verifyCommand (command) {
   return commandExists(command).catch(() => missingDependencies.push(command))
 }
 
+/**
+ * verefy if the sistem have the right dependencies.
+ */
 async function verify () {
   await Promise.all([verifyCommand('git'), verifyCommand('docker'), verifyCommand('docker-compose')])
 

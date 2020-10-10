@@ -3,9 +3,11 @@ const { Docker } = require('../docker')
 
 /**
  * Create mysql continer.
+ *
  * @param {string} name - The name of the container.
  * @param {number} port - The port expose to the host.
- * @returns {Promise<Container>}
+ * @param {boolean} run - should the container run at the instance of creation.
+ * @returns {Promise<Container>} retrun promise for mysql continer object.
  */
 function CreateMysqlContainer (name, port, run = false) {
   return Docker.prototype.CreateContainer({
@@ -23,9 +25,11 @@ function CreateMysqlContainer (name, port, run = false) {
 
 /**
  * Create wordpress continer.
+ *
  * @param {string} name - The name of the container.
  * @param {number} port - The port expose to the host.
- * @returns {Promise<Container>}
+ * @param {boolean} run - should the container run at the instance of creation.
+ * @returns {Promise<Container>} retrun promise for WordPress continer object.
  */
 function CreateWordpressContainer (name, port, run = false) {
   return Docker.prototype.CreateContainer({
