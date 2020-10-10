@@ -135,7 +135,7 @@ describe('Docker', () => {
 
     it('should create docker continer', async () => {
       const container = await CreateContainer({ image: 'hello-world' })
-      const continerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=created'])
+      const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=created'])
 
       dockerIds.push(container.options.dockerId)
 
@@ -153,7 +153,7 @@ describe('Docker', () => {
 
     it('should create runnig docker continer', async () => {
       const continer = await CreateContainer({ image: 'hello-world' }, true)
-      const continerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${continer.options.dockerId}`, '--filter', 'status=exited'])
+      const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${continer.options.dockerId}`, '--filter', 'status=exited'])
 
       dockerIds.push(continer.options.dockerId)
 
