@@ -1,17 +1,20 @@
+/* eslint jsdoc/valid-types: 0 */
 require('../types')
 const { spawn } = require('child_process')
 
 class Container {
   /**
-  * Create and run a new docker contianer.
-  * @param {ContainerOptions} options the docker container options
-  */
+   * Create and run a new docker contianer.
+   *
+   * @param {ContainerOptions} options the docker container options
+   */
   constructor (options) {
     this.options = options
   }
 
   /**
    * Start the contianer.
+   *
    * @returns {Promise<Container>} Return the current conitner.
    */
   start () {
@@ -25,6 +28,9 @@ class Container {
 
   /**
    * Remove the continer
+   *
+   * @param {boolean} force Force the removal of a running container.
+   * @param {boolean} volumes Remove anonymous volumes associated with the container.
    * @returns {Promise<Container>} Return the current conitner.
    */
   rm (force = false, volumes = true) {
@@ -96,7 +102,7 @@ class Container {
    * inspect the continer.
    *
    * @param {string} [format] Format the output using the given Go template.
-   * @returns {string|object} continer info.
+   * @returns {Promise<string|object>} continer info.
    */
   inspect (format) {
     const inspectAgrs = ['container', 'inspect']
@@ -117,6 +123,11 @@ class Container {
     })
   }
 
+  /**
+   * retrun the status of the container.
+   *
+   * @returns {Promise<string>} the status of the container.
+   */
   status () {
     return this.inspect('{{.State.Status}}').then(status => {
       this.options.status = status
@@ -127,8 +138,9 @@ class Container {
   /**
    * Return the chiild process as promise.
    *
-   * @param {import('child_process').ChildProcessWithoutNullStreams} process the child process thats running.
-   * @param {Function} callback callback that deterred what to return when the process is succsesful.
+   * @param {import('child_process').ChildProcessWithoutNullStreams} process - the child process thats running.
+   * @param {Function} callback - callback that deterred what to return when the process is succsesful.
+   * @returns {Promise} return what said to return form the callback
    */
   ReturnPromise (process, callback) {
     if ('function' !== typeof callback) {

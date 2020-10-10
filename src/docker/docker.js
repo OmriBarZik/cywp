@@ -5,6 +5,7 @@ const { spawn } = require('child_process')
 class Docker {
   /**
    * Create a docker container
+   *
    * @param {ContainerOptions} options - docker container options
    * @param {boolean} run - should the container run at the instance of creation.
    * @returns {Promise<Container>} return promise for continer object
@@ -43,8 +44,9 @@ class Docker {
 
 /**
  * create from the option object string array of arguments for the spwan function.
+ *
  * @param {ContainerOptions} options - docker container options
- * @param {Boolean} run - should the container run at the instance of creation.
+ * @param {boolean} run - should the container run at the instance of creation.
  * @returns {string[]} array of arguments
  */
 function processCreateContainerOptions (options, run) {
