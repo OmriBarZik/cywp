@@ -1,14 +1,16 @@
+require('../src/docker/types')
 const { Docker } = require('../src/docker/docker')
 
 const containerIDs = {}
 
 /**
-   * Create a docker container
-   * @param {string} test - Test suites name.
-   * @param {ContainerOptions} options - docker container options
-   * @param {boolean} run - should the container run at the instance of creation.
-   * @returns {import('../src/docker/containers/container')} return promise for continer object
-   */
+ * Create a docker container
+ *
+ * @param {string} test - Test suites name.
+ * @param {ContainerOptions} option - docker container options
+ * @param {boolean} run - should the container run at the instance of creation.
+ * @returns {require('../src/docker/containers/container')} return continer object
+ */
 async function CreateContainer (test, option, run = false) {
   if (typeof undefined === typeof containerIDs[test]) {
     containerIDs[test] = []
@@ -22,6 +24,7 @@ async function CreateContainer (test, option, run = false) {
 
 /**
  * Get the container ids.
+ *
  * @param {string} test - Test suites name.
  * @returns {Array} The containers ids array
  */

@@ -6,7 +6,7 @@ describe('Container', () => {
     const container = await CreateContainer('container', { image: 'hello-world' })
 
     const continerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=exited'])
-    expect(continerCheck.stdout.length).not.toBe(0)
+    expect(continerCheck.stdout).not.toHaveLength(0)
 
     return expect(container.start()).resolves.toMatchObject({ options: { status: 'started' } })
   })
@@ -16,7 +16,7 @@ describe('Container', () => {
 
     return container.rm().then((container) => {
       const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
-      expect(continerCheck.stdout.length).toBe(0)
+      expect(continerCheck.stdout).toHaveLength(0)
     })
   })
 
@@ -25,7 +25,7 @@ describe('Container', () => {
 
     return container.rm(true).then((container) => {
       const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
-      expect(continerCheck.stdout.length).toBe(0)
+      expect(continerCheck.stdout).toHaveLength(0)
     })
   })
 
@@ -34,7 +34,7 @@ describe('Container', () => {
 
     return container.rm(false, true).then((container) => {
       const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
-      expect(continerCheck.stdout.length).toBe(0)
+      expect(continerCheck.stdout).toHaveLength(0)
     })
   })
 

@@ -87,9 +87,8 @@
           "objects": "always-multiline"
         }
       ],
-      "jsdoc/no-undefined-types": [
-        "off"
-      ]
+      "jsdoc/no-undefined-types": "off",
+      "jsdoc/valid-types":  "off"
     }
   }
 }

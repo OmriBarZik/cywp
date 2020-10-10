@@ -1,4 +1,3 @@
-/* eslint jsdoc/valid-types: 0 */
 require('../types')
 const { spawn } = require('child_process')
 
