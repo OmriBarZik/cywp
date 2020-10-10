@@ -27,6 +27,7 @@
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-jest": "^24.1.0",
+    "eslint-plugin-jsdoc": "^30.6.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
@@ -48,14 +49,16 @@
   },
   "eslintConfig": {
     "extends": [
-      "standard"
+      "standard",
+      "plugin:jsdoc/recommended"
     ],
     "parserOptions": {
       "ecmaVersion": 2018,
       "sourceType": "module"
     },
     "plugins": [
-      "jest"
+      "jest",
+      "jsdoc"
     ],
     "env": {
       "es6": true,
@@ -81,6 +84,9 @@
           "arrays": "always-multiline",
           "objects": "always-multiline"
         }
+      ],
+      "jsdoc/no-undefined-types": [
+        "off"
       ]
     }
   }
