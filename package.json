@@ -50,7 +50,9 @@
   "eslintConfig": {
     "extends": [
       "standard",
-      "plugin:jsdoc/recommended"
+      "plugin:jsdoc/recommended",
+      "plugin:jest/style",
+      "plugin:jest/recommended"
     ],
     "parserOptions": {
       "ecmaVersion": 2018,
