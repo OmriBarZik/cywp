@@ -9,7 +9,7 @@ const containerIDs = {}
  * @param {string} test - Test suites name.
  * @param {ContainerOptions} option - docker container options
  * @param {boolean} run - should the container run at the instance of creation.
- * @returns {require('../src/docker/containers/container')} return continer object
+ * @returns {import('../src/docker/containers/container')} return continer object
  */
 async function CreateContainer (test, option, run = false) {
   if (typeof undefined === typeof containerIDs[test]) {
