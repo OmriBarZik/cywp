@@ -78,13 +78,13 @@ class Container {
    * @param {boolean} options.timestamps - show timestamps.
    * @returns {string} Return the container logs.
    */
-  logs (options) {
-    const logsAgrs = ['container', 'stop']
+  logs (options = {}) {
+    const logsAgrs = ['container', 'logs']
     let stdout = ''
 
     if (options.since) { logsAgrs.push('--since', options.since) }
     if (options.tail) { logsAgrs.push('--tail', options.tail) }
-    if (options.timestamps) { logsAgrs.push('--since', options.timestamps) }
+    if (options.timestamps) { logsAgrs.push('--timestamps') }
 
     logsAgrs.push(this.options.dockerId)
 
