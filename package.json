@@ -45,7 +45,11 @@
     "coverageReporters": [
       "lcov"
     ],
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "!**/node_modules/**",
+      "./src/**"
+    ]
   },
   "eslintConfig": {
     "extends": [
