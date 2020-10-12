@@ -1,5 +1,6 @@
 require('../src/docker/types')
 const { Docker } = require('../src/docker/docker')
+const { spawnSync } = require('child_process')
 
 const containerIDs = {}
 
@@ -23,6 +24,15 @@ async function CreateContainer (test, option, run = false) {
 }
 
 /**
+ * Delete all containers for given test run.
+ *
+ * @param {string} test - name of the test run.
+ */
+function DeleteContainers (test) {
+  spawnSync('docker', ['rm', '-f'].concat(GetContinerIDs(test)))
+}
+
+/**
  * Get the container ids.
  *
  * @param {string} test - Test suites name.
@@ -32,4 +42,4 @@ function GetContinerIDs (test) {
   return containerIDs[test]
 }
 
-module.exports = { CreateContainer, GetContinerIDs }
+module.exports = { CreateContainer, GetContinerIDs, DeleteContainers }
