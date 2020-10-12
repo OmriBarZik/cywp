@@ -118,7 +118,12 @@ class Container {
     })
 
     return this.ReturnPromise(inspect, () => {
-      return JSON.parse(JSON.stringify(stdout))
+      stdout = stdout.replace(/\r?\n|\r/g, '')
+      try {
+        return JSON.parse(stdout)[0]
+      } catch (e) {
+        return stdout
+      }
     })
   }
 
