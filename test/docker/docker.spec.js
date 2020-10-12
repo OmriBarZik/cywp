@@ -148,7 +148,7 @@ describe('Docker', () => {
 
       dockerIds.push(continer.options.dockerId)
 
-      return expect(CreateContainer({ image: 'hello-world', name: 'test' })).rejects.not.toBeNull()
+      return expect(CreateContainer({ image: 'hello-world', name: 'test' })).rejects.toBeTruthy()
     })
 
     it('should create runnig docker continer', async () => {
