@@ -139,7 +139,7 @@ describe('Docker', () => {
 
       dockerIds.push(container.options.dockerId)
 
-      expect(continerCheck.stdout).not.toHaveLength(0)
+      expect(continerCheck.stdout.toString()).not.toHaveLength(0)
       expect(container.options.status).toEqual('created')
     })
 
@@ -157,7 +157,7 @@ describe('Docker', () => {
 
       dockerIds.push(continer.options.dockerId)
 
-      expect(continerCheck.stdout).not.toHaveLength(0)
+      expect(continerCheck.stdout.toString()).not.toHaveLength(0)
       expect(continer.options.status).toEqual('started')
     })
 
