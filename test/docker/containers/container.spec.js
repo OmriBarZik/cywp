@@ -1,5 +1,5 @@
 const { spawnSync, spawn } = require('child_process')
-const { CreateContainer, GetContinerIDs } = require('../../util')
+const { CreateContainer, DeleteContainers } = require('../../util')
 
 describe('Container', () => {
   describe('#start()', () => {
@@ -127,7 +127,7 @@ describe('Container', () => {
     })
   })
 
-  afterAll(async () => {
-    spawnSync('docker', ['rm', '-f'].concat(GetContinerIDs('container')))
+  afterAll(() => {
+    DeleteContainers('container')
   })
 })
