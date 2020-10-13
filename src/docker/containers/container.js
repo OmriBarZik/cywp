@@ -1,4 +1,3 @@
-/* eslint jsdoc/valid-types: 0 */
 require('../types')
 const { spawn } = require('child_process')
 
@@ -79,13 +78,13 @@ class Container {
    * @param {boolean} options.timestamps - show timestamps.
    * @returns {string} Return the container logs.
    */
-  logs (options) {
-    const logsAgrs = ['container', 'stop']
+  logs (options = {}) {
+    const logsAgrs = ['container', 'logs']
     let stdout = ''
 
     if (options.since) { logsAgrs.push('--since', options.since) }
     if (options.tail) { logsAgrs.push('--tail', options.tail) }
-    if (options.timestamps) { logsAgrs.push('--since', options.timestamps) }
+    if (options.timestamps) { logsAgrs.push('--timestamps') }
 
     logsAgrs.push(this.options.dockerId)
 
@@ -119,7 +118,12 @@ class Container {
     })
 
     return this.ReturnPromise(inspect, () => {
-      return JSON.parse(JSON.stringify(stdout))
+      stdout = stdout.replace(/\r?\n|\r/g, '')
+      try {
+        return JSON.parse(stdout)[0]
+      } catch (e) {
+        return stdout
+      }
     })
   }
 

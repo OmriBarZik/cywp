@@ -36,7 +36,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-push": "npm run coverage:ci"
+      "pre-push": "npm run coverage"
     }
   },
   "jest": {
@@ -45,7 +45,11 @@
     "coverageReporters": [
       "lcov"
     ],
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "!**/node_modules/**",
+      "./src/**"
+    ]
   },
   "eslintConfig": {
     "extends": [
@@ -87,9 +91,8 @@
           "objects": "always-multiline"
         }
       ],
-      "jsdoc/no-undefined-types": [
-        "off"
-      ]
+      "jsdoc/no-undefined-types": "off",
+      "jsdoc/valid-types":  "off"
     }
   }
 }

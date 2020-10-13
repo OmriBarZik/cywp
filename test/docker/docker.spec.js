@@ -1,9 +1,8 @@
 const { spawnSync } = require('child_process')
-const { Docker } = require('../../src/docker/docker')
+const { Docker, processCreateContainerOptions: processOptions } = require('../../src/docker/docker')
 const CreateContainer = Docker.prototype.CreateContainer
-const { processCreateContainerOptions: processOptions } = require('../../src/docker/docker')
 
-describe('Container', () => {
+describe('Docker', () => {
   describe('#processOptions()', () => {
     describe('##Errors', () => {
       it('should throw error when value not present', () => {
@@ -63,21 +62,21 @@ describe('Container', () => {
       it('should contains docker image name', () => {
         const arr = processOptions({ image: 'image-test' })
 
-        expect(arr.indexOf('image-test')).not.toBe(-1)
+        expect(arr).toContain('image-test')
       })
 
       it('should contains continer name argument', () => {
         const arr = processOptions({ image: 'image-test', name: 'name-test' })
 
-        expect(arr.indexOf('name-test')).not.toBe(-1)
-        expect(arr.indexOf('--name')).not.toBe(-1)
+        expect(arr).toContain('--name')
+        expect(arr).toContain('name-test')
       })
 
       it('should contains continer network argument', () => {
         const arr = processOptions({ image: 'image-test', network: 'network-test' })
 
-        expect(arr.indexOf('network-test')).not.toBe(-1)
-        expect(arr.indexOf('--net')).not.toBe(-1)
+        expect(arr).toContain('network-test')
+        expect(arr).toContain('--net')
       })
 
       it('should contains continer volume arguments', () => {
@@ -89,9 +88,9 @@ describe('Container', () => {
           ],
         })
 
-        expect(arr.indexOf('volume-1-host:volume-1-docker')).not.toBe(-1)
-        expect(arr.indexOf('volume-2-host:volume-2-docker')).not.toBe(-1)
-        expect(arr.indexOf('-v')).not.toBe(-1)
+        expect(arr).toContain('-v')
+        expect(arr).toContain('volume-2-host:volume-2-docker')
+        expect(arr).toContain('volume-1-host:volume-1-docker')
         expect(arr.indexOf('-v') < arr.lastIndexOf('-v')).toBe(true)
       })
 
@@ -104,9 +103,9 @@ describe('Container', () => {
           ],
         })
 
-        expect(arr.indexOf('env-1-name=env-1-value')).not.toBe(-1)
-        expect(arr.indexOf('env-2-name=env-2-value')).not.toBe(-1)
-        expect(arr.indexOf('-e')).not.toBe(-1)
+        expect(arr).toContain('env-2-name=env-2-value')
+        expect(arr).toContain('env-1-name=env-1-value')
+        expect(arr).toContain('-e')
         expect(arr.indexOf('-e') < arr.lastIndexOf('-e')).toBe(true)
       })
 
@@ -119,9 +118,9 @@ describe('Container', () => {
           ],
         })
 
-        expect(arr.indexOf('port-1-host:port-1-docker')).not.toBe(-1)
-        expect(arr.indexOf('port-2-host:port-2-docker')).not.toBe(-1)
-        expect(arr.indexOf('-p')).not.toBe(-1)
+        expect(arr).toContain('port-1-host:port-1-docker')
+        expect(arr).toContain('port-2-host:port-2-docker')
+        expect(arr).toContain('-p')
         expect(arr.indexOf('-p') < arr.lastIndexOf('-p')).toBe(true)
       })
     })
@@ -136,11 +135,11 @@ describe('Container', () => {
 
     it('should create docker continer', async () => {
       const container = await CreateContainer({ image: 'hello-world' })
-      const continerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=created'])
+      const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=created'])
 
       dockerIds.push(container.options.dockerId)
 
-      expect(continerCheck.stdout).not.toHaveLength(0)
+      expect(continerCheck.stdout.toString()).not.toHaveLength(0)
       expect(container.options.status).toEqual('created')
     })
 
@@ -149,16 +148,16 @@ describe('Container', () => {
 
       dockerIds.push(continer.options.dockerId)
 
-      return expect(CreateContainer({ image: 'hello-world', name: 'test' })).rejects.not.toBeNull()
+      return expect(CreateContainer({ image: 'hello-world', name: 'test' })).rejects.toBeTruthy()
     })
 
     it('should create runnig docker continer', async () => {
       const continer = await CreateContainer({ image: 'hello-world' }, true)
-      const continerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${continer.options.dockerId}`, '--filter', 'status=exited'])
+      const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${continer.options.dockerId}`])
 
       dockerIds.push(continer.options.dockerId)
 
-      expect(continerCheck.stdout).not.toHaveLength(0)
+      expect(continerCheck.stdout.toString()).not.toHaveLength(0)
       expect(continer.options.status).toEqual('started')
     })
 
