@@ -81,9 +81,10 @@ describe('Container', () => {
     it('should not return logs', async () => {
       const container = await CreateContainer('container', { image: 'hello-world' }, true)
 
-      const time = new Date().toISOString()
+      const time = new Date()
+      time.setDate(new Date().getDate() + 1)
 
-      return expect(container.logs({ since: time })).resolves.toBeFalsy()
+      return expect(container.logs({ since: time.toISOString() })).resolves.toBeFalsy()
     })
   })
 
