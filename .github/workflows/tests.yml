@@ -40,7 +40,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Run tests
-        if: ${{ matrix.node-version != '12.x0' }}
+        if: ${{ matrix.node-version != '12.x' }}
         run: npm test
 
       - name: Run test coverage
