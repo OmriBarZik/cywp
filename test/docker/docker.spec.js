@@ -153,7 +153,7 @@ describe('Docker', () => {
 
     it('should create runnig docker continer', async () => {
       const continer = await CreateContainer({ image: 'hello-world' }, true)
-      const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${continer.options.dockerId}`, '--filter', 'status=exited'])
+      const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${continer.options.dockerId}`])
 
       dockerIds.push(continer.options.dockerId)
 
