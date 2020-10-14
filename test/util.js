@@ -51,7 +51,7 @@ function CleanTestCreateContainer (suiteName) {
  * @param {string} suiteName - name of the test run.
  */
 function DeleteContainers (suiteName) {
-  spawnSync('docker', ['rm', '-f'].concat(GetContinerIDs(suiteName)))
+  spawnSync('docker', ['rm', '-f', '-v'].concat(GetContinerIDs(suiteName)))
 }
 
 /**
