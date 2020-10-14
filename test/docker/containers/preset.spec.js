@@ -1,5 +1,6 @@
 const { CreateMysqlContainer, CreateWordpressContainer } = require('../../../src/docker/containers/preset')
 const { CleanTestCreateContainer, InitTestCreateContainer } = require('../../util')
+const { spawnSync } = require('child_process')
 
 describe('Presets', () => {
   beforeAll(() => {
@@ -36,5 +37,7 @@ describe('Presets', () => {
 
   afterAll(() => {
     CleanTestCreateContainer('preset')
+
+    spawnSync('docker', ['volume', 'rm', '-f', 'cywp-twentyseventeen-volume'])
   })
 })
