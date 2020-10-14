@@ -32,7 +32,10 @@ jobs:
         run: npm install
 
       - name: Seyup Docker Environment
-        run: docker pull hello-world
+        run: | 
+        docker pull hello-world 
+        docker pull wordpress
+        docker pull mysql:5.7
 
       - name: Setup Node
         uses: actions/setup-node@v1
