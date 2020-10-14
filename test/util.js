@@ -4,42 +4,64 @@ const { spawnSync } = require('child_process')
 
 const containerIDs = {}
 
+let originalCreateContainer
+
 /**
- * Create a docker container
+ *  Init Tests configertion
  *
- * @param {string} test - Test suites name.
- * @param {ContainerOptions} option - docker container options
- * @param {boolean} run - should the container run at the instance of creation.
- * @returns {import('../src/docker/containers/container')} return continer object
+ * @param {string} suiteName - Test suites name.
+ * @returns {TestCreateContainer} - the modifed function of CreateContainer.
  */
-async function CreateContainer (test, option, run = false) {
-  if (typeof undefined === typeof containerIDs[test]) {
-    containerIDs[test] = []
+function InitTestCreateContainer (suiteName) {
+  originalCreateContainer = Docker.prototype.CreateContainer
+
+  containerIDs[suiteName] = []
+
+  /**
+   * Create a docker container
+   *
+   * @param {ContainerOptions} option - docker container options
+   * @param {boolean} run - should the container run at the instance of creation.
+   * @returns {import('../src/docker/containers/container')} return continer object
+   */
+  const CreateContainer = async function (option, run) {
+    const container = await originalCreateContainer(option, run)
+    containerIDs[suiteName].push(container.options.dockerId)
+
+    return container
   }
 
-  const container = await Docker.prototype.CreateContainer(option, run)
-  containerIDs[test].push(container.options.dockerId)
+  Docker.prototype.CreateContainer = CreateContainer
 
-  return container
+  return CreateContainer
+}
+
+/**
+ * @param {string} suiteName - Test suites name.
+ */
+function CleanTestCreateContainer (suiteName) {
+  DeleteContainers(suiteName)
+
+  Docker.prototype.CreateContainer = originalCreateContainer
 }
 
 /**
  * Delete all containers for given test run.
  *
- * @param {string} test - name of the test run.
+ * @param {string} suiteName - name of the test run.
  */
-function DeleteContainers (test) {
-  spawnSync('docker', ['rm', '-f'].concat(GetContinerIDs(test)))
+function DeleteContainers (suiteName) {
+  spawnSync('docker', ['rm', '-f'].concat(GetContinerIDs(suiteName)))
 }
 
 /**
  * Get the container ids.
  *
- * @param {string} test - Test suites name.
+ * @param {string} suiteName - Test suites name.
  * @returns {Array} The containers ids array
  */
-function GetContinerIDs (test) {
-  return containerIDs[test]
+function GetContinerIDs (suiteName) {
+  return containerIDs[suiteName]
 }
 
-module.exports = { CreateContainer, GetContinerIDs, DeleteContainers }
+module.exports = { GetContinerIDs, DeleteContainers, CleanTestCreateContainer, InitTestCreateContainer }
