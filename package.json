@@ -14,8 +14,7 @@
     "lint:fix": "eslint . --fix"
   },
   "dependencies": {
-    "command-exists": "1.2.9",
-    "dockerode": "^3.2.1"
+    "command-exists": "1.2.9"
   },
   "bin": {
     "cywp": "./bin/cywp.js"
