@@ -145,6 +145,7 @@ describe('Docker', () => {
 
     it('should throw reject for creating continer with the same name', async () => {
       const container = await CreateContainer({ image: 'hello-world', name: 'test' })
+
       dockerIds.push(container.options.dockerId)
 
       return expect(CreateContainer({ image: 'hello-world', name: 'test' })).rejects.toBeTruthy()
