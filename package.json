@@ -5,6 +5,10 @@
   "main": "index.js",
   "author": "Omri BarZik <omri@bar-zik.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmriBarZik/cywp.git"
+  },
   "scripts": {
     "start": "node index",
     "test": "jest",
