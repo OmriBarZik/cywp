@@ -33,6 +33,13 @@
     "husky": "^4.3.0",
     "jest": "^26.5.2"
   },
+  "keywords":[
+    "wordpress",
+    "cypress",
+    "cywp",
+    "e2e",
+    "test"
+  ],
   "husky": {
     "hooks": {
       "pre-push": "npm run coverage"
