@@ -144,21 +144,21 @@ describe('Docker', () => {
     })
 
     it('should throw reject for creating continer with the same name', async () => {
-      const continer = await CreateContainer({ image: 'hello-world', name: 'test' })
+      const container = await CreateContainer({ image: 'hello-world', name: 'test' })
 
-      dockerIds.push(continer.options.dockerId)
+      dockerIds.push(container.options.dockerId)
 
       return expect(CreateContainer({ image: 'hello-world', name: 'test' })).rejects.toBeTruthy()
     })
 
     it('should create runnig docker continer', async () => {
-      const continer = await CreateContainer({ image: 'hello-world' }, true)
-      const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${continer.options.dockerId}`])
+      const container = await CreateContainer({ image: 'hello-world' }, true)
+      const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
 
-      dockerIds.push(continer.options.dockerId)
+      dockerIds.push(container.options.dockerId)
 
       expect(continerCheck.stdout.toString()).not.toHaveLength(0)
-      expect(continer.options.status).toEqual('started')
+      expect(container.options.status).toEqual('started')
     })
 
     afterAll(() => {
