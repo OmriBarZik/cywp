@@ -78,11 +78,12 @@ describe('Container', () => {
     })
 
     it('should return logs since', async () => {
-      const time = new Date().toISOString()
+      const time = new Date()
+      time.setDate(new Date().getDate() - 1)
 
       const container = await CreateContainer({ image: 'hello-world' }, true)
 
-      return expect(container.logs({ since: time })).resolves.toBeTruthy()
+      return expect(container.logs({ since: time.toISOString() })).resolves.toBeTruthy()
     })
 
     it('should not return logs', async () => {
