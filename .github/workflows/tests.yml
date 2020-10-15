@@ -33,9 +33,9 @@ jobs:
 
       - name: Seyup Docker Environment
         run: |
-        docker pull wordpress
-        docker pull mysql:5.7
-        docker pull hello-world
+          docker pull wordpress
+          docker pull mysql:5.7
+          docker pull hello-world
 
       - name: Setup Node
         uses: actions/setup-node@v1
