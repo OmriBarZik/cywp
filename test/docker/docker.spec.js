@@ -134,33 +134,30 @@ describe('Docker', () => {
     })
 
     it('should create docker continer', async () => {
-      return CreateContainer({ image: 'hello-world' }).then((container) => {
-        const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=created'])
+      const container = await CreateContainer({ image: 'hello-world' })
+      const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=created'])
 
-        dockerIds.push(container.options.dockerId)
+      dockerIds.push(container.options.dockerId)
 
-        expect(continerCheck.stdout.toString()).not.toHaveLength(0)
-        expect(container.options.status).toEqual('created')
-      })
+      expect(continerCheck.stdout.toString()).not.toHaveLength(0)
+      expect(container.options.status).toEqual('created')
     })
 
     it('should throw reject for creating continer with the same name', async () => {
-      return CreateContainer({ image: 'hello-world', name: 'test' }).then((continer) => {
-        dockerIds.push(continer.options.dockerId)
+      const container = await CreateContainer({ image: 'hello-world', name: 'test' })
+      dockerIds.push(container.options.dockerId)
 
-        return expect(CreateContainer({ image: 'hello-world', name: 'test' })).rejects.toBeTruthy()
-      })
+      return expect(CreateContainer({ image: 'hello-world', name: 'test' })).rejects.toBeTruthy()
     })
 
     it('should create runnig docker continer', async () => {
-      return CreateContainer({ image: 'hello-world' }, true).then((continer) => {
-        const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${continer.options.dockerId}`])
+      const container = await CreateContainer({ image: 'hello-world' }, true)
+      const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
 
-        dockerIds.push(continer.options.dockerId)
+      dockerIds.push(container.options.dockerId)
 
-        expect(continerCheck.stdout.toString()).not.toHaveLength(0)
-        expect(continer.options.status).toEqual('started')
-      })
+      expect(continerCheck.stdout.toString()).not.toHaveLength(0)
+      expect(container.options.status).toEqual('started')
     })
 
     afterAll(() => {
