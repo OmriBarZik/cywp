@@ -2,8 +2,8 @@
   "name": "cypress-for-wordpress",
   "version": "0.1.0",
   "description": "cypress environment builder for wordpress",
-  "main": "index.js",
   "author": "Omri BarZik <omri@bar-zik.com>",
+  "main": "index.js",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -12,6 +12,11 @@
   "bugs": {
     "url": "https://github.com/OmriBarZik/cywp/issues"
   },
+  "directories": {
+    "lib": "./src ",
+    "test": "./test",
+    "bin": "./bin"
+  },
   "scripts": {
     "start": "node index",
     "test": "jest",
@@ -19,9 +24,6 @@
     "coverage:ci": "npm run coverage && codecov",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
-  },
-  "bin": {
-    "cywp": "./bin/cywp.js"
   },
   "dependencies": {
     "command-exists": "1.2.9"
