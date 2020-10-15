@@ -9,6 +9,9 @@
     "type": "git",
     "url": "git+https://github.com/OmriBarZik/cywp.git"
   },
+  "bugs": {
+    "url": "https://github.com/OmriBarZik/cywp/issues"
+  },
   "scripts": {
     "start": "node index",
     "test": "jest",
