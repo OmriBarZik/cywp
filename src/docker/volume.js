@@ -5,7 +5,7 @@ class Volume {
   /**
    * Set info for the volume.
    *
-   * @param {VolumeOptions} options the docker container options
+   * @param {VolumeOptions} options the docker volume options
    */
   constructor (options) {
     this.options = options
