@@ -1,5 +1,6 @@
 require('../types')
 const { spawn } = require('child_process')
+const { ReturnPromise } = require('../util')
 
 class Container {
   /**
@@ -19,7 +20,7 @@ class Container {
   start () {
     const start = spawn('docker', ['container', 'start', this.options.dockerId])
 
-    return this.ReturnPromise(start, () => {
+    return ReturnPromise(start, () => {
       this.options.status = 'started'
       return this
     })
@@ -42,7 +43,7 @@ class Container {
 
     const rm = spawn('docker', rmArgs)
 
-    return this.ReturnPromise(rm, () => {
+    return ReturnPromise(rm, () => {
       this.options.status = 'removed'
       return this
     })
@@ -63,7 +64,7 @@ class Container {
 
     const stop = spawn('docker', stopArgs)
 
-    return this.ReturnPromise(stop, () => {
+    return ReturnPromise(stop, () => {
       this.options.status = 'stoped'
       return this
     })
@@ -94,7 +95,7 @@ class Container {
       stdout += data
     })
 
-    return this.ReturnPromise(logs, () => stdout)
+    return ReturnPromise(logs, () => stdout)
   }
 
   /**
@@ -117,7 +118,7 @@ class Container {
       stdout += data
     })
 
-    return this.ReturnPromise(inspect, () => {
+    return ReturnPromise(inspect, () => {
       stdout = stdout.replace(/\r?\n|\r/g, '')
       try {
         return JSON.parse(stdout)[0]
@@ -136,36 +137,6 @@ class Container {
     return this.inspect('{{.State.Status}}').then(status => {
       this.options.status = status
       return status
-    })
-  }
-
-  /**
-   * Return the chiild process as promise.
-   *
-   * @param {import('child_process').ChildProcessWithoutNullStreams} process - the child process thats running.
-   * @param {Function} callback - callback that deterred what to return when the process is succsesful.
-   * @returns {Promise} return what said to return form the callback
-   */
-  ReturnPromise (process, callback) {
-    if ('function' !== typeof callback) {
-      throw new TypeError('callback must be a function')
-    }
-
-    let stderr = ''
-
-    process.stderr.on('data', (data) => {
-      stderr += data
-    })
-
-    return new Promise((resolve, reject) => {
-      process.on('close', (code) => {
-        if (code) {
-          reject(stderr)
-          return
-        }
-
-        resolve(callback())
-      })
     })
   }
 }

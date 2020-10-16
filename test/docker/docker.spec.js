@@ -1,6 +1,7 @@
 const { spawnSync } = require('child_process')
 const { Docker, processCreateContainerOptions: processOptions } = require('../../src/docker/docker')
 const CreateContainer = Docker.prototype.CreateContainer
+const CreateVolume = Docker.prototype.CreateVolume
 
 describe('Docker', () => {
   describe('#processOptions()', () => {
@@ -139,7 +140,7 @@ describe('Docker', () => {
 
       dockerIds.push(container.options.dockerId)
 
-      expect(continerCheck.stdout.toString()).not.toHaveLength(0)
+      expect(continerCheck.stdout).not.toHaveLength(0)
       expect(container.options.status).toEqual('created')
     })
 
@@ -157,12 +158,40 @@ describe('Docker', () => {
 
       dockerIds.push(container.options.dockerId)
 
-      expect(continerCheck.stdout.toString()).not.toHaveLength(0)
+      expect(continerCheck.stdout).not.toHaveLength(0)
       expect(container.options.status).toEqual('started')
     })
 
     afterAll(() => {
       spawnSync('docker', ['rm', '-f'].concat(dockerIds))
+    })
+  })
+
+  describe('#CreateVolume()', () => {
+    let volumeNames
+
+    beforeAll(() => {
+      volumeNames = []
+    })
+
+    it('should create a volume', async () => {
+      const volume = await CreateVolume('cywp-docker-CreateVolume-test')
+      volumeNames.push('cywp-docker-CreateVolume-test')
+
+      const volumeCheck = spawnSync('docker', ['volume', 'ls', '-q', '-f', `name=${volume.options.name}`])
+
+      expect(volumeCheck.stdout).not.toHaveLength(0)
+
+      expect(volume.options.name).toBe('cywp-docker-CreateVolume-test')
+      expect(volume.options.status).toBe('alive')
+    })
+
+    it('should throw error for creating a volume', async () => {
+      return expect(CreateVolume('!')).rejects.toBeTruthy()
+    })
+
+    afterAll(() => {
+      spawnSync('docker', ['volume', 'rm', '-f'].concat(volumeNames))
     })
   })
 })
