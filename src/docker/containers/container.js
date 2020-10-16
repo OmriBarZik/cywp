@@ -105,14 +105,14 @@ class Container {
    * @returns {Promise<string|object>} continer info.
    */
   inspect (format) {
-    const inspectAgrs = ['container', 'inspect']
+    const inspectArgs = ['container', 'inspect']
     let stdout = ''
 
-    if (format) { inspectAgrs.push('--format', format) }
+    if (format) { inspectArgs.push('--format', format) }
 
-    inspectAgrs.push(this.options.dockerId)
+    inspectArgs.push(this.options.dockerId)
 
-    const inspect = spawn('docker', inspectAgrs)
+    const inspect = spawn('docker', inspectArgs)
 
     inspect.stdout.on('data', (data) => {
       stdout += data
