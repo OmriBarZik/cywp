@@ -30,16 +30,19 @@ function CreateMysqlContainer (name, port, run = false) {
  *
  * @param {string} name - The name of the container.
  * @param {number} port - The port expose to the host.
+ * @param {string} mysqlName - The name of the mysql container.
+ * @param {number} mysqlPort - The mysql port expose to the host.
  * @param {boolean} run - should the container run at the instance of creation.
  * @returns {Promise<Container>} retrun promise for WordPress continer object.
  */
-function CreateWordpressContainer (name, port, run = false) {
+function CreateWordpressContainer (name, port, mysqlName, mysqlPort, run = false) {
   CheckParameters(name, port)
+  CheckParameters(mysqlName, mysqlPort)
 
   return Docker.prototype.CreateContainer({
     exposePorts: [{ docker: 80, host: port }],
     environmentVariables: [
-      { name: 'WORDPRESS_DB_HOST', value: 'cywp-mysql:3306' },
+      { name: 'WORDPRESS_DB_HOST', value: `${mysqlName}:${mysqlPort}` },
       { name: 'WORDPRESS_DB_PASSWORD', value: 'cywp' },
       { name: 'WORDPRESS_DB_NAME', value: 'cywp-twentyseventeen-db' },
     ],
@@ -49,6 +52,31 @@ function CreateWordpressContainer (name, port, run = false) {
     image: 'wordpress',
     network: 'cywp-network',
     name: `cywp-${name}-wordpress`,
+  }, run)
+}
+
+/**
+ * Create wordpress cli continer.
+ *
+ * @param {string} name - The name of the container.
+ * @param {number} port - The port expose to the host.
+ * @param {boolean} run - should the container run at the instance of creation.
+ * @returns {Promise<Container>} retrun promise for WordPress continer object.
+ */
+function CreateWordpressCliContainer (name, port, run) {
+  CheckParameters()
+
+  return Docker.prototype.CreateContainer({
+    environmentVariables: [
+      { name: 'HOST_PORT', value: port },
+      { name: 'SITE_TITLE', value: `cywp ${name}` },
+    ],
+    volumes: [
+      { host: 'cywp-twentyseventeen-volume', docker: '/var/www/html' },
+    ],
+    image: 'wordpress:cli',
+    network: 'cywp-network',
+    name: `cywp-${name}-wordpress-cli`,
   }, run)
 }
 
@@ -67,4 +95,4 @@ function CheckParameters (name, port) {
   }
 }
 
-module.exports = { CreateMysqlContainer, CreateWordpressContainer }
+module.exports = { CreateMysqlContainer, CreateWordpressContainer, CreateWordpressCliContainer }
