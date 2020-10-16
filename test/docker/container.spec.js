@@ -1,6 +1,6 @@
-require('../../types')
+require('../types')
 const { spawnSync } = require('child_process')
-const { InitTestCreateContainer, CleanTestCreateContainer } = require('../../util')
+const { InitTestCreateContainer, CleanTestCreateContainer } = require('../util')
 
 describe('Container', () => {
   /** @type {TestCreateContainer} */

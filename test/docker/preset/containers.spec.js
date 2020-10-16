@@ -1,4 +1,4 @@
-const { CreateMysqlContainer, CreateWordpressContainer } = require('../../../src/docker/containers/preset')
+const { CreateMysqlContainer, CreateWordpressContainer } = require('../../../src/docker/presets/containers')
 const { CleanTestCreateContainer, InitTestCreateContainer } = require('../../util')
 const { spawnSync } = require('child_process')
 
