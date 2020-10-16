@@ -1,7 +1,8 @@
 const { spawnSync } = require('child_process')
-const { Docker, processCreateContainerOptions: ProcessContainerOptions } = require('../../src/docker/docker')
+const { Docker, processCreateContainerOptions: ProcessContainerOptions, ProssesCreateNetworkOption: ProssesNetworkOption } = require('../../src/docker/docker')
 const CreateContainer = Docker.prototype.CreateContainer
 const CreateVolume = Docker.prototype.CreateVolume
+const CreateNetwork = Docker.prototype.CreateNetwork
 
 describe('Docker', () => {
   describe('#processCreateContainerOptions()', () => {
@@ -127,6 +128,28 @@ describe('Docker', () => {
     })
   })
 
+  describe('#ProssesCreateNetworkOption()', () => {
+    describe('##Errors', () => {
+      it('should throw error when value not present', () => {
+        expect(() => { ProssesNetworkOption() }).toThrow()
+      })
+
+      it('should throw error when name value is not present', () => {
+        expect(() => { ProssesNetworkOption({}) }).toThrow()
+
+        expect(() => { ProssesNetworkOption({ name: '' }) }).toThrow()
+      })
+    })
+
+    describe('##Returns', () => {
+      it('should contains docker image name', () => {
+        const arr = ProssesNetworkOption({ name: 'cywp-network-test' })
+
+        expect(arr).toContain('cywp-network-test')
+      })
+    })
+  })
+
   describe('#CreateContainer', () => {
     let dockerIds
 
@@ -192,6 +215,36 @@ describe('Docker', () => {
 
     afterAll(() => {
       spawnSync('docker', ['volume', 'rm', '-f'].concat(volumeNames))
+    })
+  })
+
+  describe('#CreateNetwork()', () => {
+    let networkIds
+
+    beforeAll(() => {
+      networkIds = []
+    })
+
+    it('should create docker network', async () => {
+      const network = await CreateNetwork({ name: 'cywp-create-network-test' })
+      const networkCheck = spawnSync('docker', ['network', 'ls', '-q', '--filter', `id=${network.options.id}`])
+
+      networkIds.push(network.options.id)
+
+      expect(networkCheck.stdout).not.toHaveLength(0)
+      expect(network.options.status).toEqual('alive')
+    })
+
+    it('should throw reject for creating network with the same name', async () => {
+      const network = await CreateNetwork({ name: 'cywp-name-error-create-network-test' })
+
+      networkIds.push(network.options.id)
+
+      return expect(CreateNetwork({ name: 'cywp-name-error-create-network-test' })).rejects.toBeTruthy()
+    })
+
+    afterAll(() => {
+      spawnSync('docker', ['network', 'rm'].concat(networkIds))
     })
   })
 })

@@ -1,7 +1,12 @@
 
 class Network {
-  constructor (option) {
-    this.option = option
+  /**
+   * Set info for the network.
+   *
+   * @param {NetworkOption} options -the docker network options
+   */
+  constructor (options) {
+    this.options = options
   }
 
   rm () {
