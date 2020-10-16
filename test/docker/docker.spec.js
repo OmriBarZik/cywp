@@ -151,17 +151,17 @@ describe('Docker', () => {
   })
 
   describe('#CreateContainer', () => {
-    let dockerIds
+    let containerIds
 
     beforeAll(() => {
-      dockerIds = []
+      containerIds = []
     })
 
     it('should create docker container', async () => {
       const container = await CreateContainer({ image: 'hello-world' })
-      const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=created'])
+      const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`, '--filter', 'status=created'])
 
-      dockerIds.push(container.options.dockerId)
+      containerIds.push(container.options.id)
 
       expect(containerCheck.stdout).not.toHaveLength(0)
       expect(container.options.status).toEqual('created')
@@ -170,23 +170,23 @@ describe('Docker', () => {
     it('should throw reject for creating container with the same name', async () => {
       const container = await CreateContainer({ image: 'hello-world', name: 'test' })
 
-      dockerIds.push(container.options.dockerId)
+      containerIds.push(container.options.id)
 
       return expect(CreateContainer({ image: 'hello-world', name: 'test' })).rejects.toBeTruthy()
     })
 
     it('should create running docker container', async () => {
       const container = await CreateContainer({ image: 'hello-world' }, true)
-      const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
+      const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`])
 
-      dockerIds.push(container.options.dockerId)
+      containerIds.push(container.options.id)
 
       expect(containerCheck.stdout).not.toHaveLength(0)
       expect(container.options.status).toEqual('started')
     })
 
     afterAll(() => {
-      spawnSync('docker', ['rm', '-f'].concat(dockerIds))
+      spawnSync('docker', ['rm', '-f'].concat(containerIds))
     })
   })
 

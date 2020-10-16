@@ -18,7 +18,7 @@ class Container {
    * @returns {Promise<Container>} Return the current container.
    */
   start () {
-    const start = spawn('docker', ['container', 'start', this.options.dockerId])
+    const start = spawn('docker', ['container', 'start', this.options.id])
 
     return ReturnPromise(start, () => {
       this.options.status = 'started'
@@ -39,7 +39,7 @@ class Container {
     if (force) { rmArgs.push('--force') }
     if (volumes) { rmArgs.push('--volumes') }
 
-    rmArgs.push(this.options.dockerId)
+    rmArgs.push(this.options.id)
 
     const rm = spawn('docker', rmArgs)
 
@@ -60,7 +60,7 @@ class Container {
 
     stopArgs.push('--time', time)
 
-    stopArgs.push(this.options.dockerId)
+    stopArgs.push(this.options.id)
 
     const stop = spawn('docker', stopArgs)
 
@@ -87,7 +87,7 @@ class Container {
     if (options.tail) { logsArgs.push('--tail', options.tail) }
     if (options.timeStamps) { logsArgs.push('--timestamps') } // eslint-disable-line spellcheck/spell-checker
 
-    logsArgs.push(this.options.dockerId)
+    logsArgs.push(this.options.id)
 
     const logs = spawn('docker', logsArgs)
 
@@ -110,7 +110,7 @@ class Container {
 
     if (format) { inspectArgs.push('--format', format) }
 
-    inspectArgs.push(this.options.dockerId)
+    inspectArgs.push(this.options.id)
 
     const inspect = spawn('docker', inspectArgs)
 

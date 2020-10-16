@@ -25,7 +25,7 @@ class Docker {
     })
 
     return ReturnPromise(process, () => {
-      options.dockerId = stdout.replace('\n', '')
+      options.id = stdout.replace('\n', '')
       options.status = run ? 'started' : 'created'
 
       return new Container(options)

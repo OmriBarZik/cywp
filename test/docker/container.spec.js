@@ -14,7 +14,7 @@ describe('Container', () => {
     it('should start docker container', async () => {
       const container = await CreateContainer({ image: 'hello-world' })
 
-      const containerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=exited'])
+      const containerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${container.options.id}`, '--filter', 'status=exited'])
       expect(containerCheck.stdout).not.toHaveLength(0)
 
       return expect(container.start()).resolves.toMatchObject({ options: { status: 'started' } })
@@ -28,7 +28,7 @@ describe('Container', () => {
       return container.rm().then((container) => {
         expect(container.options.status).toBe('removed')
 
-        const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
+        const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`])
         expect(containerCheck.stdout).toHaveLength(0)
       })
     })
@@ -37,7 +37,7 @@ describe('Container', () => {
       const container = await CreateContainer({ image: 'hello-world' })
 
       return container.rm(true).then((container) => {
-        const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
+        const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`])
         expect(containerCheck.stdout).toHaveLength(0)
       })
     })
@@ -46,7 +46,7 @@ describe('Container', () => {
       const container = await CreateContainer({ image: 'hello-world' })
 
       return container.rm(false, true).then((container) => {
-        const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
+        const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`])
         expect(containerCheck.stdout).toHaveLength(0)
       })
     })
@@ -104,13 +104,13 @@ describe('Container', () => {
       const container = await CreateContainer({ image: 'hello-world' })
 
       return expect(container.inspect()).resolves
-        .toMatchObject({ Id: container.options.dockerId, State: { Status: 'created' } })
+        .toMatchObject({ Id: container.options.id, State: { Status: 'created' } })
     })
 
     it('should return specific container info', async () => {
       const container = await CreateContainer({ image: 'hello-world' })
 
-      return expect(container.inspect('{{.Id}}')).resolves.toBe(container.options.dockerId)
+      return expect(container.inspect('{{.Id}}')).resolves.toBe(container.options.id)
     })
   })
 
