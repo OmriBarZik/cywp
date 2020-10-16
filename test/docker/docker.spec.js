@@ -1,5 +1,5 @@
 const { spawnSync } = require('child_process')
-const { Docker, processCreateContainerOptions, ProssesCreateNetworkOption } = require('../../src/docker/docker')
+const { Docker, processCreateContainerOptions, ProcessCreateNetworkOption } = require('../../src/docker/docker')
 const CreateContainer = Docker.prototype.CreateContainer
 const CreateVolume = Docker.prototype.CreateVolume
 const CreateNetwork = Docker.prototype.CreateNetwork
@@ -29,7 +29,7 @@ describe('Docker', () => {
         expect(() => { processCreateContainerOptions({ image: 'test', exposePorts: 'fail test' }) }).toThrow()
       })
 
-      it('should throw error when volumes is not made of a spsific object array', () => {
+      it('should throw error when volumes is not made of a specific object array', () => {
         expect(() => { processCreateContainerOptions({ image: 'test', volumes: [{}] }) }).toThrow()
 
         expect(() => { processCreateContainerOptions({ image: 'test', volumes: [{ docker: 'docker' }] }) }).toThrow()
@@ -39,7 +39,7 @@ describe('Docker', () => {
         expect(() => { processCreateContainerOptions({ image: 'test', volumes: [{ error: 'error' }] }) }).toThrow()
       })
 
-      it('should throw error when environmentVariables is not made of a spsific object array', () => {
+      it('should throw error when environmentVariables is not made of a specific object array', () => {
         expect(() => { processCreateContainerOptions({ image: 'test', environmentVariables: [{}] }) }).toThrow()
 
         expect(() => { processCreateContainerOptions({ image: 'test', environmentVariables: [{ name: 'docker' }] }) }).toThrow()
@@ -49,7 +49,7 @@ describe('Docker', () => {
         expect(() => { processCreateContainerOptions({ image: 'test', environmentVariables: [{ error: 'error' }] }) }).toThrow()
       })
 
-      it('should throw error when exposePorts is not made of a spsific object array', () => {
+      it('should throw error when exposePorts is not made of a specific object array', () => {
         expect(() => { processCreateContainerOptions({ image: 'test', exposePorts: [{}] }) }).toThrow()
 
         expect(() => { processCreateContainerOptions({ image: 'test', exposePorts: [{ host: 'docker' }] }) }).toThrow()
@@ -67,21 +67,21 @@ describe('Docker', () => {
         expect(arr).toContain('image-test')
       })
 
-      it('should contains continer name argument', () => {
+      it('should contains container name argument', () => {
         const arr = processCreateContainerOptions({ image: 'image-test', name: 'name-test' })
 
         expect(arr).toContain('--name')
         expect(arr).toContain('name-test')
       })
 
-      it('should contains continer network argument', () => {
+      it('should contains container network argument', () => {
         const arr = processCreateContainerOptions({ image: 'image-test', network: 'network-test' })
 
         expect(arr).toContain('network-test')
         expect(arr).toContain('--net')
       })
 
-      it('should contains continer volume arguments', () => {
+      it('should contains container volume arguments', () => {
         const arr = processCreateContainerOptions({
           image: 'image-test',
           volumes: [
@@ -96,7 +96,7 @@ describe('Docker', () => {
         expect(arr.indexOf('-v') < arr.lastIndexOf('-v')).toBe(true)
       })
 
-      it('should contains continer environment variables arguments', () => {
+      it('should contains container environment variables arguments', () => {
         const arr = processCreateContainerOptions({
           image: 'image-test',
           environmentVariables: [
@@ -111,7 +111,7 @@ describe('Docker', () => {
         expect(arr.indexOf('-e') < arr.lastIndexOf('-e')).toBe(true)
       })
 
-      it('should contains continer expose ports arguments', () => {
+      it('should contains container expose ports arguments', () => {
         const arr = processCreateContainerOptions({
           image: 'image-test',
           exposePorts: [
@@ -128,22 +128,22 @@ describe('Docker', () => {
     })
   })
 
-  describe('#ProssesCreateNetworkOption()', () => {
+  describe('#ProcessCreateNetworkOption()', () => {
     describe('##Errors', () => {
       it('should throw error when value not present', () => {
-        expect(() => { ProssesCreateNetworkOption() }).toThrow()
+        expect(() => { ProcessCreateNetworkOption() }).toThrow()
       })
 
       it('should throw error when name value is not present', () => {
-        expect(() => { ProssesCreateNetworkOption({}) }).toThrow()
+        expect(() => { ProcessCreateNetworkOption({}) }).toThrow()
 
-        expect(() => { ProssesCreateNetworkOption({ name: '' }) }).toThrow()
+        expect(() => { ProcessCreateNetworkOption({ name: '' }) }).toThrow()
       })
     })
 
     describe('##Returns', () => {
       it('should contains docker image name', () => {
-        const arr = ProssesCreateNetworkOption({ name: 'cywp-network-test' })
+        const arr = ProcessCreateNetworkOption({ name: 'cywp-network-test' })
 
         expect(arr).toContain('cywp-network-test')
       })
@@ -157,17 +157,17 @@ describe('Docker', () => {
       dockerIds = []
     })
 
-    it('should create docker continer', async () => {
+    it('should create docker container', async () => {
       const container = await CreateContainer({ image: 'hello-world' })
-      const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=created'])
+      const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=created'])
 
       dockerIds.push(container.options.dockerId)
 
-      expect(continerCheck.stdout).not.toHaveLength(0)
+      expect(containerCheck.stdout).not.toHaveLength(0)
       expect(container.options.status).toEqual('created')
     })
 
-    it('should throw reject for creating continer with the same name', async () => {
+    it('should throw reject for creating container with the same name', async () => {
       const container = await CreateContainer({ image: 'hello-world', name: 'test' })
 
       dockerIds.push(container.options.dockerId)
@@ -175,13 +175,13 @@ describe('Docker', () => {
       return expect(CreateContainer({ image: 'hello-world', name: 'test' })).rejects.toBeTruthy()
     })
 
-    it('should create runnig docker continer', async () => {
+    it('should create running docker container', async () => {
       const container = await CreateContainer({ image: 'hello-world' }, true)
-      const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
+      const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
 
       dockerIds.push(container.options.dockerId)
 
-      expect(continerCheck.stdout).not.toHaveLength(0)
+      expect(containerCheck.stdout).not.toHaveLength(0)
       expect(container.options.status).toEqual('started')
     })
 

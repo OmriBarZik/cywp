@@ -69,7 +69,7 @@ class Docker {
       options = { name: options }
     }
 
-    const args = ProssesCreateNetworkOption(options)
+    const args = ProcessCreateNetworkOption(options)
 
     const process = spawn('docker', args)
 
@@ -167,7 +167,7 @@ function processCreateContainerOptions (options, run) {
  * @param {NetworkOption} options - docker network options
  * @returns {string[]} array of arguments
  */
-function ProssesCreateNetworkOption (options) {
+function ProcessCreateNetworkOption (options) {
   const args = ['network', 'create']
 
   if (!options || !options.name) {
@@ -179,4 +179,4 @@ function ProssesCreateNetworkOption (options) {
   return args
 }
 
-module.exports = { Docker, processCreateContainerOptions, ProssesCreateNetworkOption }
+module.exports = { Docker, processCreateContainerOptions, ProcessCreateNetworkOption }

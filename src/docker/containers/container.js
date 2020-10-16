@@ -4,7 +4,7 @@ const { ReturnPromise, CleanInspect } = require('../util')
 
 class Container {
   /**
-   * Create and run a new docker contianer.
+   * Create and run a new docker container.
    *
    * @param {ContainerOptions} options the docker container options
    */
@@ -13,9 +13,9 @@ class Container {
   }
 
   /**
-   * Start the contianer.
+   * Start the container.
    *
-   * @returns {Promise<Container>} Return the current contianer.
+   * @returns {Promise<Container>} Return the current container.
    */
   start () {
     const start = spawn('docker', ['container', 'start', this.options.dockerId])
@@ -53,7 +53,7 @@ class Container {
    * Stop the continer.
    *
    * @param {number} time Seconds to wait for stop before stopping the container.
-   * @returns {Promise<Container>} Return the current contianer.
+   * @returns {Promise<Container>} Return the current container.
    */
   stop (time = 10) {
     const stopArgs = ['container', 'stop']
@@ -65,7 +65,7 @@ class Container {
     const stop = spawn('docker', stopArgs)
 
     return ReturnPromise(stop, () => {
-      this.options.status = 'stoped'
+      this.options.status = 'stopped'
       return this
     })
   }
@@ -76,20 +76,20 @@ class Container {
    * @param {object} options - options object for logs.
    * @param {string} options.since - Show logs since timestamp (e.g. 2020-01-02T13:23:37) or relative (e.g. 42m for 42 minutes)
    * @param {string} options.tail - Number of lines to show from the end of the logs (default "all")
-   * @param {boolean} options.timestamps - show timestamps.
+   * @param {boolean} options.timeStamps - show time stamps.
    * @returns {string} Return the container logs.
    */
   logs (options = {}) {
-    const logsAgrs = ['container', 'logs']
+    const logsArgs = ['container', 'logs']
     let stdout = ''
 
-    if (options.since) { logsAgrs.push('--since', options.since) }
-    if (options.tail) { logsAgrs.push('--tail', options.tail) }
-    if (options.timestamps) { logsAgrs.push('--timestamps') }
+    if (options.since) { logsArgs.push('--since', options.since) }
+    if (options.tail) { logsArgs.push('--tail', options.tail) }
+    if (options.timeStamps) { logsArgs.push('--timestamps') } // eslint-disable-line spellcheck/spell-checker
 
-    logsAgrs.push(this.options.dockerId)
+    logsArgs.push(this.options.dockerId)
 
-    const logs = spawn('docker', logsAgrs)
+    const logs = spawn('docker', logsArgs)
 
     logs.stdout.on('data', (data) => {
       stdout += data
@@ -99,10 +99,10 @@ class Container {
   }
 
   /**
-   * inspect the continer.
+   * inspect the container.
    *
    * @param {string} [format] - Format the output using the given Go template.
-   * @returns {Promise<string|object>} continer info.
+   * @returns {Promise<string|object>} container info.
    */
   inspect (format) {
     const inspectArgs = ['container', 'inspect']

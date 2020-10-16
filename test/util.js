@@ -2,31 +2,31 @@ require('../src/docker/types')
 const { Docker } = require('../src/docker/docker')
 const { spawnSync } = require('child_process')
 
-const containerIDs = {}
+const containerIds = {}
 
 let originalCreateContainer
 
 /**
- *  Init Tests configertion
+ *  Init Tests configuration
  *
  * @param {string} suiteName - Test suites name.
- * @returns {TestCreateContainer} - the modifed function of CreateContainer.
+ * @returns {TestCreateContainer} - the modified function of CreateContainer.
  */
 function InitTestCreateContainer (suiteName) {
   originalCreateContainer = Docker.prototype.CreateContainer
 
-  containerIDs[suiteName] = []
+  containerIds[suiteName] = []
 
   /**
    * Create a docker container
    *
    * @param {ContainerOptions} option - docker container options
    * @param {boolean} run - should the container run at the instance of creation.
-   * @returns {import('../src/docker/containers/container')} return continer object
+   * @returns {import('../src/docker/containers/container')} return container object
    */
   const CreateContainer = async function (option, run) {
     const container = await originalCreateContainer(option, run)
-    containerIDs[suiteName].push(container.options.dockerId)
+    containerIds[suiteName].push(container.options.dockerId)
 
     return container
   }
@@ -51,7 +51,7 @@ function CleanTestCreateContainer (suiteName) {
  * @param {string} suiteName - name of the test run.
  */
 function DeleteContainers (suiteName) {
-  spawnSync('docker', ['rm', '-f', '-v'].concat(GetContinerIDs(suiteName)))
+  spawnSync('docker', ['rm', '-f', '-v'].concat(GetContainerIds(suiteName)))
 }
 
 /**
@@ -60,8 +60,8 @@ function DeleteContainers (suiteName) {
  * @param {string} suiteName - Test suites name.
  * @returns {Array} The containers ids array
  */
-function GetContinerIDs (suiteName) {
-  return containerIDs[suiteName]
+function GetContainerIds (suiteName) {
+  return containerIds[suiteName]
 }
 
-module.exports = { GetContinerIDs, DeleteContainers, CleanTestCreateContainer, InitTestCreateContainer }
+module.exports = { GetContainerIds: GetContainerIds, DeleteContainers, CleanTestCreateContainer, InitTestCreateContainer }

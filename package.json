@@ -38,11 +38,12 @@
     "eslint-plugin-jsdoc": "^30.6.4",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-spellcheck": "0.0.17",
     "eslint-plugin-standard": "^4.0.1",
     "husky": "^4.3.0",
     "jest": "^26.5.2"
   },
-  "keywords":[
+  "keywords": [
     "wordpress",
     "cypress",
     "cywp",
@@ -80,7 +81,8 @@
     },
     "plugins": [
       "jest",
-      "jsdoc"
+      "jsdoc",
+      "spellcheck"
     ],
     "env": {
       "es6": true,
@@ -108,7 +110,23 @@
         }
       ],
       "jsdoc/no-undefined-types": "off",
-      "jsdoc/valid-types":  "off"
+      "jsdoc/valid-types": "off",
+      "spellcheck/spell-checker": [
+        "warn",
+        {
+          "skipWords": [
+            "cywp",
+            "stdout",
+            "stderr",
+            "ps",
+            "Wordpress",
+            "Mysql",
+            "twentyseventeen",
+            "spwan",
+            "usr"
+          ]
+        }
+      ]
     }
   }
 }
