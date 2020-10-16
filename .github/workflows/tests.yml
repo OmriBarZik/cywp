@@ -30,7 +30,7 @@ jobs:
 
       - name: Install Dependencies
         env:
-          HUSKY_SKIP_INSTALL: =1
+          HUSKY_SKIP_INSTALL: 1
         run: npm install
 
       - name: Seyup Docker Environment
