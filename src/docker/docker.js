@@ -1,6 +1,8 @@
 require('./types')
+const { ReturnPromise } = require('./util')
 const Container = require('./containers/container')
 const Volume = require('./volume')
+const Network = require('./network')
 const { spawn } = require('child_process')
 
 class Docker {
@@ -12,7 +14,6 @@ class Docker {
    * @returns {Promise<Container>} return promise for continer object
    */
   CreateContainer (options, run = false) {
-    let stderr = ''
     let stdout = ''
 
     const args = processCreateContainerOptions(options, run)
@@ -23,22 +24,11 @@ class Docker {
       stdout += data
     })
 
-    process.stderr.on('data', (data) => {
-      stderr += data
-    })
+    return ReturnPromise(process, () => {
+      options.dockerId = stdout.replace('\n', '')
+      options.status = run ? 'started' : 'created'
 
-    return new Promise((resolve, reject) => {
-      process.on('close', (code) => {
-        if (code) {
-          reject(stderr)
-          return
-        }
-
-        options.dockerId = stdout.replace('\n', '')
-        options.status = run ? 'started' : 'created'
-
-        resolve(new Container(options))
-      })
+      return new Container(options)
     })
   }
 
@@ -49,7 +39,6 @@ class Docker {
    * @returns {Promise<Volume>} return promise for volume object.
    */
   CreateVolume (name) {
-    let stderr = ''
     let stdout = ''
 
     const process = spawn('docker', ['volume', 'create', name])
@@ -58,29 +47,47 @@ class Docker {
       stdout += data
     })
 
-    process.stderr.on('data', (data) => {
-      stderr += data
+    return ReturnPromise(process, () => {
+      const options = {}
+      options.name = stdout.replace('\n', '')
+      options.status = 'alive'
+
+      return new Volume(options)
+    })
+  }
+
+  /**
+   * Create docker network.
+   *
+   * @param {NetworkOption | string} options - gfch
+   * @returns {Promise<Network>} return promise for network object.
+   */
+  CreateNetwork (options) {
+    let stdout = ''
+
+    if ('string' === typeof options) {
+      options = { name: options }
+    }
+
+    const args = ProssesCreateNetworkOption(options)
+
+    const process = spawn('docker', args)
+
+    process.stdout.on('data', (data) => {
+      stdout += data
     })
 
-    return new Promise((resolve, reject) => {
-      process.on('close', (code) => {
-        if (code) {
-          reject(stderr)
-          return
-        }
+    return ReturnPromise(process, () => {
+      options.id = stdout.replace('\n', '')
+      options.status = 'alive'
 
-        const options = {}
-        options.name = stdout.replace('\n', '')
-        options.status = 'alive'
-
-        resolve(new Volume(options))
-      })
+      return new Network(options)
     })
   }
 }
 
 /**
- * create from the option object string array of arguments for the spwan function.
+ * Create from the option object string array of arguments for the spwan function.
  *
  * @param {ContainerOptions} options - docker container options
  * @param {boolean} run - should the container run at the instance of creation.
@@ -154,4 +161,22 @@ function processCreateContainerOptions (options, run) {
   return args
 }
 
-module.exports = { Docker, processCreateContainerOptions }
+/**
+ * Create from the option object string array of arguments for the spwan function.
+ *
+ * @param {NetworkOption} options - docker network options
+ * @returns {string[]} array of arguments
+ */
+function ProssesCreateNetworkOption (options) {
+  const args = ['network', 'create']
+
+  if (!options || !options.name) {
+    throw new Error('options.name must be provided!\nexample:\nnew Network({ name: \'cywp-network\' })')
+  }
+
+  args.push(options.name)
+
+  return args
+}
+
+module.exports = { Docker, processCreateContainerOptions, ProssesCreateNetworkOption }

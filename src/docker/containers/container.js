@@ -1,6 +1,6 @@
 require('../types')
 const { spawn } = require('child_process')
-const { ReturnPromise } = require('../util')
+const { ReturnPromise, CleanInspect } = require('../util')
 
 class Container {
   /**
@@ -15,7 +15,7 @@ class Container {
   /**
    * Start the contianer.
    *
-   * @returns {Promise<Container>} Return the current conitner.
+   * @returns {Promise<Container>} Return the current contianer.
    */
   start () {
     const start = spawn('docker', ['container', 'start', this.options.dockerId])
@@ -31,7 +31,7 @@ class Container {
    *
    * @param {boolean} force Force the removal of a running container.
    * @param {boolean} volumes Remove anonymous volumes associated with the container.
-   * @returns {Promise<Container>} Return the current conitner.
+   * @returns {Promise<Container>} Return the current container.
    */
   rm (force = false, volumes = true) {
     const rmArgs = ['container', 'rm']
@@ -53,7 +53,7 @@ class Container {
    * Stop the continer.
    *
    * @param {number} time Seconds to wait for stop before stopping the container.
-   * @returns {Promise<Container>} Return the current conitner.
+   * @returns {Promise<Container>} Return the current contianer.
    */
   stop (time = 10) {
     const stopArgs = ['container', 'stop']
@@ -101,30 +101,25 @@ class Container {
   /**
    * inspect the continer.
    *
-   * @param {string} [format] Format the output using the given Go template.
+   * @param {string} [format] - Format the output using the given Go template.
    * @returns {Promise<string|object>} continer info.
    */
   inspect (format) {
-    const inspectAgrs = ['container', 'inspect']
+    const inspectArgs = ['container', 'inspect']
     let stdout = ''
 
-    if (format) { inspectAgrs.push('--format', format) }
+    if (format) { inspectArgs.push('--format', format) }
 
-    inspectAgrs.push(this.options.dockerId)
+    inspectArgs.push(this.options.dockerId)
 
-    const inspect = spawn('docker', inspectAgrs)
+    const inspect = spawn('docker', inspectArgs)
 
     inspect.stdout.on('data', (data) => {
       stdout += data
     })
 
     return ReturnPromise(inspect, () => {
-      stdout = stdout.replace(/\r?\n|\r/g, '')
-      try {
-        return JSON.parse(stdout)[0]
-      } catch (e) {
-        return stdout
-      }
+      return CleanInspect(stdout)
     })
   }
 

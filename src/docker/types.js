@@ -14,12 +14,20 @@
  * @property {string} image - the name if the docker image.
  * @property {string} name - name of the container.
  * @property {string} dockerId - the container id, set when the continer is created.
- * @property {string} status - the container status (created|started|removed|stoped)
+ * @property {'created'|'started'|'removed'|'stoped'} status - the container status (created|started|removed|stoped)
  */
 
 /**
  * @typedef VolumeOptions
  * @type {object}
  * @property {string} name - The volume id, set when the volume is created.
- * @property {string} status - Tells if the volume is alive (can be alive|dead)
+ * @property {'alive'|'dead'} status - Tells if the volume is alive (alive|dead)
+ */
+
+/**
+ * @typedef NetworkOption
+ * @type {object}
+ * @property {string} name - the name ofthe docker network.
+ * @property {string} id - the network id, set when the network is created.
+ * @property {'alive'|'dead'} status - Tells if the network is alive (alive|dead)
  */

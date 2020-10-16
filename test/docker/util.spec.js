@@ -1,6 +1,6 @@
 
 const { spawn } = require('child_process')
-const { ReturnPromise } = require('../../src/docker/util')
+const { ReturnPromise, CleanInspect } = require('../../src/docker/util')
 
 describe('Util', () => {
   describe('#ReturnPromise()', () => {
@@ -13,6 +13,16 @@ describe('Util', () => {
       const process = spawn('docker', ['error'])
 
       return expect(ReturnPromise(process, () => {})).rejects.toBeTruthy()
+    })
+  })
+
+  describe('#CleanInspect()', () => {
+    it('should throw error for invalid arguments', () => {
+      expect(CleanInspect('data')).toBe('data')
+    })
+
+    it('should reject for invalid process', () => {
+      expect(CleanInspect('[{"test": "test"}]')).toStrictEqual({ test: 'test' })
     })
   })
 })
