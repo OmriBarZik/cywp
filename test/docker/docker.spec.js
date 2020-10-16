@@ -174,7 +174,7 @@ describe('Docker', () => {
       volumeNames = []
     })
 
-    it('should create volume', async () => {
+    it('should create a volume', async () => {
       const volume = await CreateVolume('cywp-docker-CreateVolume-test')
       volumeNames.push('cywp-docker-CreateVolume-test')
 
@@ -184,6 +184,10 @@ describe('Docker', () => {
 
       expect(volume.options.name).toBe('cywp-docker-CreateVolume-test')
       expect(volume.options.status).toBe('alive')
+    })
+
+    it('should throw error for creating a volume', async () => {
+      return expect(CreateVolume('!')).rejects.toBeTruthy()
     })
 
     afterAll(() => {
