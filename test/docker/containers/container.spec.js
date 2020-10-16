@@ -1,4 +1,4 @@
-const { spawnSync, spawn } = require('child_process')
+const { spawnSync } = require('child_process')
 const { InitTestCreateContainer, CleanTestCreateContainer } = require('../../util')
 
 describe('Container', () => {
@@ -116,23 +116,6 @@ describe('Container', () => {
       const container = await CreateContainer({ image: 'hello-world' })
 
       return expect(container.status()).resolves.toBe('created')
-    })
-  })
-
-  describe('#ReturnPromise()', () => {
-    it('should throw error for invalid arguments', async () => {
-      const container = await CreateContainer({ image: 'hello-world' })
-
-      return expect(() => { container.ReturnPromise('process', 'invalid callback') })
-        .toThrow(new TypeError('callback must be a function'))
-    })
-
-    it('should reject for invalid process', async () => {
-      const container = await CreateContainer({ image: 'hello-world' })
-
-      const process = spawn('docker', ['error'])
-
-      return expect(container.ReturnPromise(process, () => {})).rejects.toBeTruthy()
     })
   })
 
