@@ -1,6 +1,6 @@
 require('../types')
 const { spawn } = require('child_process')
-const { ReturnPromise } = require('../util')
+const { ReturnPromise, CleanInspect } = require('../util')
 
 class Container {
   /**
@@ -101,7 +101,7 @@ class Container {
   /**
    * inspect the continer.
    *
-   * @param {string} [format] Format the output using the given Go template.
+   * @param {string} [format] - Format the output using the given Go template.
    * @returns {Promise<string|object>} continer info.
    */
   inspect (format) {
@@ -119,12 +119,7 @@ class Container {
     })
 
     return ReturnPromise(inspect, () => {
-      stdout = stdout.replace(/\r?\n|\r/g, '')
-      try {
-        return JSON.parse(stdout)[0]
-      } catch (e) {
-        return stdout
-      }
+      return CleanInspect(stdout)
     })
   }
 

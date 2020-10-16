@@ -28,4 +28,19 @@ function ReturnPromise (process, callback) {
   })
 }
 
-module.exports = { ReturnPromise }
+/**
+ * Clean docker inspect output.
+ *
+ * @param {string} stdout - raw inspect output
+ * @returns {string | object} Clean json object or clean string
+ */
+function CleanInspect (stdout) {
+  stdout = stdout.replace(/\r?\n|\r/g, '')
+  try {
+    return JSON.parse(stdout)[0]
+  } catch (e) {
+    return stdout
+  }
+}
+
+module.exports = { ReturnPromise, CleanInspect }
