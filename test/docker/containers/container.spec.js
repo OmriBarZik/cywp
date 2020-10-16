@@ -1,3 +1,4 @@
+require('../../types')
 const { spawnSync } = require('child_process')
 const { InitTestCreateContainer, CleanTestCreateContainer } = require('../../util')
 
@@ -25,6 +26,8 @@ describe('Container', () => {
       const container = await CreateContainer({ image: 'hello-world' })
 
       return container.rm().then((container) => {
+        expect(container.options.status).toBe('removed')
+
         const continerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
         expect(continerCheck.stdout).toHaveLength(0)
       })
