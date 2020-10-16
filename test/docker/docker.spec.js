@@ -225,8 +225,18 @@ describe('Docker', () => {
       networkIds = []
     })
 
-    it('should create docker network', async () => {
-      const network = await CreateNetwork({ name: 'cywp-create-network-test' })
+    it('should create docker network with object', async () => {
+      const network = await CreateNetwork({ name: 'cywp-create-network-with-object-test' })
+      const networkCheck = spawnSync('docker', ['network', 'ls', '-q', '--filter', `id=${network.options.id}`])
+
+      networkIds.push(network.options.id)
+
+      expect(networkCheck.stdout).not.toHaveLength(0)
+      expect(network.options.status).toEqual('alive')
+    })
+
+    it('should create docker network with string', async () => {
+      const network = await CreateNetwork('cywp-create-network-with-string-test')
       const networkCheck = spawnSync('docker', ['network', 'ls', '-q', '--filter', `id=${network.options.id}`])
 
       networkIds.push(network.options.id)

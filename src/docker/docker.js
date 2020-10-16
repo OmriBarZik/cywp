@@ -59,11 +59,15 @@ class Docker {
   /**
    * Create docker network.
    *
-   * @param {NetworkOption} options - gfch
+   * @param {NetworkOption | string} options - gfch
    * @returns {Promise<Network>} return promise for network object.
    */
   CreateNetwork (options) {
     let stdout = ''
+
+    if ('string' === typeof options) {
+      options = { name: options }
+    }
 
     const args = ProssesCreateNetworkOption(options)
 
