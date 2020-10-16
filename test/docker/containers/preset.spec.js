@@ -17,7 +17,7 @@ describe('Presets', () => {
   })
 
   describe('#CreateWordpressContainer()', () => {
-    it('should create wwordpress container named cywp-test-mysql with port exposed', async () => {
+    it('should create wordpress container named cywp-test-mysql with port exposed', async () => {
       const container = await CreateWordpressContainer('test', 4501)
 
       expect(container.options.name).toBe('cywp-test-wordpress')

@@ -1,20 +1,20 @@
 /**
  * @typedef ContainerOptions
  * @type {object}
- * @property {object[]} exposePorts - list of objects that spesified what ports to expose.
+ * @property {object[]} exposePorts - list of objects that specified what ports to expose.
  * @property {number} exposePorts.host - port expose at the host machine.
  * @property {number} exposePorts.docker - port expose at the container.
- * @property {object[]} environmentVariables - list of objects that spesified what environment variables pass to the docker contianer.
- * @property {string} environmentVariables.name - the name of the envierment variable that passes to the docker contianer.
- * @property {string} environmentVariables.value - the value of the envierment variable that passes to the docker contianer.
- * @property {object[]} volumes - list of bjects that spesified what volumes are expose.
+ * @property {object[]} environmentVariables - list of objects that specified what environment variables pass to the docker container.
+ * @property {string} environmentVariables.name - the name of the environment variable that passes to the docker container.
+ * @property {string} environmentVariables.value - the value of the environment variable that passes to the docker container.
+ * @property {object[]} volumes - list of objects that specified what volumes are expose.
  * @property {string} volumes.host - what path is expose at the host.
  * @property {string} volumes.docker - where the expose path is contained in the docker container.
- * @property {string} network - the network the contianer is in.
+ * @property {string} network - the network the container is in.
  * @property {string} image - the name if the docker image.
  * @property {string} name - name of the container.
- * @property {string} dockerId - the container id, set when the continer is created.
- * @property {'created'|'started'|'removed'|'stoped'} status - the container status (created|started|removed|stoped)
+ * @property {string} dockerId - the container id, set when the container is created.
+ * @property {'created'|'started'|'removed'|'stopped'} status - the container status (created|started|removed|stopped)
  */
 
 /**
@@ -27,7 +27,7 @@
 /**
  * @typedef NetworkOption
  * @type {object}
- * @property {string} name - the name ofthe docker network.
+ * @property {string} name - the name of the docker network.
  * @property {string} id - the network id, set when the network is created.
  * @property {'alive'|'dead'} status - Tells if the network is alive (alive|dead)
  */

@@ -14,7 +14,7 @@ function verifyCommand (command) {
 }
 
 /**
- * verefy if the sistem have the right dependencies.
+ * Verify if the system have the right dependencies.
  */
 async function verify () {
   await Promise.all([verifyCommand('git'), verifyCommand('docker'), verifyCommand('docker-compose')])
