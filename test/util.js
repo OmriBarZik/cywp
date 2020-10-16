@@ -22,7 +22,7 @@ function InitTestCreateContainer (suiteName) {
    *
    * @param {ContainerOptions} option - docker container options
    * @param {boolean} run - should the container run at the instance of creation.
-   * @returns {import('../src/docker/containers/container')} return container object
+   * @returns {import('../src/docker/container')} return container object
    */
   const CreateContainer = async function (option, run) {
     const container = await originalCreateContainer(option, run)

@@ -1,6 +1,6 @@
-require('../types')
+require('./types')
 const { spawn } = require('child_process')
-const { ReturnPromise, CleanInspect } = require('../util')
+const { ReturnPromise, CleanInspect } = require('./util')
 
 class Container {
   /**

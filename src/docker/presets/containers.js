@@ -1,4 +1,4 @@
-const Container = require('./container') // eslint-disable-line no-unused-vars
+const Container = require('../container') // eslint-disable-line no-unused-vars
 const { Docker } = require('../docker')
 
 /**

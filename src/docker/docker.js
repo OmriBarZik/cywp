@@ -1,6 +1,6 @@
 require('./types')
 const { ReturnPromise } = require('./util')
-const Container = require('./containers/container')
+const Container = require('./container')
 const Volume = require('./volume')
 const Network = require('./network')
 const { spawn } = require('child_process')
