@@ -16,3 +16,10 @@
  * @property {string} dockerId - the container id, set when the continer is created.
  * @property {string} status - the container status (created|started|removed|stoped)
  */
+
+/**
+ * @typedef VolumeOptions
+ * @type {object}
+ * @property {string} name - The volume id, set when the volume is created.
+ * @property {string} status - Tells if the volume is alive (can be alive|dead)
+ */

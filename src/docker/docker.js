@@ -1,5 +1,6 @@
 require('./types')
 const Container = require('./containers/container')
+const Volume = require('./volume')
 const { spawn } = require('child_process')
 
 class Docker {
@@ -37,6 +38,42 @@ class Docker {
         options.status = run ? 'started' : 'created'
 
         resolve(new Container(options))
+      })
+    })
+  }
+
+  /**
+   * Create docker volume.
+   *
+   * @param {string} name - Name of the volume.
+   * @returns {Promise<Volume>} return promise for volume object.
+   */
+  CreateVolume (name) {
+    let stderr = ''
+    let stdout = ''
+
+    const process = spawn('docker', ['volume', 'create', name])
+
+    process.stdout.on('data', (data) => {
+      stdout += data
+    })
+
+    process.stderr.on('data', (data) => {
+      stderr += data
+    })
+
+    return new Promise((resolve, reject) => {
+      process.on('close', (code) => {
+        if (code) {
+          reject(stderr)
+          return
+        }
+
+        const options = {}
+        options.name = stdout.replace('\n', '')
+        options.status = 'alive'
+
+        resolve(new Volume(options))
       })
     })
   }
