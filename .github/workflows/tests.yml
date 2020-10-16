@@ -29,6 +29,8 @@ jobs:
             ${{ runner.os }}-npm-
 
       - name: Install Dependencies
+        env:
+          HUSKY_SKIP_INSTALL: =1
         run: npm install
 
       - name: Seyup Docker Environment
