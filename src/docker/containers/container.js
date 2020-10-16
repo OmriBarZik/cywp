@@ -15,7 +15,7 @@ class Container {
   /**
    * Start the contianer.
    *
-   * @returns {Promise<Container>} Return the current conitner.
+   * @returns {Promise<Container>} Return the current contianer.
    */
   start () {
     const start = spawn('docker', ['container', 'start', this.options.dockerId])
@@ -31,7 +31,7 @@ class Container {
    *
    * @param {boolean} force Force the removal of a running container.
    * @param {boolean} volumes Remove anonymous volumes associated with the container.
-   * @returns {Promise<Container>} Return the current conitner.
+   * @returns {Promise<Container>} Return the current container.
    */
   rm (force = false, volumes = true) {
     const rmArgs = ['container', 'rm']
@@ -53,7 +53,7 @@ class Container {
    * Stop the continer.
    *
    * @param {number} time Seconds to wait for stop before stopping the container.
-   * @returns {Promise<Container>} Return the current conitner.
+   * @returns {Promise<Container>} Return the current contianer.
    */
   stop (time = 10) {
     const stopArgs = ['container', 'stop']
