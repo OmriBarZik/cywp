@@ -10,8 +10,8 @@ describe('Volume', () => {
       return volume.rm().then((volume) => {
         expect(volume.options.status).toBe('dead')
 
-        const continerCheck = spawnSync('docker', ['volume', 'ls', '-q', '--filter', `name=${volume.options.name}`])
-        expect(continerCheck.stdout).toHaveLength(0)
+        const volumeCheck = spawnSync('docker', ['volume', 'ls', '-q', '--filter', `name=${volume.options.name}`])
+        expect(volumeCheck.stdout).toHaveLength(0)
       })
     })
   })
