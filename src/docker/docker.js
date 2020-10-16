@@ -28,6 +28,8 @@ class Docker {
       options.id = stdout.replace('\n', '')
       options.status = run ? 'started' : 'created'
 
+      if (options.rm) { options.status = 'removed' }
+
       return new Container(options)
     })
   }
@@ -106,6 +108,10 @@ function processCreateContainerOptions (options, run) {
 
   if (options.network) {
     args.push('--net', options.network)
+  }
+
+  if (options.rm) {
+    args.push('--rm')
   }
 
   if (options.volumes) {

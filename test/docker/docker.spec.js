@@ -81,6 +81,12 @@ describe('Docker', () => {
         expect(arr).toContain('--net')
       })
 
+      it('should contains container removal argument', () => {
+        const arr = processCreateContainerOptions({ image: 'image-test', rm: true })
+
+        expect(arr).toContain('--rm')
+      })
+
       it('should contains container volume arguments', () => {
         const arr = processCreateContainerOptions({
           image: 'image-test',
@@ -183,6 +189,16 @@ describe('Docker', () => {
 
       expect(containerCheck.stdout).not.toHaveLength(0)
       expect(container.options.status).toEqual('started')
+    })
+
+    it('should create and remove automatically docker container', async () => {
+      const container = await CreateContainer({ image: 'hello-world', rm: true }, true)
+      const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`])
+
+      containerIds.push(container.options.id)
+
+      expect(containerCheck.stdout.toString()).toHaveLength(0)
+      expect(container.options.status).toEqual('removed')
     })
 
     afterAll(() => {
