@@ -77,11 +77,12 @@ class Container {
    * @param {string} options.since - Show logs since timestamp (e.g. 2020-01-02T13:23:37) or relative (e.g. 42m for 42 minutes)
    * @param {string} options.tail - Number of lines to show from the end of the logs (default "all")
    * @param {boolean} options.timeStamps - show time stamps.
-   * @returns {Promise<string>} Return Promise for container logs.
+   * @returns {Promise<{stdout: string, stderr: string}}>} Return Promise for container logs.
    */
   logs (options = {}) {
     const logsArgs = ['container', 'logs']
     let stdout = ''
+    let stderr = ''
 
     if (options.since) { logsArgs.push('--since', options.since) }
     if (options.tail) { logsArgs.push('--tail', options.tail) }
@@ -95,7 +96,22 @@ class Container {
       stdout += data
     })
 
-    return ReturnPromise(logs, () => stdout)
+    logs.stderr.on('data', (data) => {
+      stderr += data
+    })
+
+    return new Promise((resolve, reject) => {
+      logs.on('close', (code) => {
+        if (code) {
+          reject(stderr)
+          return
+        }
+        resolve({
+          stdout: stdout,
+          stderr: stderr,
+        })
+      })
+    })
   }
 
   /**
