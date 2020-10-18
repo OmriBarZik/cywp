@@ -56,27 +56,21 @@ function CreateWordpressContainer (name, port, mysqlName, mysqlPort, run = false
 }
 
 /**
- * Create wordpress cli continer.
+ * Create wordpress cli container.
  *
- * @param {string} name - The name of the container.
- * @param {number} port - The port expose to the host.
+ * @param {Container} wordpress - WordPress docker container based from.
  * @param {boolean} run - should the container run at the instance of creation.
  * @returns {Promise<Container>} retrun promise for WordPress continer object.
  */
-function CreateWordpressCliContainer (name, port, run) {
-  CheckParameters()
-
+function CreateWordpressCliContainer (wordpress, run) {
   return Docker.prototype.CreateContainer({
     environmentVariables: [
-      { name: 'HOST_PORT', value: port },
-      { name: 'SITE_TITLE', value: `cywp ${name}` },
+      { name: 'HOST_PORT', value: wordpress.options.exposePorts[0].host },
     ],
-    volumes: [
-      { host: 'cywp-twentyseventeen-volume', docker: '/var/www/html' },
-    ],
+    volumes: wordpress.options.volumes,
     image: 'wordpress:cli',
-    network: 'cywp-network',
-    name: `cywp-${name}-wordpress-cli`,
+    network: wordpress.options.network,
+    name: `${wordpress.options.name}-cli`,
   }, run)
 }
 
