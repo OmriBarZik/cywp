@@ -58,6 +58,10 @@ describe('Docker', () => {
 
         expect(() => { processCreateContainerOptions({ image: 'test', exposePorts: [{ error: 'error' }] }) }).toThrow()
       })
+
+      it('should throw an error when commands is not array', () => {
+        expect(() => processCreateContainerOptions({ image: 'test', commands: 'first' })).toThrow()
+      })
     })
 
     describe('##Returns', () => {
@@ -130,6 +134,16 @@ describe('Docker', () => {
         expect(arr).toContain('port-2-host:port-2-docker')
         expect(arr).toContain('-p')
         expect(arr.indexOf('-p') < arr.lastIndexOf('-p')).toBe(true)
+      })
+
+      it('should contains commands for container expose ports arguments', () => {
+        const arr = processCreateContainerOptions({
+          image: 'image-test',
+          commands: ['command1', 'command2'],
+        })
+
+        expect(arr).toContain('command1')
+        expect(arr).toContain('command2')
       })
     })
   })

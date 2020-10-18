@@ -16,6 +16,7 @@
  * @property {string} id - the container id, set when the container is created.
  * @property {boolean} rm - remove the container after it exits.
  * @property {'created'|'started'|'removed'|'stopped'} status - the container status (created|started|removed|stopped)
+ * @property {string[]} commands - commands to pass to the container.
  */
 
 /**

@@ -164,6 +164,14 @@ function processCreateContainerOptions (options, run) {
 
   args.push(options.image)
 
+  if (options.commands) {
+    if (!Array.isArray(options.commands)) {
+      throw new TypeError('options.commands must be array of string.')
+    }
+
+    args.push.apply(args, options.commands)
+  }
+
   return args
 }
 
