@@ -85,6 +85,13 @@ describe('Docker', () => {
         expect(arr).toContain('--net')
       })
 
+      it('should contains container health-cmd argument', () => {
+        const arr = processCreateContainerOptions({ image: 'image-test', healthCommand: 'ping test' })
+
+        expect(arr).toContain("'ping test'")
+        expect(arr).toContain('--health-cmd')
+      })
+
       it('should contains container removal argument', () => {
         const arr = processCreateContainerOptions({ image: 'image-test', rm: true })
 

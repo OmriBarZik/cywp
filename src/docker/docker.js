@@ -110,6 +110,10 @@ function processCreateContainerOptions (options, run) {
     args.push('--net', options.network)
   }
 
+  if (options.healthCommand) {
+    args.push('--health-cmd', `'${options.healthCommand}'`)
+  }
+
   if (options.rm) {
     args.push('--rm')
   }
