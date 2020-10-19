@@ -14,8 +14,15 @@ function setupNetwork () {
 }
 
 /**
+ * Setup mysql container. return the mysql object only when the database is ready.
+ *
  * @param {number} port - the mysql port exposed to the host.
  * @returns {import('../docker/container')} return when mysql database ready.
+ *
+ * @example
+ * function foo() {
+ *  const mysql = await setupDatabase(3306);
+ * }
  */
 async function setupDatabase (port) {
   const mysql = await CreateMysqlContainer('main', port, true)
