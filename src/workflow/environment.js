@@ -39,8 +39,6 @@ async function setupDatabase (port) {
   while (!mysqlReady) {
     const status = await mysql.inspect('{{.State.Health.Status}}')
 
-    console.log(status)
-
     if ('healthy' === status) { mysqlReady = true }
 
     await sleep(1000)
