@@ -47,4 +47,4 @@ async function setupDatabase (port) {
   return mysql
 }
 
-module.exports = { setupNetwork, setupDatabase, docker }
+module.exports = { setupNetwork, setupDatabase }
