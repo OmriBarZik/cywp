@@ -31,24 +31,22 @@ function CreateMysqlContainer (name, port, run = false) {
  *
  * @param {string} name - The name of the container.
  * @param {number} port - The port expose to the host.
- * @param {string} mysqlName - The name of the mysql container.
- * @param {number} mysqlPort - The mysql port expose to the host.
+ * @param {Container} mysqlContainer - The name of the mysql container.
  * @param {boolean} run - should the container run at the instance of creation.
  * @returns {Promise<Container>} retrun promise for WordPress continer object.
  */
-function CreateWordpressContainer (name, port, mysqlName, mysqlPort, run = false) {
+function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
   CheckParameters(name, port)
-  CheckParameters(mysqlName, mysqlPort)
 
   return Docker.prototype.CreateContainer({
     exposePorts: [{ docker: 80, host: port }],
     environmentVariables: [
-      { name: 'WORDPRESS_DB_HOST', value: `${mysqlName}:${mysqlPort}` },
+      { name: 'WORDPRESS_DB_HOST', value: `${mysqlContainer.options.name}:${mysqlContainer.options.exposePorts[0].host}` },
       { name: 'WORDPRESS_DB_PASSWORD', value: 'cywp' },
-      { name: 'WORDPRESS_DB_NAME', value: 'cywp-twentyseventeen-db' },
+      { name: 'WORDPRESS_DB_NAME', value: `cywp-${name}-db` },
     ],
     volumes: [
-      { host: 'cywp-twentyseventeen-volume', docker: '/var/www/html' },
+      { host: `cywp-${name}-volume`, docker: '/var/www/html' },
     ],
     image: 'wordpress',
     network: 'cywp-network',
