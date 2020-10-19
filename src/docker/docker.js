@@ -111,7 +111,7 @@ function processCreateContainerOptions (options, run) {
   }
 
   if (options.healthCommand) {
-    args.push('--health-cmd', `'${options.healthCommand}'`)
+    args.push('--health-cmd', `${options.healthCommand}`)
   }
 
   if (options.rm) {
