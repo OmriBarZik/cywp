@@ -22,6 +22,7 @@ function CreateMysqlContainer (name, port, run = false) {
     environmentVariables: [
       { name: 'MYSQL_ROOT_PASSWORD', value: 'cywp' },
     ],
+    healthCommand: 'mysqladmin ping --silent', // eslint-disable-line spellcheck/spell-checker
   }, run)
 }
 
