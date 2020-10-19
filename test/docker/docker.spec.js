@@ -88,7 +88,7 @@ describe('Docker', () => {
       it('should contains container health-cmd argument', () => {
         const arr = processCreateContainerOptions({ image: 'image-test', healthCommand: 'ping test' })
 
-        expect(arr).toContain("'ping test'")
+        expect(arr).toContain('ping test')
         expect(arr).toContain('--health-cmd')
       })
 
