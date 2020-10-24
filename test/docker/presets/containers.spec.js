@@ -26,6 +26,12 @@ describe('Presets', () => {
       expect(container.options.exposePorts[0].host).toBe(4501)
       expect(container.options.environmentVariables[0].value).toBe('pop:123')
     })
+
+    it('should throw for error when mysqlContainer is not Container', () => {
+      expect(() => CreateWordpressContainer('test', 4501)).toThrow()
+
+      expect(() => CreateWordpressContainer('test', 4501, {})).toThrow()
+    })
   })
 
   describe('#CheckParameters()', () => {
