@@ -31,12 +31,16 @@ function CreateMysqlContainer (name, port, run = false) {
  *
  * @param {string} name - The name of the container.
  * @param {number} port - The port expose to the host.
- * @param {Container} mysqlContainer - The name of the mysql container.
- * @param {boolean} run - should the container run at the instance of creation.
- * @returns {Promise<Container>} retrun promise for WordPress continer object.
+ * @param {Container} mysqlContainer - The mysql container object.
+ * @param {boolean} [run] - Should the container run at the instance of creation.
+ * @returns {Promise<Container>} Retrun promise for WordPress continer object.
  */
 function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
   CheckParameters(name, port)
+
+  if (!(mysqlContainer instanceof Container)) {
+    throw new TypeError('mysqlContainer must be instance of container')
+  }
 
   return Docker.prototype.CreateContainer({
     exposePorts: [{ docker: 80, host: port }],
