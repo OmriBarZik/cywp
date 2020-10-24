@@ -27,13 +27,6 @@ function setupNetwork () {
 async function setupDatabase (port) {
   const mysql = await CreateMysqlContainer('main', port, true)
 
-  const { stderr, stdout } = await mysql.logs()
-
-  console.log('stderr', stderr)
-  console.log('stdout', stdout)
-
-  console.log('created mysql')
-
   let mysqlReady = false
 
   while (!mysqlReady) {
