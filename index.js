@@ -1,51 +1,24 @@
-const { CreateMysqlContainer, CreateWordpressContainer } = require('./src/docker/presets/containers')
-const { Docker } = require('./src/docker/docker')
-
-const docker = new Docker()
+const { CreateWordpressContainer } = require('./src/docker/presets/containers')
+const { setupDatabase } = require('./src/workflow/environment')
+const { InitSite } = require('./src/workflow/sites-management')
 
 /**
- *
+ * Main process function.
  */
 async function start () {
-  // const network = await docker.CreateNetwork('cywp-network')
+  // const network = await setupNetwork()
 
-  const mysql = await CreateMysqlContainer('tmp', 3306)
-  const wordpress = await CreateWordpressContainer('tmp', 8080, 'cywp-tmp-mysql', 3306)
+  const mysql = await setupDatabase(3306)
 
-  await mysql.start()
+  console.log('mysql')
 
-  await wordpress.start()
+  const wordpress = await CreateWordpressContainer('pop', 8001, mysql, true)
+
+  console.log('wordpress')
+
+  const cli = await InitSite(wordpress)
+
+  console.log(cli.options.status)
 }
 
-/**
- *
- */
-async function tmp () {
-  docker.CreateContainer({
-    volumes: [
-      { docker: '/var/www/html', host: 'cywp-twentyseventeen-volume' },
-    ],
-    network: 'cywp-network',
-    image: 'wordpress:cli',
-    // rm: true,
-  }, true).then(cli => {
-    return cli.start()
-  }).then(cli => {
-    return cli.logs()
-  }).then(logs => {
-    console.log(logs)
-  })
-}
-/*
-[
-  "container",
-  "create",
-  "--rm",
-  "-v",
-  "cywp-twentyseventeen-volume:/var/www/html",
-  "wordpress:cli",
-]
- */
-
-// start()
-tmp()
+start()
