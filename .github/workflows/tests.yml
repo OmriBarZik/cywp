@@ -60,6 +60,7 @@ jobs:
           # You can find this token here: https://dashboard.ngrok.com/get-started/setup
           # NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
           NGROK_TOKEN: ${{ secrets.NGROK_TOKEN }}
+          USER_PASS: ${{ secrets.NGROK_PASSWORD }}
 
       - name: Don't kill instace
         if: ${{ failure() }}
