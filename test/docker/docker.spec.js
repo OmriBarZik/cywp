@@ -1,5 +1,6 @@
 const { spawnSync } = require('child_process')
 const { Docker, processCreateContainerOptions, ProcessCreateNetworkOption } = require('../../src/docker/docker')
+const { sleep } = require('../../src/docker/util')
 const CreateContainer = Docker.prototype.CreateContainer
 const CreateVolume = Docker.prototype.CreateVolume
 const CreateNetwork = Docker.prototype.CreateNetwork
@@ -239,6 +240,8 @@ describe('Docker', () => {
       const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`])
 
       containerIds.push(container.options.id)
+
+      await sleep(500)
 
       expect(containerCheck.stdout.toString()).toHaveLength(0)
       expect(container.options.status).toEqual('removed')
