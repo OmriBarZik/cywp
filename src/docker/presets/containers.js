@@ -67,9 +67,6 @@ function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
  */
 function CreateWordpressCliContainer (wordpress, commands) {
   return Docker.prototype.CreateContainer({
-    environmentVariables: [
-      { name: 'HOST_PORT', value: wordpress.options.exposePorts[0].host },
-    ],
     volumes: wordpress.options.volumes,
     image: 'wordpress:cli',
     network: wordpress.options.network,
