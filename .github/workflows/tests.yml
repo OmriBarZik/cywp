@@ -63,5 +63,5 @@ jobs:
           USER_PASS: ${{ secrets.NGROK_PASSWORD }}
 
       - name: Don't kill instace
-        if: ${{ failure() && matrix.node-version == '12.x' }}
-        run: sleep 30m # Prevent to killing instance after failure
+        if: ${{ failure() }}
+        run: sleep 1h # Prevent to killing instance after failure
