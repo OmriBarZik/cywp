@@ -65,6 +65,28 @@ describe('Docker', () => {
     })
 
     describe('##Returns', () => {
+      it('should contains base args to create container', () => {
+        const arr1 = processCreateContainerOptions({ image: 'image-test' })
+        const arr2 = processCreateContainerOptions({ image: 'image-test' }, false, false)
+
+        expect(arr1).toEqual(['container', 'create', 'image-test'])
+        expect(arr2).toEqual(['container', 'create', 'image-test'])
+      })
+
+      it('should contains base args to run container as detach', () => {
+        const arr2 = processCreateContainerOptions({ image: 'image-test' }, true, true)
+
+        expect(arr2).toStrictEqual(['container', 'run', '--detach', 'image-test'])
+      })
+
+      it('should contains base args to run container', () => {
+        const arr1 = processCreateContainerOptions({ image: 'image-test' }, true, false)
+        const arr2 = processCreateContainerOptions({ image: 'image-test' }, true)
+
+        expect(arr1).toEqual(['container', 'run', 'image-test'])
+        expect(arr2).toEqual(['container', 'run', 'image-test'])
+      })
+
       it('should contains docker image name', () => {
         const arr = processCreateContainerOptions({ image: 'image-test' })
 

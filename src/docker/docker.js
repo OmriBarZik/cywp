@@ -9,14 +9,15 @@ class Docker {
   /**
    * Create a docker container
    *
-   * @param {ContainerOptions} options - docker container options
-   * @param {boolean} run - should the container run at the instance of creation.
-   * @returns {Promise<Container>} return promise for continer object
+   * @param {ContainerOptions} options - Docker container options
+   * @param {boolean} run - Should the container run at the instance of creation.
+   * @param {boolean} detach - Should the Promise resolve when the container exits.
+   * @returns {Promise<Container>} Return promise for continer object
    */
-  CreateContainer (options, run = false) {
+  CreateContainer (options, run = false, detach = true) {
     let stdout = ''
 
-    const args = processCreateContainerOptions(options, run)
+    const args = processCreateContainerOptions(options, run, detach)
 
     const process = spawn('docker', args)
 
@@ -91,12 +92,17 @@ class Docker {
 /**
  * Create from the option object string array of arguments for the spwan function.
  *
- * @param {ContainerOptions} options - docker container options
- * @param {boolean} run - should the container run at the instance of creation.
- * @returns {string[]} array of arguments
+ * @param {ContainerOptions} options - Docker container options
+ * @param {boolean} run - Should the container run at the instance of creation.
+ * @param {boolean} detach - Should the container run with logs attached.
+ * @returns {string[]} Array of arguments
  */
-function processCreateContainerOptions (options, run) {
+function processCreateContainerOptions (options, run, detach) {
   const args = run ? ['container', 'run', '--detach'] : ['container', 'create']
+
+  if (run && !detach) {
+    args.pop()
+  }
 
   if (!options || !options.image) {
     throw new Error('options.image must be provided!\nexample:\nnew Container({image = \'wordpress:latest\'})')
