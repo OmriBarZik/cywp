@@ -241,7 +241,7 @@ describe('Docker', () => {
 
       containerIds.push(container.options.id)
 
-      await sleep(500)
+      await sleep(100)
 
       expect(containerCheck.stdout.toString()).toHaveLength(0)
       expect(container.options.status).toEqual('removed')
