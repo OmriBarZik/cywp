@@ -236,14 +236,11 @@ describe('Docker', () => {
     })
 
     it('should create and remove automatically docker container', async () => {
-      return CreateContainer({ image: 'hello-world', rm: true }, true).then(container => {
-        const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`])
+      const container = await CreateContainer({ image: 'hello-world', rm: true }, true)
 
-        containerIds.push(container.options.id)
+      containerIds.push(container.options.id)
 
-        expect(containerCheck.stdout.toString()).toHaveLength(0)
-        expect(container.options.status).toEqual('removed')
-      })
+      expect(container.options.status).toEqual('removed')
     })
 
     afterAll(() => {
