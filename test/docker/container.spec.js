@@ -61,6 +61,12 @@ describe('Container', () => {
   })
 
   describe('#logs()', () => {
+    it('should return stderr docker logs', async () => {
+      const container = await CreateContainer({ image: 'hello-world' }, true)
+
+      return expect(container.logs({ since: 'fail' })).rejects.toBeTruthy()
+    })
+
     it('should return docker logs', async () => {
       const container = await CreateContainer({ image: 'hello-world' }, true)
 

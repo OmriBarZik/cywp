@@ -66,6 +66,10 @@ function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
  * @returns {Promise<Container>} retrun promise for WordPress continer object.
  */
 function CreateWordpressCliContainer (wordpress, commands) {
+  if (!Array.isArray(commands)) {
+    throw new TypeError('commands must be an array')
+  }
+
   return Docker.prototype.CreateContainer({
     volumes: wordpress.options.volumes,
     image: 'wordpress:cli',

@@ -3,6 +3,7 @@ const { Docker } = require('../src/docker/docker')
 const { spawnSync } = require('child_process')
 
 const containerIds = {}
+const volumeIds = {}
 
 let originalCreateContainer
 
@@ -16,6 +17,7 @@ function InitTestCreateContainer (suiteName) {
   originalCreateContainer = Docker.prototype.CreateContainer
 
   containerIds[suiteName] = []
+  volumeIds[suiteName] = []
 
   /**
    * Create a docker container
@@ -27,6 +29,10 @@ function InitTestCreateContainer (suiteName) {
   const CreateContainer = async function (option, run) {
     const container = await originalCreateContainer(option, run)
     containerIds[suiteName].push(container.options.id)
+
+    if (container.options.volumes) {
+      volumeIds[suiteName].push.apply(volumeIds[suiteName], container.options.volumes.map(item => item.host))
+    }
 
     return container
   }
@@ -52,6 +58,7 @@ function CleanTestCreateContainer (suiteName) {
  */
 function DeleteContainers (suiteName) {
   spawnSync('docker', ['rm', '-f', '-v'].concat(GetContainerIds(suiteName)))
+  spawnSync('docker', ['volume', 'rm', '-f'].concat(volumeIds[suiteName]))
 }
 
 /**
