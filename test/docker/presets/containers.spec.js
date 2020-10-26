@@ -2,10 +2,20 @@ const { CreateMysqlContainer, CreateWordpressContainer, CreateWordpressCliContai
 const { CleanTestCreateContainer, InitTestCreateContainer } = require('../../util')
 const { spawnSync } = require('child_process')
 const Container = require('../../../src/docker/container')
+const { Docker } = require('../../../src/docker/docker')
 
 describe('Presets', () => {
-  beforeAll(() => {
+  let keepCywpNetwork
+
+  beforeAll(async () => {
     InitTestCreateContainer('preset')
+
+    try {
+      await Docker.prototype.CreateNetwork('cywp-network')
+      keepCywpNetwork = false
+    } catch (error) {
+      keepCywpNetwork = true
+    }
   })
 
   describe('#CreateMysqlContainer()', () => {
@@ -63,6 +73,8 @@ describe('Presets', () => {
   afterAll(() => {
     CleanTestCreateContainer('preset')
 
-    spawnSync('docker', ['volume', 'rm', '-f', 'cywp-twentyseventeen-volume'])
+    if (!keepCywpNetwork) {
+      spawnSync('docker', ['network', 'rm', 'cywp-network'])
+    }
   })
 })
