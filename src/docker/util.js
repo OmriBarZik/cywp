@@ -28,6 +28,7 @@ function ReturnPromise (process, callback) {
   })
 }
 
+/* istanbul ignore next */
 /**
  * wait for number of milliseconds.
  *
