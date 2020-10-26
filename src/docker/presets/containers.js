@@ -22,6 +22,7 @@ function CreateMysqlContainer (name, port, run = false) {
     environmentVariables: [
       { name: 'MYSQL_ROOT_PASSWORD', value: 'cywp' },
     ],
+    healthCommand: 'mysqladmin ping --silent', // eslint-disable-line spellcheck/spell-checker
   }, run)
 }
 
@@ -30,26 +31,49 @@ function CreateMysqlContainer (name, port, run = false) {
  *
  * @param {string} name - The name of the container.
  * @param {number} port - The port expose to the host.
- * @param {boolean} run - should the container run at the instance of creation.
- * @returns {Promise<Container>} retrun promise for WordPress continer object.
+ * @param {Container} mysqlContainer - The mysql container object.
+ * @param {boolean} [run] - Should the container run at the instance of creation.
+ * @returns {Promise<Container>} Retrun promise for WordPress continer object.
  */
-function CreateWordpressContainer (name, port, run = false) {
+function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
   CheckParameters(name, port)
+
+  if (!(mysqlContainer instanceof Container)) {
+    throw new TypeError('mysqlContainer must be instance of container')
+  }
 
   return Docker.prototype.CreateContainer({
     exposePorts: [{ docker: 80, host: port }],
     environmentVariables: [
-      { name: 'WORDPRESS_DB_HOST', value: 'cywp-mysql:3306' },
+      { name: 'WORDPRESS_DB_HOST', value: `${mysqlContainer.options.name}:${mysqlContainer.options.exposePorts[0].host}` },
       { name: 'WORDPRESS_DB_PASSWORD', value: 'cywp' },
-      { name: 'WORDPRESS_DB_NAME', value: 'cywp-twentyseventeen-db' },
+      { name: 'WORDPRESS_DB_NAME', value: `cywp-${name}-db` },
     ],
     volumes: [
-      { host: 'cywp-twentyseventeen-volume', docker: '/var/www/html' },
+      { host: `cywp-${name}-volume`, docker: '/var/www/html' },
     ],
     image: 'wordpress',
     network: 'cywp-network',
     name: `cywp-${name}-wordpress`,
   }, run)
+}
+
+/**
+ * Create wordpress cli container.
+ *
+ * @param {Container} wordpress - WordPress docker container based from.
+ * @param {string[]} commands - commands to pass to the container.
+ * @returns {Promise<Container>} retrun promise for WordPress continer object.
+ */
+function CreateWordpressCliContainer (wordpress, commands) {
+  return Docker.prototype.CreateContainer({
+    volumes: wordpress.options.volumes,
+    image: 'wordpress:cli',
+    network: wordpress.options.network,
+    name: `${wordpress.options.name}-cli`,
+    commands: commands,
+    rm: true,
+  }, true, false)
 }
 
 /**
@@ -67,4 +91,4 @@ function CheckParameters (name, port) {
   }
 }
 
-module.exports = { CreateMysqlContainer, CreateWordpressContainer }
+module.exports = { CreateMysqlContainer, CreateWordpressContainer, CreateWordpressCliContainer }

@@ -29,6 +29,18 @@ function ReturnPromise (process, callback) {
 }
 
 /**
+ * wait for number of milliseconds.
+ *
+ * @param {number} ms - number of milliseconds.
+ * @returns {Promise<void>} - return promise.
+ */
+function sleep (ms) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms)
+  })
+}
+
+/**
  * Clean docker inspect output.
  *
  * @param {string} stdout - raw inspect output
@@ -43,4 +55,4 @@ function CleanInspect (stdout) {
   }
 }
 
-module.exports = { ReturnPromise, CleanInspect }
+module.exports = { ReturnPromise, CleanInspect, sleep }

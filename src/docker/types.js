@@ -13,8 +13,11 @@
  * @property {string} network - the network the container is in.
  * @property {string} image - the name if the docker image.
  * @property {string} name - name of the container.
- * @property {string} dockerId - the container id, set when the container is created.
+ * @property {string} id - the container id, set when the container is created.
+ * @property {boolean} rm - remove the container after it exits.
  * @property {'created'|'started'|'removed'|'stopped'} status - the container status (created|started|removed|stopped)
+ * @property {string[]} commands - commands to pass to the container.
+ * @property {string} healthCommand - Command to run to check health.
  */
 
 /**

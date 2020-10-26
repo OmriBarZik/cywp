@@ -14,7 +14,7 @@ describe('Container', () => {
     it('should start docker container', async () => {
       const container = await CreateContainer({ image: 'hello-world' })
 
-      const containerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=exited'])
+      const containerCheck = spawnSync('docker', ['ps', '-a', '--filter', `id=${container.options.id}`, '--filter', 'status=exited'])
       expect(containerCheck.stdout).not.toHaveLength(0)
 
       return expect(container.start()).resolves.toMatchObject({ options: { status: 'started' } })
@@ -28,7 +28,7 @@ describe('Container', () => {
       return container.rm().then((container) => {
         expect(container.options.status).toBe('removed')
 
-        const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
+        const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`])
         expect(containerCheck.stdout).toHaveLength(0)
       })
     })
@@ -37,7 +37,7 @@ describe('Container', () => {
       const container = await CreateContainer({ image: 'hello-world' })
 
       return container.rm(true).then((container) => {
-        const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
+        const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`])
         expect(containerCheck.stdout).toHaveLength(0)
       })
     })
@@ -46,7 +46,7 @@ describe('Container', () => {
       const container = await CreateContainer({ image: 'hello-world' })
 
       return container.rm(false, true).then((container) => {
-        const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
+        const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`])
         expect(containerCheck.stdout).toHaveLength(0)
       })
     })
@@ -64,38 +64,63 @@ describe('Container', () => {
     it('should return docker logs', async () => {
       const container = await CreateContainer({ image: 'hello-world' }, true)
 
-      return expect(container.logs()).resolves.toEqual(expect.stringContaining('Docker'))
+      return container.logs().then((logs) => {
+        expect(logs.stdout).toEqual(expect.stringContaining('docker'))
+        expect(logs.stderr).toBeFalsy()
+        expect(logs.container).toBe(container)
+      })
     })
 
     it('should return number of lines form logs', async () => {
       const container = await CreateContainer({ image: 'hello-world' }, true)
 
-      return expect(container.logs({ tail: 2 })).resolves.toBe(' https://docs.docker.com/get-started/\n\n')
+      return container.logs({ tail: 2 }).then(logs => {
+        expect(logs.stdout).toEqual(' https://docs.docker.com/get-started/\n\n')
+        expect(logs.stderr).toBeFalsy()
+        expect(logs.container).toBe(container)
+      })
     })
 
     it('should return logs with time stamp', async () => {
       const container = await CreateContainer({ image: 'hello-world' }, true)
 
-      const time = new Date().toISOString().substr(0, 14)
-      return expect(container.logs({ timeStamps: true })).resolves.toEqual(expect.stringContaining(time))
+      const creationTime = await container.inspect('{{.Created}}')
+      const time = new Date(creationTime)
+      time.setDate(time.getDate())
+
+      return container.logs({ timeStamps: true }).then(logs => {
+        expect(logs.stdout).toEqual(expect.stringContaining(time.toISOString().substr(0, 17)))
+        expect(logs.stderr).toBeFalsy()
+        expect(logs.container).toBe(container)
+      })
     })
 
     it('should return logs since', async () => {
-      const time = new Date()
-      time.setDate(new Date().getDate() - 1)
-
       const container = await CreateContainer({ image: 'hello-world' }, true)
 
-      return expect(container.logs({ since: time.toISOString() })).resolves.toBeTruthy()
+      const creationTime = await container.inspect('{{.Created}}')
+      const time = new Date(creationTime)
+      time.setDate(time.getDate() - 1)
+
+      return container.logs({ since: time.toISOString() }).then(logs => {
+        expect(logs.stdout).toBeTruthy()
+        expect(logs.stderr).toBeFalsy()
+        expect(logs.container).toBe(container)
+      })
     })
 
     it('should not return logs', async () => {
       const container = await CreateContainer({ image: 'hello-world' }, true)
 
-      const time = new Date()
-      time.setDate(new Date().getDate() + 1)
+      const creationTime = await container.inspect('{{.Created}}')
+      const time = new Date(creationTime)
+      time.setDate(time.getDate() + 1)
 
-      return expect(container.logs({ since: time.toISOString() })).resolves.toBeFalsy()
+      return container.logs({ since: time.toISOString() }).then(logs => {
+        expect(logs.stdout).toBeFalsy()
+        expect(logs.stderr).toBeFalsy()
+        expect(logs.container).toBe(container)
+      })
     })
   })
 
@@ -104,13 +129,13 @@ describe('Container', () => {
       const container = await CreateContainer({ image: 'hello-world' })
 
       return expect(container.inspect()).resolves
-        .toMatchObject({ Id: container.options.dockerId, State: { Status: 'created' } })
+        .toMatchObject({ Id: container.options.id, State: { Status: 'created' } })
     })
 
     it('should return specific container info', async () => {
       const container = await CreateContainer({ image: 'hello-world' })
 
-      return expect(container.inspect('{{.Id}}')).resolves.toBe(container.options.dockerId)
+      return expect(container.inspect('{{.Id}}')).resolves.toBe(container.options.id)
     })
   })
 

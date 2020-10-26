@@ -26,7 +26,7 @@ function InitTestCreateContainer (suiteName) {
    */
   const CreateContainer = async function (option, run) {
     const container = await originalCreateContainer(option, run)
-    containerIds[suiteName].push(container.options.dockerId)
+    containerIds[suiteName].push(container.options.id)
 
     return container
   }

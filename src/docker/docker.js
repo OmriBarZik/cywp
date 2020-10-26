@@ -9,14 +9,15 @@ class Docker {
   /**
    * Create a docker container
    *
-   * @param {ContainerOptions} options - docker container options
-   * @param {boolean} run - should the container run at the instance of creation.
-   * @returns {Promise<Container>} return promise for continer object
+   * @param {ContainerOptions} options - Docker container options
+   * @param {boolean} run - Should the container run at the instance of creation.
+   * @param {boolean} detach - Should the Promise resolve when the container exits.
+   * @returns {Promise<Container>} Return promise for continer object
    */
-  CreateContainer (options, run = false) {
+  CreateContainer (options, run = false, detach = true) {
     let stdout = ''
 
-    const args = processCreateContainerOptions(options, run)
+    const args = processCreateContainerOptions(options, run, detach)
 
     const process = spawn('docker', args)
 
@@ -25,8 +26,10 @@ class Docker {
     })
 
     return ReturnPromise(process, () => {
-      options.dockerId = stdout.replace('\n', '')
+      options.id = stdout.replace('\n', '')
       options.status = run ? 'started' : 'created'
+
+      if (options.rm) { options.status = 'removed' }
 
       return new Container(options)
     })
@@ -89,12 +92,17 @@ class Docker {
 /**
  * Create from the option object string array of arguments for the spwan function.
  *
- * @param {ContainerOptions} options - docker container options
- * @param {boolean} run - should the container run at the instance of creation.
- * @returns {string[]} array of arguments
+ * @param {ContainerOptions} options - Docker container options
+ * @param {boolean} run - Should the container run at the instance of creation.
+ * @param {boolean} detach - Should the container run with logs attached.
+ * @returns {string[]} Array of arguments
  */
-function processCreateContainerOptions (options, run) {
+function processCreateContainerOptions (options, run, detach) {
   const args = run ? ['container', 'run', '--detach'] : ['container', 'create']
+
+  if (run && !detach) {
+    args.pop()
+  }
 
   if (!options || !options.image) {
     throw new Error('options.image must be provided!\nexample:\nnew Container({image = \'wordpress:latest\'})')
@@ -106,6 +114,14 @@ function processCreateContainerOptions (options, run) {
 
   if (options.network) {
     args.push('--net', options.network)
+  }
+
+  if (options.healthCommand) {
+    args.push('--health-cmd', `${options.healthCommand}`)
+  }
+
+  if (options.rm) {
+    args.push('--rm')
   }
 
   if (options.volumes) {
@@ -157,6 +173,14 @@ function processCreateContainerOptions (options, run) {
   }
 
   args.push(options.image)
+
+  if (options.commands) {
+    if (!Array.isArray(options.commands)) {
+      throw new TypeError('options.commands must be array of string.')
+    }
+
+    args.push.apply(args, options.commands)
+  }
 
   return args
 }

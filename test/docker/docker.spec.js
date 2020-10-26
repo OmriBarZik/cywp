@@ -58,9 +58,35 @@ describe('Docker', () => {
 
         expect(() => { processCreateContainerOptions({ image: 'test', exposePorts: [{ error: 'error' }] }) }).toThrow()
       })
+
+      it('should throw an error when commands is not array', () => {
+        expect(() => processCreateContainerOptions({ image: 'test', commands: 'first' })).toThrow()
+      })
     })
 
     describe('##Returns', () => {
+      it('should contains base args to create container', () => {
+        const arr1 = processCreateContainerOptions({ image: 'image-test' })
+        const arr2 = processCreateContainerOptions({ image: 'image-test' }, false, false)
+
+        expect(arr1).toEqual(['container', 'create', 'image-test'])
+        expect(arr2).toEqual(['container', 'create', 'image-test'])
+      })
+
+      it('should contains base args to run container as detach', () => {
+        const arr2 = processCreateContainerOptions({ image: 'image-test' }, true, true)
+
+        expect(arr2).toStrictEqual(['container', 'run', '--detach', 'image-test'])
+      })
+
+      it('should contains base args to run container', () => {
+        const arr1 = processCreateContainerOptions({ image: 'image-test' }, true, false)
+        const arr2 = processCreateContainerOptions({ image: 'image-test' }, true)
+
+        expect(arr1).toEqual(['container', 'run', 'image-test'])
+        expect(arr2).toEqual(['container', 'run', 'image-test'])
+      })
+
       it('should contains docker image name', () => {
         const arr = processCreateContainerOptions({ image: 'image-test' })
 
@@ -79,6 +105,19 @@ describe('Docker', () => {
 
         expect(arr).toContain('network-test')
         expect(arr).toContain('--net')
+      })
+
+      it('should contains container health-cmd argument', () => {
+        const arr = processCreateContainerOptions({ image: 'image-test', healthCommand: 'ping test' })
+
+        expect(arr).toContain('ping test')
+        expect(arr).toContain('--health-cmd')
+      })
+
+      it('should contains container removal argument', () => {
+        const arr = processCreateContainerOptions({ image: 'image-test', rm: true })
+
+        expect(arr).toContain('--rm')
       })
 
       it('should contains container volume arguments', () => {
@@ -125,6 +164,16 @@ describe('Docker', () => {
         expect(arr).toContain('-p')
         expect(arr.indexOf('-p') < arr.lastIndexOf('-p')).toBe(true)
       })
+
+      it('should contains commands for container expose ports arguments', () => {
+        const arr = processCreateContainerOptions({
+          image: 'image-test',
+          commands: ['command1', 'command2'],
+        })
+
+        expect(arr).toContain('command1')
+        expect(arr).toContain('command2')
+      })
     })
   })
 
@@ -151,17 +200,17 @@ describe('Docker', () => {
   })
 
   describe('#CreateContainer', () => {
-    let dockerIds
+    let containerIds
 
     beforeAll(() => {
-      dockerIds = []
+      containerIds = []
     })
 
     it('should create docker container', async () => {
       const container = await CreateContainer({ image: 'hello-world' })
-      const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`, '--filter', 'status=created'])
+      const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`, '--filter', 'status=created'])
 
-      dockerIds.push(container.options.dockerId)
+      containerIds.push(container.options.id)
 
       expect(containerCheck.stdout).not.toHaveLength(0)
       expect(container.options.status).toEqual('created')
@@ -170,23 +219,31 @@ describe('Docker', () => {
     it('should throw reject for creating container with the same name', async () => {
       const container = await CreateContainer({ image: 'hello-world', name: 'test' })
 
-      dockerIds.push(container.options.dockerId)
+      containerIds.push(container.options.id)
 
       return expect(CreateContainer({ image: 'hello-world', name: 'test' })).rejects.toBeTruthy()
     })
 
     it('should create running docker container', async () => {
       const container = await CreateContainer({ image: 'hello-world' }, true)
-      const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.dockerId}`])
+      const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`])
 
-      dockerIds.push(container.options.dockerId)
+      containerIds.push(container.options.id)
 
       expect(containerCheck.stdout).not.toHaveLength(0)
       expect(container.options.status).toEqual('started')
     })
 
+    it('should create and remove automatically docker container', async () => {
+      const container = await CreateContainer({ image: 'hello-world', rm: true }, true)
+
+      containerIds.push(container.options.id)
+
+      expect(container.options.status).toEqual('removed')
+    })
+
     afterAll(() => {
-      spawnSync('docker', ['rm', '-f'].concat(dockerIds))
+      spawnSync('docker', ['rm', '-f'].concat(containerIds))
     })
   })
 
