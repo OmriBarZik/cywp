@@ -51,6 +51,8 @@ function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
     ],
     volumes: [
       { host: `cywp-${name}-volume`, docker: '/var/www/html' },
+      { host: `cywp-${name}-volume-themes`, docker: '/var/www/html/wp-content/themes' },
+      { host: `cywp-${name}-volume-plugins`, docker: '/var/www/html/wp-content/plugins' },
     ],
     image: 'wordpress',
     network: 'cywp-network',
