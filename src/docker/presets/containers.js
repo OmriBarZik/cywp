@@ -72,7 +72,7 @@ function CreateWordpressCliContainer (wordpress, commands) {
     throw new TypeError('commands must be an array')
   }
 
-  return Docker.prototype.CreateContainer({
+  return Docker.prototype.RunInContainer({
     volumes: wordpress.options.volumes,
     image: 'wordpress:cli',
     network: wordpress.options.network,
