@@ -22,7 +22,12 @@ function CreateMysqlContainer (name, port, run = false) {
     environmentVariables: [
       { name: 'MYSQL_ROOT_PASSWORD', value: 'cywp' },
     ],
-    healthCommand: 'mysqladmin ping --silent', // eslint-disable-line spellcheck/spell-checker
+    health: {
+      command: 'mysqladmin ping --silent', // eslint-disable-line spellcheck/spell-checker
+      startPeriod: '5s',
+      retries: 30,
+      interval: '1s',
+    },
   }, run)
 }
 
@@ -59,8 +64,8 @@ function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
     name: `cywp-${name}-wordpress`,
     health: {
       command: 'test -r wp-includes/version.php',
-      interval: '5s',
-      startPeriod: '3s',
+      startPeriod: '1s',
+      interval: '1s',
       retries: 30,
     },
   }, run)
