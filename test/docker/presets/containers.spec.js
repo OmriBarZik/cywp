@@ -50,7 +50,6 @@ describe('Presets', () => {
       const wordpress = await CreateWordpressContainer('presets-test-cli', 4501, demoMysqlContainer)
       const container = await CreateWordpressCliContainer(wordpress, ['wp', '--help'])
 
-      expect(container.options.name).toBe('cywp-presets-test-cli-wordpress-cli')
       expect(container.options.commands).toEqual(expect.arrayContaining(['wp', '--help']))
       expect(container.options.network).toBe(wordpress.options.network)
     })
