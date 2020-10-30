@@ -36,6 +36,36 @@ class Docker {
   }
 
   /**
+   * Run commands in a docker container return it's output.
+   *
+   * @param {ContainerOptions} options - Docker container options.
+   * @returns {RunInContainerOutput} Container outputs.
+   */
+  RunInContainer (options) {
+    if (!options.commands) {
+      throw new TypeError('options.commands must be provided to use RunInContainer.')
+    }
+
+    if (!options.rm) {
+      throw new TypeError('options.rm must be true to use RunInContainer. (we don\'t want to leave garbage aroud)')
+    }
+
+    let stdout = ''
+
+    const args = processCreateContainerOptions(options, true, false)
+
+    const process = spawn('docker', args)
+
+    process.stdout.on('data', (data) => {
+      stdout += data
+    })
+
+    return ReturnPromise(process, (stderr) => {
+      return { stdout: stdout, stderr: stderr }
+    })
+  }
+
+  /**
    * Create docker volume.
    *
    * @param {string} name - Name of the volume.

@@ -20,6 +20,12 @@
  * @property {string} healthCommand - Command to run to check health.
  */
 
+/** @typedef RunInContainerOutput
+ * @type {object}
+ * @property {string} stdout - Container output from log stream.
+ * @property {string} stderr - Container output from error stream.
+ */
+
 /**
  * @typedef VolumeOptions
  * @type {object}
