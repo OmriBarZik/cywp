@@ -146,8 +146,30 @@ function processCreateContainerOptions (options, run, detach) {
     args.push('--net', options.network)
   }
 
-  if (options.healthCommand) {
-    args.push('--health-cmd', `${options.healthCommand}`)
+  if (options.health) {
+    if (options.health.command) {
+      args.push('--health-cmd', options.health.command)
+    }
+
+    if (options.health.interval) {
+      args.push('--health-interval', options.health.interval)
+    }
+
+    if (options.health.retries) {
+      if (!Number.isInteger(options.health.retries)) {
+        throw new TypeError('options.health.retries must be an integer.')
+      }
+
+      args.push('--health-retries', options.health.retries)
+    }
+
+    if (options.health.startPeriod) {
+      args.push('--health-start-period', options.health.startPeriod)
+    }
+
+    if (options.health.timeout) {
+      args.push('--health-timeout', options.health.timeout)
+    }
   }
 
   if (options.rm) {
