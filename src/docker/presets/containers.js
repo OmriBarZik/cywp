@@ -65,7 +65,7 @@ function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
  *
  * @param {Container} wordpress - WordPress docker container based from.
  * @param {string[]} commands - commands to pass to the container.
- * @returns {Promise<Container>} retrun promise for WordPress continer object.
+ * @returns {Promise<RunInContainerOutput>} retrun promise for WordPress continer object.
  */
 function CreateWordpressCliContainer (wordpress, commands) {
   if (!Array.isArray(commands)) {
