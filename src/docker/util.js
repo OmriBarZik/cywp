@@ -2,7 +2,7 @@
  * Return the child process as promise.
  *
  * @param {import('child_process').ChildProcessWithoutNullStreams} process - the child process that's running.
- * @param {Function} callback - callback that deterred what to return when the process is successful.
+ * @param {([stderr]: string) => any} callback - callback that deterred what to return when the process is successful.
  * @returns {Promise} return what said to return form the callback
  */
 function ReturnPromise (process, callback) {
@@ -23,7 +23,7 @@ function ReturnPromise (process, callback) {
         return
       }
 
-      resolve(callback())
+      resolve(callback(stderr))
     })
   })
 }
