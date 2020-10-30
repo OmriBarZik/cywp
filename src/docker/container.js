@@ -151,6 +151,20 @@ class Container {
       return status
     })
   }
+
+  /**
+   * Checks if the container is healthy or not.
+   *
+   * @returns {Promise<boolean>} if the continer is healthy or not
+   */
+  isHealthy () {
+    if (!this.options.health.command) {
+      throw new Error('options.health.command must be defined to use IsHealthy')
+    }
+
+    return this.inspect('{{.State.Health.Status}}')
+      .then(status => 'healthy' === status)
+  }
 }
 
 module.exports = Container
