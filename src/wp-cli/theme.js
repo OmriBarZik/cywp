@@ -97,7 +97,13 @@ class Theme {
       installArgs.push('--activate')
     }
 
-    if (version) { installArgs.push(`--version=${version}`) }
+    if (version) {
+      if (1 < theme.length) {
+        throw new Error('To use version there must be at only one theme given.')
+      }
+
+      installArgs.push(`--version=${version}`)
+    }
 
     installArgs.push.apply(installArgs, theme)
 
