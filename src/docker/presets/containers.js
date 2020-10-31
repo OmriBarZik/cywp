@@ -64,7 +64,7 @@ function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
     name: `cywp-${name}-wordpress`,
     health: {
       command: 'test -r wp-includes/version.php',
-      startPeriod: '2s',
+      startPeriod: '3s',
       interval: '1s',
       retries: 30,
     },
