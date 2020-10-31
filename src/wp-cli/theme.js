@@ -1,6 +1,6 @@
-const Container = require('../docker/container') // eslint-disable-line no-unused-vars
-const { CreateWordpressCliContainer } = require('../docker/presets/containers')
 require('./types')
+const { CreateWordpressCliContainer } = require('../docker/presets/containers')
+const { CheckIfArrayOrString } = require('./util')
 
 /**
  * Manage wordpress theme through wp cli.
@@ -9,7 +9,7 @@ class Theme {
   /**
    * Constructor for the Theme object
    *
-   * @param {Container} site - the wordpress site to work on.
+   * @param {import('../docker/container')} site - the wordpress site to work on.
    */
   constructor (site) {
     this.site = site
@@ -54,13 +54,7 @@ class Theme {
    * ```
    */
   delete (theme, force = false) {
-    if ('string' === typeof theme) {
-      theme = [theme]
-    }
-
-    if (!Array.isArray(theme)) {
-      throw new TypeError('theme must be an array or a string')
-    }
+    theme = CheckIfArrayOrString(theme, 'theme')
 
     const deleteArgs = ['delete']
 
@@ -91,13 +85,7 @@ class Theme {
    * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
   install (theme, activate, version) {
-    if ('string' === typeof theme) {
-      theme = [theme]
-    }
-
-    if (!Array.isArray(theme)) {
-      throw new TypeError('theme must be an array or a string')
-    }
+    theme = CheckIfArrayOrString(theme, 'theme')
 
     const installArgs = ['install', '--force']
 
