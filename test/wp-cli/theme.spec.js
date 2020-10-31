@@ -70,7 +70,7 @@ describe('Theme', () => {
     })
 
     it('should have the arguments to get theme info', () => {
-      theme.wpTheme = jest.fn((commands) => Promise.resolve(commands))
+      theme.wpTheme = jest.fn((commands) => Promise.resolve({ stdout: JSON.stringify(commands) }))
 
       theme.get('theme')
 
