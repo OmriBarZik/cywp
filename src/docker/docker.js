@@ -39,7 +39,7 @@ class Docker {
    * Run commands in a docker container return it's output.
    *
    * @param {ContainerOptions} options - Docker container options.
-   * @returns {RunInContainerOutput} Container outputs.
+   * @returns {Promise<RunInContainerOutput>} Container outputs.
    */
   RunInContainer (options) {
     if (!options.commands) {
