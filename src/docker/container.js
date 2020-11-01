@@ -165,6 +165,26 @@ class Container {
     return this.inspect('{{.State.Health.Status}}')
       .then(status => 'healthy' === status)
   }
+
+  /**
+   * Run commands in a running container.
+   *
+   * @param {Array} commands - Commands to run.
+   * @returns {Promise<Container>} Return the current container.
+   */
+  exec (commands) {
+    const execArgs = ['container', 'exec']
+
+    execArgs.push(this.options.id)
+
+    execArgs.push.apply(execArgs, commands)
+
+    const inspect = spawn('docker', execArgs)
+
+    return ReturnPromise(inspect, () => {
+      return this
+    })
+  }
 }
 
 module.exports = Container
