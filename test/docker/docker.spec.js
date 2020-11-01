@@ -60,6 +60,19 @@ describe('Docker', () => {
         expect(() => { processCreateContainerOptions({ image: 'test', exposePorts: [{ error: 'error' }] }) }).toThrow()
       })
 
+      it('should throw error when options.health.command is not defined', () => {
+        expect(() => processCreateContainerOptions({ image: 'test', health: {} }))
+          .toThrow('options.health.command must not be defined to use options.health')
+      })
+
+      it('should throw error when options.health.retries is not a number', () => {
+        expect(() => processCreateContainerOptions({ image: 'test', health: { command: ['test'], retries: 1.2 } }))
+          .toThrow('options.health.retries must be an integer.')
+
+        expect(() => processCreateContainerOptions({ image: 'test', health: { command: ['test'], retries: '1' } }))
+          .toThrow('options.health.retries must be an integer.')
+      })
+
       it('should throw an error when commands is not array', () => {
         expect(() => processCreateContainerOptions({ image: 'test', commands: 'first' })).toThrow()
       })
@@ -166,7 +179,7 @@ describe('Docker', () => {
         expect(arr.indexOf('-p') < arr.lastIndexOf('-p')).toBe(true)
       })
 
-      it('should contains commands for container expose ports arguments', () => {
+      it('should contains commands for passing commands to docker container', () => {
         const arr = processCreateContainerOptions({
           image: 'image-test',
           commands: ['command1', 'command2'],
@@ -174,6 +187,65 @@ describe('Docker', () => {
 
         expect(arr).toContain('command1')
         expect(arr).toContain('command2')
+      })
+
+      it('should contains commands for checking container health', () => {
+        const arr = processCreateContainerOptions({ image: 'test', health: { command: 'test-command' } })
+
+        expect(arr).toContain('--health-cmd')
+        expect(arr).toContain('test-command')
+      })
+
+      it('should contains commands for checking container health checks retries', () => {
+        const arr = processCreateContainerOptions({
+          image: 'test',
+          health: {
+            command: 'test-command',
+            retries: 30,
+          },
+        })
+
+        expect(arr).toContain('--health-retries')
+        expect(arr).toContain(30)
+      })
+
+      it('should contains commands for checking container health checks interval', () => {
+        const arr = processCreateContainerOptions({
+          image: 'test',
+          health: {
+            command: 'test-command',
+            interval: '2s',
+          },
+        })
+
+        expect(arr).toContain('--health-interval')
+        expect(arr).toContain('2s')
+      })
+
+      it('should contains commands for checking container health checks start period', () => {
+        const arr = processCreateContainerOptions({
+          image: 'test',
+          health: {
+            command: 'test-command',
+            startPeriod: '2s',
+          },
+        })
+
+        expect(arr).toContain('--health-start-period')
+        expect(arr).toContain('2s')
+      })
+
+      it('should contains commands for checking container health checks timeout', () => {
+        const arr = processCreateContainerOptions({
+          image: 'test',
+          health: {
+            command: 'test-command',
+            timeout: '2s',
+          },
+        })
+
+        expect(arr).toContain('--health-timeout')
+        expect(arr).toContain('2s')
       })
     })
   })
