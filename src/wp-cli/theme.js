@@ -110,10 +110,28 @@ class Theme {
     return this.wpTheme(installArgs)
   }
 
-  isActive () {
+  /**
+   * Checks if a given theme is active.
+   *
+   * @param {string} theme - The theme to check.
+   * @returns {Promise<boolean>} Whether theme is active
+   */
+  isActive (theme) {
+    return this.wpTheme(['is-active', theme])
+      .then(() => true)
+      .catch(() => Promise.resolve(false))
   }
 
-  isInstalled () {
+  /**
+   * Checks if a given theme is installed.
+   *
+   * @param {string} theme - The theme to check.
+   * @returns {Promise<boolean>} Whether theme is installed
+   */
+  isInstalled (theme) {
+    return this.wpTheme(['is-installed ', theme])
+      .then(() => true)
+      .catch(() => Promise.resolve(false))
   }
 
   list () {
