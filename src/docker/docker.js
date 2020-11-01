@@ -147,9 +147,11 @@ function processCreateContainerOptions (options, run, detach) {
   }
 
   if (options.health) {
-    if (options.health.command) {
-      args.push('--health-cmd', options.health.command)
+    if (!options.health.command) {
+      throw new TypeError('options.health.command must not be defined to use options.health')
     }
+
+    args.push('--health-cmd', options.health.command)
 
     if (options.health.interval) {
       args.push('--health-interval', options.health.interval)
