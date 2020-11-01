@@ -155,13 +155,18 @@ class Theme {
       .then((output) => JSON.parse(output.stdout))
   }
 
-  path () {
-  }
+  /**
+   * Gets the path to a theme or to the theme directory.
+   *
+   * @param {string} theme - The theme to get the path to.
+   * @returns {Promise<string>} Path to a theme or to the theme directory.
+   */
+  path (theme) {
+    const pathArgs = ['path']
 
-  search () {
-  }
+    if (theme) { pathArgs.push('--dir', theme) }
 
-  status () {
+    return this.wpTheme(pathArgs)
   }
 }
 
