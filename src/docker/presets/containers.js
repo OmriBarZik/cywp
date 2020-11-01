@@ -23,7 +23,7 @@ function CreateMysqlContainer (name, port, run = false) {
       { name: 'MYSQL_ROOT_PASSWORD', value: 'cywp' },
     ],
     health: {
-      command: 'mysqladmin ping --silent', // eslint-disable-line spellcheck/spell-checker
+      command: 'mysqladmin ping -u root -p$MYSQL_ROOT_PASSWORD | grep \'mysqld is alive\'', // eslint-disable-line spellcheck/spell-checker
       startPeriod: '5s',
       retries: 30,
       interval: '1s',
@@ -52,6 +52,7 @@ function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
     environmentVariables: [
       { name: 'WORDPRESS_DB_HOST', value: `${mysqlContainer.options.name}:${mysqlContainer.options.exposePorts[0].host}` },
       { name: 'WORDPRESS_DB_PASSWORD', value: 'cywp' },
+      { name: 'WORDPRESS_DB_USER', value: 'root' },
       { name: 'WORDPRESS_DB_NAME', value: `cywp-${name}-db` },
     ],
     volumes: [
@@ -64,7 +65,7 @@ function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
     name: `cywp-${name}-wordpress`,
     health: {
       command: 'test -r wp-includes/version.php',
-      startPeriod: '3s',
+      startPeriod: '1s',
       interval: '1s',
       retries: 30,
     },
