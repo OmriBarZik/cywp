@@ -3,6 +3,7 @@ const { Docker, processCreateContainerOptions, ProcessCreateNetworkOption } = re
 const CreateContainer = Docker.prototype.CreateContainer
 const CreateVolume = Docker.prototype.CreateVolume
 const CreateNetwork = Docker.prototype.CreateNetwork
+const RunInContainer = Docker.prototype.RunInContainer
 
 describe('Docker', () => {
   describe('#processCreateContainerOptions()', () => {
@@ -244,6 +245,24 @@ describe('Docker', () => {
 
     afterAll(() => {
       spawnSync('docker', ['rm', '-f'].concat(containerIds))
+    })
+  })
+
+  describe('#RunInContainer()', () => {
+    it('should throw error empty option.command', () => {
+      expect(() => RunInContainer({})).toThrow()
+    })
+
+    it('should throw error when rm is not true', () => {
+      expect(() => RunInContainer({ commands: ['test'] })).toThrow()
+    })
+
+    it('run tmp docker', () => {
+      return expect(RunInContainer({
+        image: 'hello-world',
+        commands: ['./hello'],
+        rm: true,
+      })).resolves.toBeTruthy()
     })
   })
 
