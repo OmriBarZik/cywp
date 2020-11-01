@@ -153,6 +153,20 @@ describe('Container', () => {
     })
   })
 
+  describe('#isHealthy', () => {
+    it('should return container health status', async () => {
+      const container = await CreateContainer({ image: 'hello-world', health: { command: 'test -r ./hello' } }, true)
+
+      return expect(container.isHealthy()).resolves.toBeFalsy()
+    })
+
+    it('should throw error when health.command isn\'t defined', async () => {
+      const container = await CreateContainer({ image: 'hello-world' }, true)
+
+      expect(() => container.isHealthy()).toThrow('options.health.command must be defined to use IsHealthy')
+    })
+  })
+
   afterAll(() => {
     CleanTestCreateContainer('container')
   })
