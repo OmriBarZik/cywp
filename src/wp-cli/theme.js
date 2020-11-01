@@ -134,7 +134,25 @@ class Theme {
       .catch(() => Promise.resolve(false))
   }
 
-  list () {
+  /**
+   * Return list of themes installed in the wordpress site and there data.
+   *
+   * @param {ThemeListFiltersObject} [filters] - Filter results based on the value of a field.
+   * @returns {Promise<ThemeListFiltersObject[]>} - List of themes installed in the wordpress site.
+   */
+  list (filters) {
+    const listArgs = [
+      'list',
+      '--fields=name,status,update,version,update_version,update_package,update_id,title,description',
+      '--format=json',
+    ]
+
+    for (const filtersField in filters) {
+      listArgs.push(`--${filtersField}=${filters[filtersField]}`)
+    }
+
+    return this.wpTheme(listArgs)
+      .then((output) => JSON.parse(output.stdout))
   }
 
   path () {
