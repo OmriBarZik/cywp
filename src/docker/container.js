@@ -173,15 +173,19 @@ class Container {
    * @returns {Promise<Container>} Return the current container.
    */
   exec (commands) {
+    if (!Array.isArray(commands)) {
+      throw new Error('commands must be an array')
+    }
+
     const execArgs = ['container', 'exec']
 
     execArgs.push(this.options.id)
 
     execArgs.push.apply(execArgs, commands)
 
-    const inspect = spawn('docker', execArgs)
+    const exec = spawn('docker', execArgs)
 
-    return ReturnPromise(inspect, () => {
+    return ReturnPromise(exec, () => {
       return this
     })
   }
