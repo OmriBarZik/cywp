@@ -158,7 +158,7 @@ class Container {
    * @returns {Promise<boolean>} if the continer is healthy or not
    */
   isHealthy () {
-    if (!this.options.health.command) {
+    if (!this.options.health) {
       throw new Error('options.health.command must be defined to use IsHealthy')
     }
 
