@@ -15,17 +15,11 @@ class Docker {
    * @returns {Promise<Container>} Return promise for continer object
    */
   CreateContainer (options, run = false, detach = true) {
-    let stdout = ''
-
     const args = processCreateContainerOptions(options, run, detach)
 
     const process = spawn('docker', args)
 
-    process.stdout.on('data', (data) => {
-      stdout += data
-    })
-
-    return ReturnPromise(process, () => {
+    return ReturnPromise(process, (stdout) => {
       options.id = stdout.replace('\n', '')
       options.status = run ? 'started' : 'created'
 
@@ -50,17 +44,11 @@ class Docker {
       throw new TypeError('options.rm must be true to use RunInContainer. (we don\'t want to leave garbage aroud)')
     }
 
-    let stdout = ''
-
     const args = processCreateContainerOptions(options, true, false)
 
     const process = spawn('docker', args)
 
-    process.stdout.on('data', (data) => {
-      stdout += data
-    })
-
-    return ReturnPromise(process, (stderr) => {
+    return ReturnPromise(process, (stdout, stderr) => {
       return { stdout: stdout, stderr: stderr }
     })
   }
@@ -72,15 +60,9 @@ class Docker {
    * @returns {Promise<Volume>} return promise for volume object.
    */
   CreateVolume (name) {
-    let stdout = ''
-
     const process = spawn('docker', ['volume', 'create', name])
 
-    process.stdout.on('data', (data) => {
-      stdout += data
-    })
-
-    return ReturnPromise(process, () => {
+    return ReturnPromise(process, (stdout) => {
       const options = {}
       options.name = stdout.replace('\n', '')
       options.status = 'alive'
@@ -96,8 +78,6 @@ class Docker {
    * @returns {Promise<Network>} return promise for network object.
    */
   CreateNetwork (options) {
-    let stdout = ''
-
     if ('string' === typeof options) {
       options = { name: options }
     }
@@ -106,11 +86,7 @@ class Docker {
 
     const process = spawn('docker', args)
 
-    process.stdout.on('data', (data) => {
-      stdout += data
-    })
-
-    return ReturnPromise(process, () => {
+    return ReturnPromise(process, (stdout) => {
       options.id = stdout.replace('\n', '')
       options.status = 'alive'
 
