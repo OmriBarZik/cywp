@@ -81,8 +81,6 @@ class Container {
    */
   logs (options = {}) {
     const logsArgs = ['container', 'logs']
-    let stdout = ''
-    let stderr = ''
 
     if (options.since) { logsArgs.push('--since', options.since) }
     if (options.tail) { logsArgs.push('--tail', options.tail) }
@@ -92,26 +90,12 @@ class Container {
 
     const logs = spawn('docker', logsArgs)
 
-    logs.stdout.on('data', (data) => {
-      stdout += data
-    })
-
-    logs.stderr.on('data', (data) => {
-      stderr += data
-    })
-
-    return new Promise((resolve, reject) => {
-      logs.on('close', (code) => {
-        if (code) {
-          reject(stderr)
-          return
-        }
-        resolve({
-          stdout: stdout,
-          stderr: stderr,
-          container: this,
-        })
-      })
+    return ReturnPromise(logs, (stdout, stderr) => {
+      return {
+        stdout: stdout,
+        stderr: stderr,
+        container: this,
+      }
     })
   }
 
@@ -123,7 +107,6 @@ class Container {
    */
   inspect (format) {
     const inspectArgs = ['container', 'inspect']
-    let stdout = ''
 
     if (format) { inspectArgs.push('--format', format) }
 
@@ -131,11 +114,7 @@ class Container {
 
     const inspect = spawn('docker', inspectArgs)
 
-    inspect.stdout.on('data', (data) => {
-      stdout += data
-    })
-
-    return ReturnPromise(inspect, () => {
+    return ReturnPromise(inspect, (stdout) => {
       return CleanInspect(stdout)
     })
   }

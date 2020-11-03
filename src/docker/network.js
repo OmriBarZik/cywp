@@ -34,19 +34,13 @@ class Network {
   inspect (format) {
     const inspectArgs = ['network', 'inspect']
 
-    let stdout = ''
-
     if (format) { inspectArgs.push('--format', format) }
 
     inspectArgs.push(this.options.id)
 
     const inspect = spawn('docker', inspectArgs)
 
-    inspect.stdout.on('data', (data) => {
-      stdout += data
-    })
-
-    return ReturnPromise(inspect, () => {
+    return ReturnPromise(inspect, (stdout) => {
       return CleanInspect(stdout)
     })
   }
