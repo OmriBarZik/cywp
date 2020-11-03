@@ -153,7 +153,7 @@ describe('Container', () => {
     })
   })
 
-  describe('#isHealthy', () => {
+  describe('#isHealthy()', () => {
     it('should return container health status', async () => {
       const container = await CreateContainer({ image: 'hello-world', health: { command: 'test -r ./hello' } }, true)
 
