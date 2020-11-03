@@ -13,14 +13,27 @@ class Container {
   }
 
   /**
+   * @param {string[]} args - docker container arguments
+   * @param {(stdout: string, stderr: string) => any} callback - callback that deterred what to return when the process is successful.
+   * @returns {Promise} return what said to return form the callback
+   */
+  dockerContainer (args, callback) {
+    args = ['container'].concat(args)
+
+    const container = spawn('docker', args)
+
+    return ReturnPromise(container, callback)
+  }
+
+  /**
    * Start the container.
    *
    * @returns {Promise<Container>} Return the current container.
    */
   start () {
-    const start = spawn('docker', ['container', 'start', this.options.id])
+    const startArgs = ['start', this.options.id]
 
-    return ReturnPromise(start, () => {
+    return this.dockerContainer(startArgs, () => {
       this.options.status = 'started'
       return this
     })
@@ -34,16 +47,14 @@ class Container {
    * @returns {Promise<Container>} Return the current container.
    */
   rm (force = false, volumes = true) {
-    const rmArgs = ['container', 'rm']
+    const rmArgs = ['rm']
 
     if (force) { rmArgs.push('--force') }
     if (volumes) { rmArgs.push('--volumes') }
 
     rmArgs.push(this.options.id)
 
-    const rm = spawn('docker', rmArgs)
-
-    return ReturnPromise(rm, () => {
+    return this.dockerContainer(rmArgs, () => {
       this.options.status = 'removed'
       return this
     })
@@ -56,15 +67,16 @@ class Container {
    * @returns {Promise<Container>} Return the current container.
    */
   stop (time = 10) {
-    const stopArgs = ['container', 'stop']
+    const stopArgs = ['stop']
+
+    if (0 > time) {
+      throw new Error('time must be bigger then 0')
+    }
 
     stopArgs.push('--time', time)
-
     stopArgs.push(this.options.id)
 
-    const stop = spawn('docker', stopArgs)
-
-    return ReturnPromise(stop, () => {
+    return this.dockerContainer(stopArgs, () => {
       this.options.status = 'stopped'
       return this
     })
@@ -80,7 +92,7 @@ class Container {
    * @returns {Promise<{stdout: string, stderr: string, container: Container}}>} Return Promise for container logs.
    */
   logs (options = {}) {
-    const logsArgs = ['container', 'logs']
+    const logsArgs = ['logs']
 
     if (options.since) { logsArgs.push('--since', options.since) }
     if (options.tail) { logsArgs.push('--tail', options.tail) }
@@ -88,9 +100,7 @@ class Container {
 
     logsArgs.push(this.options.id)
 
-    const logs = spawn('docker', logsArgs)
-
-    return ReturnPromise(logs, (stdout, stderr) => {
+    return this.dockerContainer(logsArgs, (stdout, stderr) => {
       return {
         stdout: stdout,
         stderr: stderr,
@@ -106,15 +116,13 @@ class Container {
    * @returns {Promise<string|object>} container info.
    */
   inspect (format) {
-    const inspectArgs = ['container', 'inspect']
+    const inspectArgs = ['inspect']
 
     if (format) { inspectArgs.push('--format', format) }
 
     inspectArgs.push(this.options.id)
 
-    const inspect = spawn('docker', inspectArgs)
-
-    return ReturnPromise(inspect, (stdout) => {
+    return this.dockerContainer(inspectArgs, (stdout) => {
       return CleanInspect(stdout)
     })
   }
@@ -156,15 +164,13 @@ class Container {
       throw new Error('commands must be an array')
     }
 
-    const execArgs = ['container', 'exec']
+    const execArgs = ['exec']
 
     execArgs.push(this.options.id)
 
     execArgs.push.apply(execArgs, commands)
 
-    const exec = spawn('docker', execArgs)
-
-    return ReturnPromise(exec, () => {
+    return this.dockerContainer(execArgs, () => {
       return this
     })
   }
