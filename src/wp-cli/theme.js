@@ -140,7 +140,7 @@ class Theme {
    * @param {ThemeListFiltersObject} [filters] - Filter results based on the value of a field.
    * @returns {Promise<ThemeListFiltersObject[]>} - List of themes installed in the wordpress site.
    */
-  list (filters) {
+  list (filters = []) {
     const listArgs = [
       'list',
       '--fields=name,status,update,version,update_version,update_package,update_id,title,description',
