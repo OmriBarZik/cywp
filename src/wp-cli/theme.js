@@ -129,7 +129,7 @@ class Theme {
    * @returns {Promise<boolean>} Whether theme is installed
    */
   isInstalled (theme) {
-    return this.wpTheme(['is-installed ', theme])
+    return this.wpTheme(['is-installed', theme])
       .then(() => true)
       .catch(() => Promise.resolve(false))
   }
