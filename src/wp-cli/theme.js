@@ -16,8 +16,9 @@ class Theme {
   }
 
   /**
+   * Run wp theme command on a wp cli continer that connect to the site provied in the constructor.
    *
-   * @param {string[]} commands -
+   * @param {string[]} commands - commands passing to wp theme
    * @returns {Promise<RunInContainerOutput>} The output of the command
    */
   wpTheme (commands) {
