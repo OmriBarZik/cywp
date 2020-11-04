@@ -122,4 +122,85 @@ describe('Theme', () => {
         .toThrow(new Error('To use version there must be at only one theme given.'))
     })
   })
+
+  describe('#isActive()', () => {
+    it('should have args to check theme activation', () => {
+      theme.wpTheme = jest.fn(() => Promise.resolve())
+
+      theme.isActive('theme')
+
+      expect(theme.wpTheme).toHaveBeenLastCalledWith(['is-active', 'theme'])
+    })
+
+    it('should return true on resolve', () => {
+      theme.wpTheme = jest.fn(() => Promise.resolve())
+
+      return expect(theme.isActive('theme')).resolves.toBe(true)
+    })
+
+    it('should return false on reject', () => {
+      theme.wpTheme = jest.fn(() => Promise.reject(new Error()))
+
+      return expect(theme.isActive('theme')).resolves.toBe(false)
+    })
+  })
+
+  describe('#isInstalled()', () => {
+    it('should have args to check theme installation', () => {
+      theme.wpTheme = jest.fn(() => Promise.resolve())
+
+      theme.isInstalled('theme')
+
+      expect(theme.wpTheme).toHaveBeenLastCalledWith(['is-installed', 'theme'])
+    })
+
+    it('should return true on resolve', () => {
+      theme.wpTheme = jest.fn(() => Promise.resolve())
+
+      return expect(theme.isInstalled('theme')).resolves.toBe(true)
+    })
+
+    it('should return false on reject', () => {
+      theme.wpTheme = jest.fn(() => Promise.reject(new Error()))
+
+      return expect(theme.isInstalled('theme')).resolves.toBe(false)
+    })
+  })
+
+  describe('#list()', () => {
+    it('should throw error when filters is not object', () => {
+      expect(() => theme.list('test')).toThrow(new TypeError('filters must be an object'))
+    })
+
+    it('should have arguments for listing themes', () => {
+      theme.wpTheme = jest.fn((listArgs) => Promise.resolve(JSON.stringify(listArgs)))
+
+      theme.list()
+
+      expect(theme.wpTheme)
+        .toHaveBeenLastCalledWith([
+          'list',
+          '--fields=name,status,update,version,update_version,update_package,update_id,title,description',
+          '--format=json',
+        ])
+    })
+
+    it('should have arguments for listing themes with filters', () => {
+      theme.wpTheme = jest.fn((listArgs) => Promise.resolve(JSON.stringify(listArgs)))
+
+      theme.list({
+        name: 'test',
+        status: 'active',
+      })
+
+      expect(theme.wpTheme)
+        .toHaveBeenLastCalledWith([
+          'list',
+          '--fields=name,status,update,version,update_version,update_package,update_id,title,description',
+          '--format=json',
+          '--name=test',
+          '--status=active',
+        ])
+    })
+  })
 })
