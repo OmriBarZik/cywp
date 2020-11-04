@@ -205,4 +205,20 @@ describe('Theme', () => {
         ])
     })
   })
+
+  describe('#path()', () => {
+    it('should have arguments to get theme parent directory', () => {
+      theme.path()
+
+      expect(theme.wpTheme)
+        .toHaveBeenLastCalledWith(['path'])
+    })
+
+    it('should have arguments to get theme directory', () => {
+      theme.path('theme')
+
+      expect(theme.wpTheme)
+        .toHaveBeenLastCalledWith(['path', '--dir', 'theme'])
+    })
+  })
 })
