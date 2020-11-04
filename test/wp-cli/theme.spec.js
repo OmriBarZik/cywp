@@ -6,17 +6,28 @@ jest.mock('../../src/docker/presets/containers')
 describe('Theme', () => {
   /** @type {Theme} */
   let theme
+  let originalWpTheme
 
   beforeAll(async () => {
     theme = new Theme()
+    originalWpTheme = theme.wpTheme
+    theme.wpTheme = jest.fn()
   })
 
   describe('#wpTheme()', () => {
+    beforeAll(() => {
+      theme.wpTheme = originalWpTheme
+    })
+
     it('should have the arguments wp theme', () => {
       theme.wpTheme([])
 
       expect(CreateWordpressCliContainer)
         .toHaveBeenLastCalledWith(undefined, ['wp', 'theme'])
+    })
+
+    afterAll(() => {
+      theme.wpTheme = jest.fn()
     })
   })
 
@@ -24,8 +35,8 @@ describe('Theme', () => {
     it('should have the arguments to activate theme', () => {
       theme.activate('theme')
 
-      expect(CreateWordpressCliContainer)
-        .toHaveBeenLastCalledWith(undefined, ['wp', 'theme', 'activate', 'theme'])
+      expect(theme.wpTheme)
+        .toHaveBeenLastCalledWith(['activate', 'theme'])
     })
   })
 
@@ -33,29 +44,29 @@ describe('Theme', () => {
     it('should have the arguments to delete theme', () => {
       theme.delete('theme')
 
-      expect(CreateWordpressCliContainer)
-        .toHaveBeenLastCalledWith(undefined, ['wp', 'theme', 'delete', 'theme'])
+      expect(theme.wpTheme)
+        .toHaveBeenLastCalledWith(['delete', 'theme'])
     })
 
     it('should have the arguments to delete multiple themes', () => {
       theme.delete(['theme1', 'theme2'])
 
-      expect(CreateWordpressCliContainer)
-        .toHaveBeenLastCalledWith(undefined, ['wp', 'theme', 'delete', 'theme1', 'theme2'])
+      expect(theme.wpTheme)
+        .toHaveBeenLastCalledWith(['delete', 'theme1', 'theme2'])
     })
 
     it('should have the arguments to delete all themes', () => {
       theme.delete('all')
 
-      expect(CreateWordpressCliContainer)
-        .toHaveBeenLastCalledWith(undefined, ['wp', 'theme', 'delete', '--all'])
+      expect(theme.wpTheme)
+        .toHaveBeenLastCalledWith(['delete', '--all'])
     })
 
     it('should have the arguments to delete theme with force', () => {
       theme.delete('theme', true)
 
-      expect(CreateWordpressCliContainer)
-        .toHaveBeenLastCalledWith(undefined, ['wp', 'theme', 'delete', '--force', 'theme'])
+      expect(theme.wpTheme)
+        .toHaveBeenLastCalledWith(['delete', '--force', 'theme'])
     })
 
     it('should throw an error massage with theme in it', () => {
@@ -64,11 +75,6 @@ describe('Theme', () => {
   })
 
   describe('#get()', () => {
-    let originalWpTheme
-    beforeAll(() => {
-      originalWpTheme = theme.wpTheme
-    })
-
     it('should have the arguments to get theme info', () => {
       theme.wpTheme = jest.fn((commands) => Promise.resolve({ stdout: JSON.stringify(commands) }))
 
@@ -77,32 +83,28 @@ describe('Theme', () => {
       expect(theme.wpTheme)
         .toHaveBeenLastCalledWith(['get', '--format=json', 'theme'])
     })
-
-    afterAll(() => {
-      theme.wpTheme = originalWpTheme
-    })
   })
 
   describe('#install()', () => {
     it('should have the arguments to install theme', () => {
       theme.install('theme')
 
-      expect(CreateWordpressCliContainer)
-        .toHaveBeenLastCalledWith(undefined, ['wp', 'theme', 'install', '--force', 'theme'])
+      expect(theme.wpTheme)
+        .toHaveBeenLastCalledWith(['install', '--force', 'theme'])
     })
 
     it('should have the arguments to install multiple themes', () => {
       theme.install(['theme1', 'theme2'])
 
-      expect(CreateWordpressCliContainer)
-        .toHaveBeenLastCalledWith(undefined, ['wp', 'theme', 'install', '--force', 'theme1', 'theme2'])
+      expect(theme.wpTheme)
+        .toHaveBeenLastCalledWith(['install', '--force', 'theme1', 'theme2'])
     })
 
     it('should have the arguments to install and activate theme', () => {
       theme.install('theme', true)
 
-      expect(CreateWordpressCliContainer)
-        .toHaveBeenLastCalledWith(undefined, ['wp', 'theme', 'install', '--force', '--activate', 'theme'])
+      expect(theme.wpTheme)
+        .toHaveBeenLastCalledWith(['install', '--force', '--activate', 'theme'])
     })
 
     it('should throw an error when trying to install an activate multiple themes', () => {
@@ -113,8 +115,8 @@ describe('Theme', () => {
     it('should have the arguments to install different version theme', () => {
       theme.install('theme', false, 2.2)
 
-      expect(CreateWordpressCliContainer)
-        .toHaveBeenLastCalledWith(undefined, ['wp', 'theme', 'install', '--force', '--version=2.2', 'theme'])
+      expect(theme.wpTheme)
+        .toHaveBeenLastCalledWith(['install', '--force', '--version=2.2', 'theme'])
     })
 
     it('should throw an error when trying to install an different version multiple themes', () => {
@@ -173,7 +175,7 @@ describe('Theme', () => {
     })
 
     it('should have arguments for listing themes', () => {
-      theme.wpTheme = jest.fn((listArgs) => Promise.resolve(JSON.stringify(listArgs)))
+      theme.wpTheme = jest.fn(() => Promise.resolve({ stdout: JSON.stringify('data') }))
 
       theme.list()
 
@@ -186,7 +188,7 @@ describe('Theme', () => {
     })
 
     it('should have arguments for listing themes with filters', () => {
-      theme.wpTheme = jest.fn((listArgs) => Promise.resolve(JSON.stringify(listArgs)))
+      theme.wpTheme = jest.fn(() => Promise.resolve({ stdout: JSON.stringify('data') }))
 
       theme.list({
         name: 'test',
