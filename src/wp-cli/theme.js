@@ -140,12 +140,16 @@ class Theme {
    * @param {ThemeListFiltersObject} [filters] - Filter results based on the value of a field.
    * @returns {Promise<ThemeListFiltersObject[]>} - List of themes installed in the wordpress site.
    */
-  list (filters = []) {
+  list (filters = {}) {
     const listArgs = [
       'list',
       '--fields=name,status,update,version,update_version,update_package,update_id,title,description',
       '--format=json',
     ]
+
+    if ('object' !== typeof filters) {
+      throw new TypeError('filters must be an object')
+    }
 
     for (const filtersField in filters) {
       listArgs.push(`--${filtersField}=${filters[filtersField]}`)
