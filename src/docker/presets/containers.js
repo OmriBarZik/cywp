@@ -22,7 +22,12 @@ function CreateMysqlContainer (name, port, run = false) {
     environmentVariables: [
       { name: 'MYSQL_ROOT_PASSWORD', value: 'cywp' },
     ],
-    healthCommand: 'mysqladmin ping --silent', // eslint-disable-line spellcheck/spell-checker
+    health: {
+      command: 'mysqladmin ping -u root -p$MYSQL_ROOT_PASSWORD | grep \'mysqld is alive\'', // eslint-disable-line spellcheck/spell-checker
+      startPeriod: '5s',
+      retries: 30,
+      interval: '1s',
+    },
   }, run)
 }
 
@@ -47,6 +52,7 @@ function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
     environmentVariables: [
       { name: 'WORDPRESS_DB_HOST', value: `${mysqlContainer.options.name}:${mysqlContainer.options.exposePorts[0].host}` },
       { name: 'WORDPRESS_DB_PASSWORD', value: 'cywp' },
+      { name: 'WORDPRESS_DB_USER', value: 'root' },
       { name: 'WORDPRESS_DB_NAME', value: `cywp-${name}-db` },
     ],
     volumes: [
@@ -57,6 +63,12 @@ function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
     image: 'wordpress',
     network: 'cywp-network',
     name: `cywp-${name}-wordpress`,
+    health: {
+      command: 'test -r wp-includes/version.php',
+      startPeriod: '1s',
+      interval: '1s',
+      retries: 30,
+    },
   }, run)
 }
 
@@ -65,14 +77,14 @@ function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
  *
  * @param {Container} wordpress - WordPress docker container based from.
  * @param {string[]} commands - commands to pass to the container.
- * @returns {Promise<Container>} retrun promise for WordPress continer object.
+ * @returns {Promise<RunInContainerOutput>} retrun promise for WordPress continer object.
  */
 function CreateWordpressCliContainer (wordpress, commands) {
   if (!Array.isArray(commands)) {
     throw new TypeError('commands must be an array')
   }
 
-  return Docker.prototype.CreateContainer({
+  return Docker.prototype.RunInContainer({
     volumes: wordpress.options.volumes,
     image: 'wordpress:cli',
     network: wordpress.options.network,

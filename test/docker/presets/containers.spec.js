@@ -48,11 +48,10 @@ describe('Presets', () => {
     it('should create WordPress', async () => {
       const demoMysqlContainer = new Container({ name: 'pop', exposePorts: [{ host: 123, docker: 123 }] })
       const wordpress = await CreateWordpressContainer('presets-test-cli', 4501, demoMysqlContainer)
-      const container = await CreateWordpressCliContainer(wordpress, ['wp', '--help'])
+      const output = await CreateWordpressCliContainer(wordpress, ['wp', '--help'])
 
-      expect(container.options.name).toBe('cywp-presets-test-cli-wordpress-cli')
-      expect(container.options.commands).toEqual(expect.arrayContaining(['wp', '--help']))
-      expect(container.options.network).toBe(wordpress.options.network)
+      expect(output.stdout).toBeTruthy()
+      expect(output.stderr).toBeDefined()
     })
 
     it('should throw type error when commands is not array', async () => {

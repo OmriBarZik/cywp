@@ -15,17 +15,11 @@ class Docker {
    * @returns {Promise<Container>} Return promise for continer object
    */
   CreateContainer (options, run = false, detach = true) {
-    let stdout = ''
-
     const args = processCreateContainerOptions(options, run, detach)
 
     const process = spawn('docker', args)
 
-    process.stdout.on('data', (data) => {
-      stdout += data
-    })
-
-    return ReturnPromise(process, () => {
+    return ReturnPromise(process, (stdout) => {
       options.id = stdout.replace('\n', '')
       options.status = run ? 'started' : 'created'
 
@@ -36,21 +30,39 @@ class Docker {
   }
 
   /**
+   * Run commands in a docker container return it's output.
+   *
+   * @param {ContainerOptions} options - Docker container options.
+   * @returns {Promise<RunInContainerOutput>} Container outputs.
+   */
+  RunInContainer (options) {
+    if (!options.commands) {
+      throw new TypeError('options.commands must be provided to use RunInContainer.')
+    }
+
+    if (!options.rm) {
+      throw new TypeError('options.rm must be true to use RunInContainer. (we don\'t want to leave garbage aroud)')
+    }
+
+    const args = processCreateContainerOptions(options, true, false)
+
+    const process = spawn('docker', args)
+
+    return ReturnPromise(process, (stdout, stderr) => {
+      return { stdout: stdout, stderr: stderr }
+    })
+  }
+
+  /**
    * Create docker volume.
    *
    * @param {string} name - Name of the volume.
    * @returns {Promise<Volume>} return promise for volume object.
    */
   CreateVolume (name) {
-    let stdout = ''
-
     const process = spawn('docker', ['volume', 'create', name])
 
-    process.stdout.on('data', (data) => {
-      stdout += data
-    })
-
-    return ReturnPromise(process, () => {
+    return ReturnPromise(process, (stdout) => {
       const options = {}
       options.name = stdout.replace('\n', '')
       options.status = 'alive'
@@ -66,8 +78,6 @@ class Docker {
    * @returns {Promise<Network>} return promise for network object.
    */
   CreateNetwork (options) {
-    let stdout = ''
-
     if ('string' === typeof options) {
       options = { name: options }
     }
@@ -76,11 +86,7 @@ class Docker {
 
     const process = spawn('docker', args)
 
-    process.stdout.on('data', (data) => {
-      stdout += data
-    })
-
-    return ReturnPromise(process, () => {
+    return ReturnPromise(process, (stdout) => {
       options.id = stdout.replace('\n', '')
       options.status = 'alive'
 
@@ -116,8 +122,32 @@ function processCreateContainerOptions (options, run, detach) {
     args.push('--net', options.network)
   }
 
-  if (options.healthCommand) {
-    args.push('--health-cmd', `${options.healthCommand}`)
+  if (options.health) {
+    if (!options.health.command) {
+      throw new TypeError('options.health.command must not be defined to use options.health')
+    }
+
+    args.push('--health-cmd', options.health.command)
+
+    if (options.health.interval) {
+      args.push('--health-interval', options.health.interval)
+    }
+
+    if (options.health.retries) {
+      if (!Number.isInteger(options.health.retries)) {
+        throw new TypeError('options.health.retries must be an integer.')
+      }
+
+      args.push('--health-retries', options.health.retries)
+    }
+
+    if (options.health.startPeriod) {
+      args.push('--health-start-period', options.health.startPeriod)
+    }
+
+    if (options.health.timeout) {
+      args.push('--health-timeout', options.health.timeout)
+    }
   }
 
   if (options.rm) {

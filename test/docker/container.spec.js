@@ -58,6 +58,12 @@ describe('Container', () => {
 
       return expect(container.stop()).resolves.toMatchObject({ options: { status: 'stopped' } })
     })
+
+    it('should throw error when time smaller then 0', async () => {
+      const container = await CreateContainer({ image: 'hello-world' }, true)
+
+      return expect(() => container.stop(-1)).toThrow('time must be bigger then 0')
+    })
   })
 
   describe('#logs()', () => {
@@ -150,6 +156,39 @@ describe('Container', () => {
       const container = await CreateContainer({ image: 'hello-world' })
 
       return expect(container.status()).resolves.toBe('created')
+    })
+  })
+
+  describe('#isHealthy()', () => {
+    it('should return container health status', async () => {
+      const container = await CreateContainer({ image: 'hello-world', health: { command: 'test -r ./hello' } }, true)
+
+      return expect(container.isHealthy()).resolves.toBeFalsy()
+    })
+
+    it('should throw error when health.command isn\'t defined', async () => {
+      const container = await CreateContainer({ image: 'hello-world' }, true)
+
+      expect(() => container.isHealthy()).toThrow('options.health.command must be defined to use IsHealthy')
+    })
+  })
+
+  describe('#exec()', () => {
+    it('should have args to execute commands in docker', async () => {
+      const container = await CreateContainer({ image: 'hello-world' }, true)
+
+      container.dockerContainer = jest.fn()
+
+      container.exec(['command'])
+
+      expect(container.dockerContainer.mock.calls[0][0]).toEqual(['exec', container.options.id, 'command'])
+      expect(container.dockerContainer.mock.calls[0][1]()).toBe(container)
+    })
+
+    it('should throw error if commands in not an array', async () => {
+      const container = await CreateContainer({ image: 'hello-world' }, true)
+
+      expect(() => container.exec('command')).toThrow()
     })
   })
 

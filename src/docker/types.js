@@ -17,7 +17,18 @@
  * @property {boolean} rm - remove the container after it exits.
  * @property {'created'|'started'|'removed'|'stopped'} status - the container status (created|started|removed|stopped)
  * @property {string[]} commands - commands to pass to the container.
- * @property {string} healthCommand - Command to run to check health.
+ * @property {object} health - Object to check container health.
+ * @property {string} health.command - Command to run to check health.
+ * @property {string} health.interval - Time between running the check (ms|s|m|h) (default 30s)
+ * @property {number} health.retries - Consecutive failures needed to report unhealthy
+ * @property {string} health.startPeriod - Start period for the container to initialize before starting health-retries countdown (ms|s|m|h) (default 30s)
+ * @property {string} health.timeout - Maximum time to allow one check to run (ms|s|m|h) (default 30s)
+ */
+
+/** @typedef RunInContainerOutput
+ * @type {object}
+ * @property {string} stdout - Container output from log stream.
+ * @property {string} stderr - Container output from error stream.
  */
 
 /**
