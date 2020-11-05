@@ -125,7 +125,7 @@ class Plugin {
   /**
    * Installs one or more plugins.
    *
-   * @param {string | Array} plugin - One or more plugins to install. Accepts a plugin slug, the path to a local zip file, or a URL to a remote zip file.
+   * @param {string | string[]} plugin - One or more plugins to install. Accepts a plugin slug, the path to a local zip file, or a URL to a remote zip file.
    * @param {boolean} activate - If set, the plugin will be activated immediately after install.
    * @param {string} version - Get that particular version from wordpress.org, instead of the stable version.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
@@ -203,6 +203,38 @@ class Plugin {
 
     return this.wpPlugin(listArgs)
       .then((output) => JSON.parse(output.stdout))
+  }
+
+  /**
+   * Gets the path to a plugin or to the plugin directory.
+   *
+   * @param {string} plugin - The plugin to get the path to.
+   * @returns {Promise<RunInContainerOutput>} Path to a plugin or to the plugin directory.
+   */
+  path (plugin) {
+    const pathArgs = ['path']
+
+    if (plugin) { pathArgs.push('--dir', plugin) }
+
+    return this.wpPlugin(pathArgs)
+  }
+
+  /**
+   * Uninstalls one or more plugins.
+   *
+   * @param {string|string[]|'all'} plugin - One or more plugins to uninstall.
+   * @returns {Promise<RunInContainerOutput>} Path to a plugin or to the plugin directory
+   */
+  uninstall (plugin) {
+    plugin = CheckIfArrayOrString(plugin, 'plugin')
+
+    const deleteArgs = ['delete', '--deactivate']
+
+    if ('all' === plugin[0]) { plugin = ['--all'] }
+
+    deleteArgs.push.apply(deleteArgs, plugin)
+
+    return this.wpPlugin(deleteArgs)
   }
 }
 
