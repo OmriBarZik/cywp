@@ -92,10 +92,10 @@ class Plugin {
    * @example ```js
    * const plugin = new Plugin(WordPress)
    *
-   * //delete one plugin
+   * //Delete one plugin
    * plugin.delete('Twenty Twenty')
    *
-   * // Delete all plugins
+   * //Delete all plugins
    * plugin.delete('all')
    * ```
    */
@@ -115,7 +115,7 @@ class Plugin {
    * Get plugin data.
    *
    * @param {string} plugin - The plugin to get.
-   * @returns {Promise<ThemeGetObject>} Current plugin data.
+   * @returns {Promise<PluginGetObject>} Current plugin data.
    */
   get (plugin) {
     return this.wpPlugin(['get', '--format=json', plugin])
@@ -224,6 +224,15 @@ class Plugin {
    *
    * @param {string|string[]|'all'} plugin - One or more plugins to uninstall.
    * @returns {Promise<RunInContainerOutput>} Path to a plugin or to the plugin directory
+   * @example ```js
+   * const plugin = new Plugin(WordPress)
+   *
+   * //Uninstall one plugin
+   * plugin.uninstall('elementor')
+   *
+   * //Uninstall all plugins
+   * plugin.uninstall('all')
+   * ```
    */
   uninstall (plugin) {
     plugin = CheckIfArrayOrString(plugin, 'plugin')

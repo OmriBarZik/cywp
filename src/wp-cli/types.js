@@ -31,6 +31,16 @@
  */
 
 /**
+ * @typedef PluginGetObject
+ * @property {string} name - the name of the plugin.
+ * @property {string} title - the title of the plugin.
+ * @property {string} author - the name of the other if the plugin.
+ * @property {string} version - the version of the plugin.
+ * @property {string} description - the description of the status.
+ * @property {'inactive'|'active'} status - the plugin status.
+ */
+
+/**
  * @typedef PluginListFiltersObject
  * @property {string} name - Name of the plugin.
  * @property {'active'|'inactive'} status - If the plugin is active or inactive.
