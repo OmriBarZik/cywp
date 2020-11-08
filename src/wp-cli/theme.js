@@ -7,7 +7,7 @@ const { CheckIfArrayOrString } = require('./util')
  */
 class Theme {
   /**
-   * Constructor for the Theme object
+   * Constructor for the Theme object.
    *
    * @param {import('../docker/container')} site - the wordpress site to work on.
    */
@@ -18,8 +18,8 @@ class Theme {
   /**
    * Run wp theme command on a wp cli continer that connect to the site provied in the constructor.
    *
-   * @param {string[]} commands - commands passing to wp theme
-   * @returns {Promise<RunInContainerOutput>} The output of the command
+   * @param {string[]} commands - commands passing to wp theme.
+   * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
   wpTheme (commands) {
     const args = ['wp', 'theme'].concat(commands)
@@ -115,7 +115,7 @@ class Theme {
    * Checks if a given theme is active.
    *
    * @param {string} theme - The theme to check.
-   * @returns {Promise<boolean>} Whether theme is active
+   * @returns {Promise<boolean>} Whether theme is active.
    */
   isActive (theme) {
     return this.wpTheme(['is-active', theme])
@@ -127,7 +127,7 @@ class Theme {
    * Checks if a given theme is installed.
    *
    * @param {string} theme - The theme to check.
-   * @returns {Promise<boolean>} Whether theme is installed
+   * @returns {Promise<boolean>} Whether theme is installed.
    */
   isInstalled (theme) {
     return this.wpTheme(['is-installed', theme])
