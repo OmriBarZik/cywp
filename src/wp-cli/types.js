@@ -29,3 +29,27 @@
  * @property {string} title - the theme title.
  * @property {string} description - The theme description.
  */
+
+/**
+ * @typedef PluginGetObject
+ * @property {string} name - the name of the plugin.
+ * @property {string} title - the title of the plugin.
+ * @property {string} author - the name of the other if the plugin.
+ * @property {string} version - the version of the plugin.
+ * @property {string} description - the description of the status.
+ * @property {'inactive'|'active'} status - the plugin status.
+ */
+
+/**
+ * @typedef PluginListFiltersObject
+ * @property {string} name - Name of the plugin.
+ * @property {'active'|'inactive'} status - If the plugin is active or inactive.
+ * @property {'none'|'available'} update - when
+ * @property {string} version - current version of the plugin.
+ * @property {string} update_version - what version the plugin can update to.
+ * @property {string} update_package - link to update plugin.
+ * @property {string} update_id - the plugin id.
+ * @property {string} title - the plugin title.
+ * @property {string} description - The plugin description.
+ * @property {string} file - plugin file path from parent plugin directory.
+ */
