@@ -43,11 +43,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Run tests
-        if: ${{ matrix.node-version != '12.x' }}
-        run: npm test
+        run: npm run coverage
 
-      - name: Run test coverage
+      - name: Uplode coverage
         if: ${{ matrix.node-version == '12.x' }}
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-        run: npm run coverage:ci
+        uses: codecov/codecov-action@v1
+        with:
+          directory:  ./coverage
+          fail_ci_if_error: true
