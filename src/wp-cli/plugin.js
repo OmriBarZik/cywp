@@ -54,7 +54,7 @@ class Plugin {
   }
 
   /**
-   * Activate one or more plugins.
+   * Deactivate one or more plugins.
    *
    * @param {string|string[]|'all'} plugin - One or more plugins to deactivate, use 'all' to deactivate all plugins.
    * @param {boolean} uninstall - Uninstall the plugin after deactivation.
