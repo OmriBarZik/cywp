@@ -18,4 +18,23 @@ function CheckIfArrayOrString (item, purpose) {
   return item
 }
 
-module.exports = { CheckIfArrayOrString }
+/**
+ * Format the date to yyyy-mm-dd-hh-ii-ss style.
+ *
+ * @param {Date} date - the date to format.
+ * @returns {string} formatted string.
+ */
+function FormatToWordpressDate (date) {
+  const twoDigits = (number) => 10 > number ? '0' + number : number
+
+  return [
+    date.getFullYear(),
+    twoDigits(date.getMonth()),
+    twoDigits(date.getDate()),
+    twoDigits(date.getHours()),
+    twoDigits(date.getMinutes()),
+    twoDigits(date.getSeconds()),
+  ].join('-')
+}
+
+module.exports = { CheckIfArrayOrString, FormatToWordpressDate }
