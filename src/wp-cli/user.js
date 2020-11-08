@@ -1,0 +1,137 @@
+require('./types')
+const { CreateWordpressCliContainer } = require('../docker/presets/containers')
+const { FormatToWordpressDate } = require('./util')
+// const { CheckIfArrayOrString } = require('./util')
+
+class User {
+  /**
+   * Constructor for the User object.
+   *
+   * @param {import('../docker/container')} site - the wordpress site to work on.
+   */
+  constructor (site) {
+    this.site = site
+  }
+
+  /**
+   * Run wp user command on a wp cli continer that connect to the site provied in the constructor.
+   *
+   * @param {string[]} commands - commands passing to wp user.
+   * @returns {Promise<RunInContainerOutput>} The output of the command.
+   */
+  wpUser (commands) {
+    const args = ['wp', 'user'].concat(commands)
+
+    return CreateWordpressCliContainer(this.site, args)
+  }
+
+  /**
+   * Adds a capability to a user.
+   *
+   * @param {number|string} user - User ID, user email, or user login.
+   * @param {string} cap - The capability to add.
+   * @returns {Promise<RunInContainerOutput>} The output of the command.
+   */
+  addCap (user, cap) {
+    const addCapArgs = ['add-cap', user, cap]
+
+    return this.wpUser(addCapArgs)
+  }
+
+  /**
+   * Adds a role for a user.
+   *
+   * @param {number|string} user - User ID, user email, or user login.
+   * @param {string} cap - Add the specified role to the user.
+   * @returns {Promise<RunInContainerOutput>} The output of the command.
+   */
+  addRole (user, cap) {
+    const addRoleArgs = ['add-role', user, cap]
+
+    return this.wpUser(addRoleArgs)
+  }
+
+  /**
+   * Creates a new user.
+   *
+   * @param {object} options - Option to create new user.
+   * @param {string} options.userLogin - The login of the user to create.
+   * @param {string} options.userPass - The user password.
+   * @param {'administrator'|'editor'|'author'|'contributor'|'subscriber'} options.role - The role of the user to create. Default: default role. Possible values include ‘administrator’, ‘editor’, ‘author’, ‘contributor’, ‘subscriber’.
+   * @param {Date} [options.userRegistered] - The date the user registered. Default: current date.
+   * @param {string} [options.displayName] - The display name.
+   * @param {string} [options.userNicename] - A string that contains a URL-friendly name for the user. The default is the user’s username.
+   * @param {string} [options.userUrl] - A string containing the user’s URL for the user’s web site.
+   * @param {string} [options.nickname] - The user’s nickname, defaults to the user’s username.
+   * @param {string} [options.firstName] - The user’s first name.
+   * @param {string} [options.lastName] - The user’s last name.
+   * @param {string} [options.description] - A string containing content about the user.
+   * @param {string} [options.userEmail] - The email address of the user to create. default: `${options.userLogin}@cywp.local`
+   * @returns {Promise<RunInContainerOutput>} Retruns newy created User id.
+   */
+  create (options) {
+    const createArgs = ['add-role', '--porcelain']
+
+    if (!options.userLogin) {
+      throw new TypeError('option.userLogin must be provided!')
+    }
+
+    createArgs.push(options.userLogin)
+
+    if (!options.userEmail) {
+      options.userEmail = `${options.userLogin}@cywp.local`
+    }
+
+    createArgs.push(options.userEmail)
+
+    if (!options.userPass) {
+      throw new TypeError('option.userPass must be provided!')
+    }
+
+    createArgs.push(`--user_pass=${options.userPass}`)
+
+    if (options.role) {
+      createArgs.push(`--role=${options.role}`)
+    }
+
+    if (options.userRegistered) {
+      if (!(options.userRegistered instanceof Date)) {
+        throw new TypeError('options.userRegistered must be instance of Date!')
+      }
+
+      createArgs.push(`--user_registered=${FormatToWordpressDate(options.userRegistered)}`)
+    }
+
+    if (options.displayName) {
+      createArgs.push(`--display_name=${options.displayName}`)
+    }
+
+    if (options.userNicename) { // eslint-disable-line spellcheck/spell-checker
+      createArgs.push(`--user_nicename=${options.userNicename}`) // eslint-disable-line spellcheck/spell-checker
+    }
+
+    if (options.userUrl) {
+      createArgs.push(`--user_url=${options.userUrl}`)
+    }
+
+    if (options.nickname) {
+      createArgs.push(`--nickname=${options.nickname}`)
+    }
+
+    if (options.firstName) {
+      createArgs.push(`--first_name=${options.firstName}`)
+    }
+
+    if (options.lastName) {
+      createArgs.push(`--last_name=${options.lastName}`)
+    }
+
+    if (options.description) {
+      createArgs.push(`--description=${options.description}`)
+    }
+
+    return this.wpUser(createArgs)
+  }
+}
+
+module.exports = User
