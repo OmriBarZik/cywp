@@ -29,7 +29,7 @@ function FormatToWordpressDate (date) {
 
   return [
     date.getFullYear(),
-    twoDigits(date.getMonth()),
+    twoDigits(date.getMonth() + 1),
     twoDigits(date.getDate()),
     twoDigits(date.getHours()),
     twoDigits(date.getMinutes()),
