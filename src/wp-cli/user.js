@@ -357,6 +357,48 @@ class User {
 
     return this.wpUser(args)
   }
+
+  /**
+   * Updates an existing user.
+   *
+   * @param {object} options - Options to update user.
+   * @param {string|number|string[]|number[]} options.user - The user login, user email or user ID of the user(s) to update.
+   * @param {string} [options.userPass] - A string that contains the plain text password for the user.
+   * @param {string} [options.userNicename] - A string that contains a URL-friendly name for the user. The default is the user’s username.
+   * @param {string} [options.userUrl] - A string containing the user’s URL for the user’s web site.
+   * @param {string} [options.userEmail] - A string containing the user’s email address.
+   * @param {string} [options.displayName] - A string that will be shown on the site. Defaults to user’s username.
+   * @param {string} [options.nickname] - The user’s nickname, defaults to the user’s username.
+   * @param {string} [options.firstName] - The user’s first name.
+   * @param {string} [options.lastName] - The user’s last name.
+   * @param {string} [options.description] -A string containing content about the user.
+   * @param {string} [options.userRegistered] - The date the user registered.
+   * @param {string} [options.role] - A string used to set the user’s role.
+   * @returns {Promise<RunInContainerOutput>} the output of the command.
+   */
+  update (options) {
+    const updateArgs = ['update', '--skip-email']
+
+    if (!options.user) {
+      throw new TypeError('options.user must be provided')
+    }
+
+    options.user = CheckIfArrayOrString(options.user, 'options.user')
+
+    if (options.description) { updateArgs.push(`--description=${options.description}`) }
+    if (options.displayName) { updateArgs.push(`--display_name=${options.displayName}`) }
+    if (options.firstName) { updateArgs.push(`--first_name=${options.firstName}`) }
+    if (options.lastName) { updateArgs.push(`--last_name=${options.lastName}`) }
+    if (options.nickname) { updateArgs.push(`--nickname=${options.nickname}`) }
+    if (options.role) { updateArgs.push(`--role=${options.role}`) }
+    if (options.userEmail) { updateArgs.push(`--role=${options.userEmail}`) }
+    if (options.userNicename) { updateArgs.push(`--user_nicename=${options.userNicename}`) }
+    if (options.userPass) { updateArgs.push(`--user_pass=${options.userPass}`) }
+    if (options.userRegistered) { updateArgs.push(`--user_registered=${options.userRegistered}`) }
+    if (options.userUrl) { updateArgs.push(`--user_url=${options.userUrl}`) }
+
+    return this.wpUser(updateArgs)
+  }
 }
 
 module.exports = User
