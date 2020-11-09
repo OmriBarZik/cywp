@@ -181,7 +181,7 @@ class User {
     const listArgs = [
       'list',
       '--format=json',
-      '--fields=ID,user_login,display_name,user_email,user_registered,roles,user_pass,user_nicename,user_url,user_activation_key,user_status', // eslint-disable-line spellcheck/spell-checker
+      '--fields=ID,user_login,display_name,user_email,user_registered,roles,user_pass,user_nicename,user_url,user_activation_key,user_status',
     ]
 
     if ('object' !== typeof filters) {
