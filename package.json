@@ -126,7 +126,8 @@
             "cmd",
             "wp",
             "uri",
-            "php"
+            "php",
+            "nicename"
           ]
         }
       ]
