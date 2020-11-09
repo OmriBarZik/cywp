@@ -16,7 +16,7 @@ class UserMeta {
   /**
    * Adds a meta field.
    *
-   * @param {string} user - The user login, user email, or user ID of the user to add metadata for.
+   * @param {string|number} user - The user login, user email, or user ID of the user to add metadata for.
    * @param {string} key - The metadata key.
    * @param {string} value - The new metadata value.
    * @returns {Promise<RunInContainerOutput>} The command output.
@@ -30,7 +30,7 @@ class UserMeta {
   /**
    * Deletes a meta field.
    *
-   * @param {string} user - The user login, user email, or user ID of the user to delete metadata from.
+   * @param {string|number} user - The user login, user email, or user ID of the user to delete metadata from.
    * @param {string} key - he metadata key.
    * @returns {Promise<RunInContainerOutput>} The command output.
    */
@@ -43,7 +43,7 @@ class UserMeta {
   /**
    * Gets meta field value.
    *
-   * @param {string} user - The user login, user email, or user ID of the user to get metadata for.
+   * @param {string|number} user - The user login, user email, or user ID of the user to get metadata for.
    * @param {string} key - The metadata key.
    * @returns {Promise<any>} The command output.
    */
@@ -57,7 +57,7 @@ class UserMeta {
   /**
    * Lists all metadata associated with a user.
    *
-   * @param {string} user - The user login, user email, or user ID of the user to get metadata for.
+   * @param {string|number} user - The user login, user email, or user ID of the user to get metadata for.
    * @returns {Promise<{user_id: number, meta_key: string, meta_value: string}>} list of the user metadata
    */
   list (user) {
@@ -131,7 +131,7 @@ class User {
   /**
    * Creates a new user.
    *
-   * @param {object} options - Option to create new user.
+   * @param {object} options - Options to create new user.
    * @param {string} options.userLogin - The login of the user to create.
    * @param {string} options.userPass - The user password.
    * @param {'administrator'|'editor'|'author'|'contributor'|'subscriber'} options.role - The role of the user to create. Default: default role. Possible values include ‘administrator’, ‘editor’, ‘author’, ‘contributor’, ‘subscriber’.
@@ -150,7 +150,7 @@ class User {
     const createArgs = ['add-role', '--porcelain']
 
     if (!options.userLogin) {
-      throw new TypeError('option.userLogin must be provided!')
+      throw new TypeError('options.userLogin must be provided!')
     }
 
     createArgs.push(options.userLogin)
@@ -162,7 +162,7 @@ class User {
     createArgs.push(options.userEmail)
 
     if (!options.userPass) {
-      throw new TypeError('option.userPass must be provided!')
+      throw new TypeError('options.userPass must be provided!')
     }
 
     createArgs.push(`--user_pass=${options.userPass}`)
@@ -213,12 +213,12 @@ class User {
   /**
    * Deletes one or more users from the current site.
    *
-   * @param {string} user - The user login, user email, or user ID of the user(s) to delete.
+   * @param {string|number} user - The user login, user email, or user ID of the user(s) to delete.
    * @param {number} [reassign] -  User ID to reassign the posts to.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
   delete (user, reassign) {
-    user = CheckIfArrayOrString(user)
+    user = CheckIfArrayOrString(user, 'user')
 
     const deleteArgs = ['delete', '--yes']
 
@@ -234,7 +234,7 @@ class User {
   /**
    * Get user data.
    *
-   * @param {string} user - The user to get.
+   * @param {string|number} user - The user to get.
    * @returns {Promise<UserGetObject>} Current user data.
    */
   get (user) {
@@ -277,7 +277,7 @@ class User {
   /**
    * Return the user's capabilities
    *
-   * @param {string} user - User to check
+   * @param {string|number} user - User to check
    * @returns {Promise<{name: string}[]>} List of the user capabilities.
    */
   listCaps (user) {
@@ -285,6 +285,77 @@ class User {
 
     return this.wpUser(listCapsArgs)
       .then(output => JSON.parse(output.stdout))
+  }
+
+  /**
+   * Removes a user's capability.
+   *
+   * @param {string|number} user - User ID, user email, or user login.
+   * @param {string} cap - The capability to be removed.
+   * @returns {Promise<RunInContainerOutput>} The output of the command.
+   */
+  removeCap (user, cap) {
+    const removeCapArgs = ['remove-cap', user, cap]
+
+    return this.wpUser(removeCapArgs)
+  }
+
+  /**
+   * Removes a user's role.
+   *
+   * @param {string|number} user - User ID, user email, or user login.
+   * @param {string} cap - A specific role to remove.
+   * @returns {Promise<RunInContainerOutput>} The output of the command.
+   */
+  removeRole (user, cap) {
+    const removeRoleArgs = ['remove-role', user, cap]
+
+    return this.wpUser(removeRoleArgs)
+  }
+
+  /**
+   * Sets the user role.
+   *
+   * @param {string} user - User ID, user email, or user login.
+   * @param {string} role - Make the user have the specified role. If not passed, the default role is used.
+   * @returns {Promise<RunInContainerOutput>} The output of the command.
+   */
+  setRole (user, role) {
+    const setRoleArgs = ['set-role', user, role]
+
+    return this.wpUser(setRoleArgs)
+  }
+
+  /**
+   * Marks one or more users as spam.
+   *
+   * @param {string|number|number[]|string[]} user - One or more id's of users to mark as spam.
+   * @returns {Promise<RunInContainerOutput>} The command output
+   */
+  spam (user) {
+    user = CheckIfArrayOrString(user, 'user')
+
+    const spamArgs = ['spam']
+
+    spamArgs.push.apply(user)
+
+    return this.wpUser(spamArgs)
+  }
+
+  /**
+   * Removes one or more users from spam.
+   *
+   * @param {string|number|number[]|string[]} user - One or more IDs of users to remove from spam.
+   * @returns {Promise<RunInContainerOutput>} The command output
+   */
+  unspam (user) { // eslint-disable-line spellcheck/spell-checker
+    user = CheckIfArrayOrString(user, 'user')
+
+    const args = ['unspam'] // eslint-disable-line spellcheck/spell-checker
+
+    args.push.apply(user)
+
+    return this.wpUser(args)
   }
 }
 
