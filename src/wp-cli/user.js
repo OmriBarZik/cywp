@@ -170,6 +170,44 @@ class User {
     return this.wpUser(getArgs)
       .then(output => JSON.parse(output.stdout))
   }
+
+  /**
+   * Return list of users in the wordpress site and there data.
+   *
+   * @param {UserGetObject} [filters] - Filter results based on the value of a field.
+   * @returns {Promise<UserGetObject[]>} - List of users in the wordpress site.
+   */
+  list (filters) {
+    const listArgs = [
+      'list',
+      '--format=json',
+      '--fields=ID,user_login,display_name,user_email,user_registered,roles,user_pass,user_nicename,user_url,user_activation_key,user_status', // eslint-disable-line spellcheck/spell-checker
+    ]
+
+    if ('object' !== typeof filters) {
+      throw new TypeError('filters must be an object')
+    }
+
+    for (const filtersField in filters) {
+      listArgs.push(`--${filtersField}=${filters[filtersField]}`)
+    }
+
+    return this.wpUser(listArgs)
+      .then(output => JSON.parse(output.stdout))
+  }
+
+  /**
+   * Return the user's capabilities
+   *
+   * @param {string} user - User to check
+   * @returns {Promise<{name: string}[]>} List of the user capabilities.
+   */
+  listCaps (user) {
+    const listCapsArgs = ['list-caps', '--format=json', user]
+
+    return this.wpUser(listCapsArgs)
+      .then(output => JSON.parse(output.stdout))
+  }
 }
 
 module.exports = User
