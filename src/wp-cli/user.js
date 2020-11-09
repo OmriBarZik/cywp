@@ -144,6 +144,7 @@ class User {
    * @param {string} [options.lastName] - The user’s last name.
    * @param {string} [options.description] - A string containing content about the user.
    * @param {string} [options.userEmail] - The email address of the user to create. default: `${options.userLogin}@cywp.local`
+   *
    * @returns {Promise<RunInContainerOutput>} Retruns newy created User id.
    */
   create (options) {
@@ -167,9 +168,7 @@ class User {
 
     createArgs.push(`--user_pass=${options.userPass}`)
 
-    if (options.role) {
-      createArgs.push(`--role=${options.role}`)
-    }
+    if (options.role) { createArgs.push(`--role=${options.role}`) }
 
     if (options.userRegistered) {
       if (!(options.userRegistered instanceof Date)) {
@@ -179,33 +178,13 @@ class User {
       createArgs.push(`--user_registered=${FormatToWordpressDate(options.userRegistered)}`)
     }
 
-    if (options.displayName) {
-      createArgs.push(`--display_name=${options.displayName}`)
-    }
-
-    if (options.userNicename) {
-      createArgs.push(`--user_nicename=${options.userNicename}`)
-    }
-
-    if (options.userUrl) {
-      createArgs.push(`--user_url=${options.userUrl}`)
-    }
-
-    if (options.nickname) {
-      createArgs.push(`--nickname=${options.nickname}`)
-    }
-
-    if (options.firstName) {
-      createArgs.push(`--first_name=${options.firstName}`)
-    }
-
-    if (options.lastName) {
-      createArgs.push(`--last_name=${options.lastName}`)
-    }
-
-    if (options.description) {
-      createArgs.push(`--description=${options.description}`)
-    }
+    if (options.displayName) { createArgs.push(`--display_name=${options.displayName}`) }
+    if (options.userNicename) { createArgs.push(`--user_nicename=${options.userNicename}`) }
+    if (options.userUrl) { createArgs.push(`--user_url=${options.userUrl}`) }
+    if (options.nickname) { createArgs.push(`--nickname=${options.nickname}`) }
+    if (options.firstName) { createArgs.push(`--first_name=${options.firstName}`) }
+    if (options.lastName) { createArgs.push(`--last_name=${options.lastName}`) }
+    if (options.description) { createArgs.push(`--description=${options.description}`) }
 
     return this.wpUser(createArgs)
   }
@@ -372,8 +351,9 @@ class User {
    * @param {string} [options.firstName] - The user’s first name.
    * @param {string} [options.lastName] - The user’s last name.
    * @param {string} [options.description] -A string containing content about the user.
-   * @param {string} [options.userRegistered] - The date the user registered.
+   * @param {Date} [options.userRegistered] - The date the user registered.
    * @param {string} [options.role] - A string used to set the user’s role.
+   *
    * @returns {Promise<RunInContainerOutput>} the output of the command.
    */
   update (options) {
@@ -385,6 +365,16 @@ class User {
 
     options.user = CheckIfArrayOrString(options.user, 'options.user')
 
+    updateArgs.push.apply(updateArgs, options.user)
+
+    if (options.userRegistered) {
+      if (!(options.userRegistered instanceof Date)) {
+        throw new TypeError('options.userRegistered must be instance of Date!')
+      }
+
+      updateArgs.push(`--user_registered=${FormatToWordpressDate(options.userRegistered)}`)
+    }
+
     if (options.description) { updateArgs.push(`--description=${options.description}`) }
     if (options.displayName) { updateArgs.push(`--display_name=${options.displayName}`) }
     if (options.firstName) { updateArgs.push(`--first_name=${options.firstName}`) }
@@ -394,7 +384,6 @@ class User {
     if (options.userEmail) { updateArgs.push(`--role=${options.userEmail}`) }
     if (options.userNicename) { updateArgs.push(`--user_nicename=${options.userNicename}`) }
     if (options.userPass) { updateArgs.push(`--user_pass=${options.userPass}`) }
-    if (options.userRegistered) { updateArgs.push(`--user_registered=${options.userRegistered}`) }
     if (options.userUrl) { updateArgs.push(`--user_url=${options.userUrl}`) }
 
     return this.wpUser(updateArgs)
