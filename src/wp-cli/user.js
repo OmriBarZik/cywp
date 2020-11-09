@@ -1,7 +1,6 @@
 require('./types')
 const { CreateWordpressCliContainer } = require('../docker/presets/containers')
-const { FormatToWordpressDate } = require('./util')
-// const { CheckIfArrayOrString } = require('./util')
+const { FormatToWordpressDate, CheckIfArrayOrString } = require('./util')
 
 class User {
   /**
@@ -106,8 +105,8 @@ class User {
       createArgs.push(`--display_name=${options.displayName}`)
     }
 
-    if (options.userNicename) { // eslint-disable-line spellcheck/spell-checker
-      createArgs.push(`--user_nicename=${options.userNicename}`) // eslint-disable-line spellcheck/spell-checker
+    if (options.userNicename) {
+      createArgs.push(`--user_nicename=${options.userNicename}`)
     }
 
     if (options.userUrl) {
@@ -131,6 +130,37 @@ class User {
     }
 
     return this.wpUser(createArgs)
+  }
+
+  /**
+   * Deletes one or more users from the current site.
+   *
+   * @param {string} user - The user login, user email, or user ID of the user(s) to delete.
+   * @param {number} [reassign] -  User ID to reassign the posts to.
+   * @returns {Promise<RunInContainerOutput>} The output of the command.
+   */
+  delete (user, reassign) {
+    user = CheckIfArrayOrString(user)
+
+    const deleteArgs = ['delete', '--yes']
+
+    if (reassign) {
+      deleteArgs.push(`--reassign=${reassign}`)
+    }
+
+    deleteArgs.push.apply(deleteArgs, user)
+
+    return this.wpUser(deleteArgs)
+  }
+
+  get () {
+    const getArgs = [
+      'get',
+      '--format=json',
+      '--fields=ID,user_login,display_name,user_email,user_registered,roles,user_pass,user_nicename,user_url,user_activation_key,user_status',
+    ]
+
+    return this.wpUser(getArgs)
   }
 }
 
