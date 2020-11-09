@@ -153,14 +153,22 @@ class User {
     return this.wpUser(deleteArgs)
   }
 
-  get () {
+  /**
+   * Get user data.
+   *
+   * @param {string} user - The user to get.
+   * @returns {Promise<UserGetObject>} Current user data.
+   */
+  get (user) {
     const getArgs = [
       'get',
       '--format=json',
       '--fields=ID,user_login,display_name,user_email,user_registered,roles,user_pass,user_nicename,user_url,user_activation_key,user_status',
+      user,
     ]
 
     return this.wpUser(getArgs)
+      .then(output => JSON.parse(output.stdout))
   }
 }
 
