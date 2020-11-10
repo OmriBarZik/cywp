@@ -196,6 +196,10 @@ class User {
    * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
   delete (user, reassign) {
+    if ('number' === typeof user) {
+      user = user.toString()
+    }
+
     user = CheckIfArrayOrString(user, 'user')
 
     const deleteArgs = ['delete', '--yes']
@@ -311,6 +315,10 @@ class User {
    * @returns {Promise<RunInContainerOutput>} The command output
    */
   spam (user) {
+    if ('number' === typeof user) {
+      user = user.toString()
+    }
+
     user = CheckIfArrayOrString(user, 'user')
 
     const spamArgs = ['spam']
@@ -327,6 +335,10 @@ class User {
    * @returns {Promise<RunInContainerOutput>} The command output
    */
   unspam (user) { // eslint-disable-line spellcheck/spell-checker
+    if ('number' === typeof user) {
+      user = user.toString()
+    }
+
     user = CheckIfArrayOrString(user, 'user')
 
     const args = ['unspam'] // eslint-disable-line spellcheck/spell-checker
@@ -360,6 +372,10 @@ class User {
 
     if (!options.user) {
       throw new TypeError('options.user must be provided')
+    }
+
+    if ('number' === typeof options.user) {
+      options.user = options.user.toString()
     }
 
     options.user = CheckIfArrayOrString(options.user, 'options.user')
