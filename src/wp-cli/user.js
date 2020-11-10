@@ -119,11 +119,11 @@ class User {
    * Adds a role for a user.
    *
    * @param {number|string} user - User ID, user email, or user login.
-   * @param {string} cap - Add the specified role to the user.
+   * @param {string} role - Add the specified role to the user.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
-  addRole (user, cap) {
-    const addRoleArgs = ['add-role', user, cap]
+  addRole (user, role) {
+    const addRoleArgs = ['add-role', user, role]
 
     return this.wpUser(addRoleArgs)
   }
