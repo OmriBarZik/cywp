@@ -343,7 +343,7 @@ class User {
 
     const args = ['unspam'] // eslint-disable-line spellcheck/spell-checker
 
-    args.push.apply(user)
+    args.push.apply(args, user)
 
     return this.wpUser(args)
   }
