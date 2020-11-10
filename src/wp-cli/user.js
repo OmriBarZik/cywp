@@ -323,7 +323,7 @@ class User {
 
     const spamArgs = ['spam']
 
-    spamArgs.push.apply(user)
+    spamArgs.push.apply(spamArgs, user)
 
     return this.wpUser(spamArgs)
   }
