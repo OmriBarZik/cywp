@@ -134,7 +134,7 @@ class User {
    * @param {object} options - Options to create new user.
    * @param {string} options.userLogin - The login of the user to create.
    * @param {string} options.userPass - The user password.
-   * @param {'administrator'|'editor'|'author'|'contributor'|'subscriber'} options.role - The role of the user to create. Default: default role. Possible values include ‘administrator’, ‘editor’, ‘author’, ‘contributor’, ‘subscriber’.
+   * @param {'administrator'|'editor'|'author'|'contributor'|'subscriber'} [options.role] - The role of the user to create. Default: default role. Possible values include ‘administrator’, ‘editor’, ‘author’, ‘contributor’, ‘subscriber’.
    * @param {Date} [options.userRegistered] - The date the user registered. Default: current date.
    * @param {string} [options.displayName] - The display name.
    * @param {string} [options.userNicename] - A string that contains a URL-friendly name for the user. The default is the user’s username.
@@ -147,8 +147,8 @@ class User {
    *
    * @returns {Promise<RunInContainerOutput>} Retruns newy created User id.
    */
-  create (options) {
-    const createArgs = ['add-role', '--porcelain']
+  create (options = {}) {
+    const createArgs = ['create', '--porcelain']
 
     if (!options.userLogin) {
       throw new TypeError('options.userLogin must be provided!')
@@ -234,7 +234,7 @@ class User {
    * @param {UserGetObject} [filters] - Filter results based on the value of a field.
    * @returns {Promise<UserGetObject[]>} - List of users in the wordpress site.
    */
-  list (filters) {
+  list (filters = {}) {
     const listArgs = [
       'list',
       '--format=json',
@@ -352,11 +352,11 @@ class User {
    * @param {string} [options.lastName] - The user’s last name.
    * @param {string} [options.description] -A string containing content about the user.
    * @param {Date} [options.userRegistered] - The date the user registered.
-   * @param {string} [options.role] - A string used to set the user’s role.
+   * @param {'administrator'|'editor'|'author'|'contributor'|'subscriber'} [options.role] - A string used to set the user’s role.
    *
    * @returns {Promise<RunInContainerOutput>} the output of the command.
    */
-  update (options) {
+  update (options = {}) {
     const updateArgs = ['update', '--skip-email']
 
     if (!options.user) {
