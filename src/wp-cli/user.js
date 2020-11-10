@@ -334,14 +334,14 @@ class User {
    * @param {string|number|number[]|string[]} user - One or more IDs of users to remove from spam.
    * @returns {Promise<RunInContainerOutput>} The command output
    */
-  unspam (user) { // eslint-disable-line spellcheck/spell-checker
+  unspam (user) {
     if ('number' === typeof user) {
       user = user.toString()
     }
 
     user = CheckIfArrayOrString(user, 'user')
 
-    const args = ['unspam'] // eslint-disable-line spellcheck/spell-checker
+    const args = ['unspam']
 
     args.push.apply(args, user)
 
