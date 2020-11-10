@@ -168,8 +168,6 @@ class User {
 
     createArgs.push(`--user_pass=${options.userPass}`)
 
-    if (options.role) { createArgs.push(`--role=${options.role}`) }
-
     if (options.userRegistered) {
       if (!(options.userRegistered instanceof Date)) {
         throw new TypeError('options.userRegistered must be instance of Date!')
@@ -178,6 +176,7 @@ class User {
       createArgs.push(`--user_registered=${FormatToWordpressDate(options.userRegistered)}`)
     }
 
+    if (options.role) { createArgs.push(`--role=${options.role}`) }
     if (options.displayName) { createArgs.push(`--display_name=${options.displayName}`) }
     if (options.userNicename) { createArgs.push(`--user_nicename=${options.userNicename}`) }
     if (options.userUrl) { createArgs.push(`--user_url=${options.userUrl}`) }
