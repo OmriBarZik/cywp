@@ -127,7 +127,8 @@
             "wp",
             "uri",
             "php",
-            "nicename"
+            "nicename",
+            "unspam"
           ]
         }
       ]
