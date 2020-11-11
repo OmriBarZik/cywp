@@ -1,3 +1,4 @@
+require('./types')
 const { CreateWordpressCliContainer } = require('../docker/presets/containers')
 const { CheckIfArrayOrString } = require('./util')
 
