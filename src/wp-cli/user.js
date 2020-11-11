@@ -71,6 +71,8 @@ class UserMeta {
   }
 
   /**
+   * Updates a meta field.
+   *
    * @param {string|number} user - The user login, user email, or user ID of the user to update metadata for.
    * @param {string} key - The metadata key.
    * @param {string} value - The new metadata value.
