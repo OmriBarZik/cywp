@@ -6,11 +6,11 @@ class UserMeta {
   /**
    * Constructor for the UserMeta object.
    *
-   * @param {(commands: string) => Promise<RunInContainerOutput>} wpUser - the wpUser user command.
+   * @param {User} user - the user object.
    */
-  constructor (wpUser) {
-    /** @type {(commands: string) => Promise<RunInContainerOutput>} */
-    this.wpUserMeta = (commands) => wpUser(commands.concat('meta'))
+  constructor (user) {
+    /** @type {(commands: string[]) => Promise<RunInContainerOutput>} */
+    this.wpUserMeta = (commands) => user.wpUser(['meta', ...commands])
   }
 
   /**
@@ -64,7 +64,7 @@ class UserMeta {
     const listArgs = ['list', '--format=json', user]
 
     return this.wpUserMeta(listArgs)
-      .then(output => JSON.parse(output))
+      .then(output => JSON.parse(output.stdout))
   }
 
   /**
@@ -87,7 +87,7 @@ class User {
    */
   constructor (site) {
     this.site = site
-    this.Meta = new UserMeta(this.wpUser)
+    this.Meta = new UserMeta(this)
   }
 
   /**
@@ -396,7 +396,7 @@ class User {
     if (options.lastName) { updateArgs.push(`--last_name=${options.lastName}`) }
     if (options.nickname) { updateArgs.push(`--nickname=${options.nickname}`) }
     if (options.role) { updateArgs.push(`--role=${options.role}`) }
-    if (options.userEmail) { updateArgs.push(`--role=${options.userEmail}`) }
+    if (options.userEmail) { updateArgs.push(`--user_email=${options.userEmail}`) }
     if (options.userNicename) { updateArgs.push(`--user_nicename=${options.userNicename}`) }
     if (options.userPass) { updateArgs.push(`--user_pass=${options.userPass}`) }
     if (options.userUrl) { updateArgs.push(`--user_url=${options.userUrl}`) }
