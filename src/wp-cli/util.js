@@ -19,6 +19,25 @@ function CheckIfArrayOrString (item, purpose) {
 }
 
 /**
+ * Checks if the given value is an array or string.
+ *
+ * @param {number | number[]} item - the items to be checked.
+ * @param {string} purpose - use to determent what to throw is the items isn't valid.
+ * @returns {number[]} Array that contined a vlive item / items.
+ */
+function CheckIfArrayOrNumber (item, purpose) {
+  if ('number' === typeof item) {
+    item = [item]
+  }
+
+  if (!Array.isArray(item)) {
+    throw new TypeError(`${purpose} must be an array or a number`)
+  }
+
+  return item
+}
+
+/**
  * Format the date to yyyy-mm-dd-hh-ii-ss style.
  *
  * @param {Date} date - the date to format.
@@ -37,4 +56,4 @@ function FormatToWordpressDate (date) {
   ].join('-')
 }
 
-module.exports = { CheckIfArrayOrString, FormatToWordpressDate }
+module.exports = { CheckIfArrayOrString, FormatToWordpressDate, CheckIfArrayOrNumber }
