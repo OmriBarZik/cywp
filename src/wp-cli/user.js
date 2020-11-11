@@ -2,6 +2,9 @@ require('./types')
 const { CreateWordpressCliContainer } = require('../docker/presets/containers')
 const { FormatToWordpressDate, CheckIfArrayOrString } = require('./util')
 
+/**
+ * Adds, updates, deletes, and lists user custom fields.
+ */
 class UserMeta {
   /**
    * Constructor for the UserMeta object.
@@ -79,6 +82,9 @@ class UserMeta {
   }
 }
 
+/**
+ * Manages users, along with their roles, capabilities, and meta.
+ */
 class User {
   /**
    * Constructor for the User object.
