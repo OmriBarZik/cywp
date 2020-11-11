@@ -114,21 +114,21 @@
         "warn",
         {
           "skipWords": [
-            "cywp",
-            "stdout",
-            "stderr",
-            "ps",
-            "Wordpress",
-            "Mysql",
-            "twentyseventeen",
-            "spwan",
-            "usr",
-            "cmd",
-            "wp",
-            "uri",
-            "php",
-            "nicename",
-            "unspam"
+            "cywp"
+            ,"stdout"
+            ,"stderr"
+            ,"ps"
+            ,"wordpress"
+            ,"mysql"
+            ,"twentyseventeen"
+            ,"spwan"
+            ,"usr"
+            ,"cmd"
+            ,"wp"
+            ,"uri"
+            ,"php"
+            ,"nicename"
+            ,"unspam"
           ]
         }
       ]
