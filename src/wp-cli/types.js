@@ -53,3 +53,18 @@
  * @property {string} description - The plugin description.
  * @property {string} file - plugin file path from parent plugin directory.
  */
+
+/**
+ * @typedef UserGetObject
+ * @property {string} ID - User id.
+ * @property {string} user_login - User login name
+ * @property {string} display_name - User display name
+ * @property {string} user_email - User email
+ * @property {string} user_registered - User registration date
+ * @property {string} roles - User roles.
+ * @property {string} user_pass - Hashed user password
+ * @property {string} user_nicename - User nickname.
+ * @property {string} user_url - user url
+ * @property {string} user_activation_key - User activation key
+ * @property {string} user_status - The user status (no real use)
+ */
