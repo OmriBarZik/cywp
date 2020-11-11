@@ -1,5 +1,5 @@
 /**
- * @typedef ThemeGetObject
+ * @typedef {object} ThemeGetObject
  * @property {string} name - The name of the theme.
  * @property {string} title - the title of the theme.
  * @property {string} version - version of the theme.
@@ -18,7 +18,7 @@
  */
 
 /**
- * @typedef ThemeListFiltersObject
+ * @typedef {object} ThemeListFiltersObject
  * @property {string} name - Name of the theme.
  * @property {'active'|'inactive'} status - If the theme is active or inactive.
  * @property {'none'|'available'} update - when
@@ -31,7 +31,7 @@
  */
 
 /**
- * @typedef PluginGetObject
+ * @typedef {object} PluginGetObject
  * @property {string} name - the name of the plugin.
  * @property {string} title - the title of the plugin.
  * @property {string} author - the name of the other if the plugin.
@@ -41,7 +41,7 @@
  */
 
 /**
- * @typedef PluginListFiltersObject
+ * @typedef {object} PluginListFiltersObject
  * @property {string} name - Name of the plugin.
  * @property {'active'|'inactive'} status - If the plugin is active or inactive.
  * @property {'none'|'available'} update - when
@@ -55,7 +55,7 @@
  */
 
 /**
- * @typedef UserGetObject
+ * @typedef {object} UserGetObject
  * @property {string} ID - User id.
  * @property {string} user_login - User login name
  * @property {string} display_name - User display name
@@ -67,4 +67,33 @@
  * @property {string} user_url - user url
  * @property {string} user_activation_key - User activation key
  * @property {string} user_status - The user status (no real use)
+ */
+
+/**
+ * @typedef {object} PluginListFiltersObject
+ * @property {number} ID - The post id
+ * @property {string} post_title - the post title.
+ * @property {string} post_name - to post name.
+ * @property {string} post_date - when the post was publised.
+ * @property {string} post_status - the post status.
+ * @property {string} post_author - the id of the post other
+ * @property {string} post_date_gmt - when the post was craeted
+ * @property {string} post_content - the content of the post.
+ * @property {string} post_excerpt - the post excerpt (usly used as post summary.)
+ * @property {string} comment_status - the post commant status.
+ * @property {string} ping_status - the post ping status
+ * @property {string} post_password - the hash of the post password.
+ * @property {string} to_ping - is the post to ping.
+ * @property {string} pinged - is the post pinged.
+ * @property {string} post_modified - the time the post was modified in current time.
+ * @property {string} post_modified_gmt - the time the post was modified in GMT time.
+ * @property {string} post_content_filtered - the
+ * @property {string} post_parent - the parent post id.
+ * @property {string} guid - the post guid.
+ * @property {string} menu_order - the post menu order.
+ * @property {string} post_type - the post type.
+ * @property {string} post_mime_type - the post mime type.
+ * @property {string} comment_count - the number of commants on the post.
+ * @property {string} filter - the post filter.
+ * @property {string} url - the user of the post.
  */
