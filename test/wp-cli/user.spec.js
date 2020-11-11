@@ -421,4 +421,165 @@ describe('User', () => {
         .toHaveBeenLastCalledWith(['unspam', 'user', 1])
     })
   })
+
+  describe('#update()', () => {
+    it('should throw error when user id in not given', () => {
+      expect(() => user.update({})).toThrow(new TypeError('options.user must be provided'))
+
+      expect(() => user.update()).toThrow(new TypeError('options.user must be provided'))
+    })
+
+    it('should throw error when user Registered date is not date object', () => {
+      expect(() => user.update({ user: 'user', userRegistered: 'error' })).toThrow(new TypeError('options.userRegistered must be instance of Date!'))
+    })
+
+    it('should have the arguments to update user', () => {
+      user.update({ user: 'user' })
+
+      expect(user.wpUser)
+        .toHaveBeenLastCalledWith(['update', '--skip-email', 'user'])
+    })
+
+    it('should have the arguments to update user with user id as parameter', () => {
+      user.update({ user: 1 })
+
+      expect(user.wpUser)
+        .toHaveBeenLastCalledWith(['update', '--skip-email', '1'])
+    })
+
+    it('should have the arguments to update multiple users', () => {
+      user.update({ user: ['user', 1] })
+
+      expect(user.wpUser)
+        .toHaveBeenLastCalledWith(['update', '--skip-email', 'user', 1])
+    })
+
+    it('should have the arguments to update user description', () => {
+      user.update({ user: 'user', description: 'user-description' })
+
+      expect(user.wpUser)
+        .toHaveBeenLastCalledWith(['update', '--skip-email', 'user', '--description=user-description'])
+    })
+
+    it('should have the arguments to update user registered date', () => {
+      user.update({ user: 'user', userRegistered: new Date(2020, 10, 10) })
+
+      expect(user.wpUser)
+        .toHaveBeenLastCalledWith(['update', '--skip-email', 'user', '--user_registered=2020-11-10-00-00-00'])
+    })
+
+    it('should have the arguments to update user display name', () => {
+      user.update({ user: 'user', displayName: 'user-display-name' })
+
+      expect(user.wpUser)
+        .toHaveBeenLastCalledWith(['update', '--skip-email', 'user', '--display_name=user-display-name'])
+    })
+
+    it('should have the arguments to update user first name', () => {
+      user.update({ user: 'user', firstName: 'user-first-name' })
+
+      expect(user.wpUser)
+        .toHaveBeenLastCalledWith(['update', '--skip-email', 'user', '--first_name=user-first-name'])
+    })
+
+    it('should have the arguments to update user last name', () => {
+      user.update({ user: 'user', lastName: 'user-last-name' })
+
+      expect(user.wpUser)
+        .toHaveBeenLastCalledWith(['update', '--skip-email', 'user', '--last_name=user-last-name'])
+    })
+
+    it('should have the arguments to update user nickname', () => {
+      user.update({ user: 'user', nickname: 'user-nickname' })
+
+      expect(user.wpUser)
+        .toHaveBeenLastCalledWith(['update', '--skip-email', 'user', '--nickname=user-nickname'])
+    })
+
+    it('should have the arguments to update user role', () => {
+      user.update({ user: 'user', role: 'user-role' })
+
+      expect(user.wpUser)
+        .toHaveBeenLastCalledWith(['update', '--skip-email', 'user', '--role=user-role'])
+    })
+
+    it('should have the arguments to update user email', () => {
+      user.update({ user: 'user', userEmail: 'user-email' })
+
+      expect(user.wpUser)
+        .toHaveBeenLastCalledWith(['update', '--skip-email', 'user', '--user_email=user-email'])
+    })
+
+    it('should have the arguments to update user nicename', () => {
+      user.update({ user: 'user', userNicename: 'user-nicename' })
+
+      expect(user.wpUser)
+        .toHaveBeenLastCalledWith(['update', '--skip-email', 'user', '--user_nicename=user-nicename'])
+    })
+
+    it('should have the arguments to update user password', () => {
+      user.update({ user: 'user', userPass: 'user-password' })
+
+      expect(user.wpUser)
+        .toHaveBeenLastCalledWith(['update', '--skip-email', 'user', '--user_pass=user-password'])
+    })
+
+    it('should have the arguments to update user url', () => {
+      user.update({ user: 'user', userUrl: 'user-url' })
+
+      expect(user.wpUser)
+        .toHaveBeenLastCalledWith(['update', '--skip-email', 'user', '--user_url=user-url'])
+    })
+  })
+
+  describe('#UserMeta', () => {
+    describe('##add()', () => {
+      it('should have arguments to add user metadata', () => {
+        user.Meta.add(1, 'add-metadata-key', 'add-metadata-value')
+
+        expect(user.wpUser)
+          .toHaveBeenLastCalledWith(['meta', 'add', 1, 'add-metadata-key', 'add-metadata-value'])
+      })
+    })
+
+    describe('##delete()', () => {
+      it('should have arguments to delete user metadata', () => {
+        user.Meta.delete(1, 'delete-metadata-key')
+
+        expect(user.wpUser)
+          .toHaveBeenLastCalledWith(['meta', 'delete', 1, 'delete-metadata-key'])
+      })
+    })
+
+    describe('##get()', () => {
+      it('should have arguments to get user metadata', () => {
+        user.wpUser = jest.fn((commands) => Promise.resolve({ stdout: JSON.stringify(commands) }))
+
+        user.Meta.get(1, 'get-metadata-key')
+
+        expect(user.wpUser)
+          .toHaveBeenLastCalledWith(['meta', 'get', '--format=json', 1, 'get-metadata-key'])
+      })
+    })
+
+    describe('##list()', () => {
+      it('should have arguments to list user metadata', () => {
+        user.wpUser = jest.fn((commands) => Promise.resolve({ stdout: JSON.stringify(commands) }))
+
+        user.Meta.list(1)
+
+        expect(user.wpUser)
+          .toHaveBeenLastCalledWith(['meta', 'list', '--format=json', 1])
+      })
+    })
+
+    describe('##update()', () => {
+      it('should have arguments to update user metadata', () => {
+        user.Meta.update(1, 'update-metadata-key', 'update-metadata-value')
+
+        expect(user.wpUser)
+          .toHaveBeenLastCalledWith(['meta', 'update', 1, 'update-metadata-key', 'update-metadata-value'])
+      })
+    })
+  })
 })
