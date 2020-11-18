@@ -97,3 +97,30 @@
  * @property {string} filter - the post filter.
  * @property {string} url - the user of the post.
  */
+
+/**
+ * @typedef {object} PluginGetObject
+ * @property {number} ID - The post id
+ * @property {string} post_title - the post title.
+ * @property {string} post_name - to post name.
+ * @property {string} post_date - when the post was publised.
+ * @property {string} post_status - the post status.
+ * @property {string} post_author - the id of the post other
+ * @property {string} post_date_gmt - when the post was craeted
+ * @property {string} post_content - the content of the post.
+ * @property {string} post_excerpt - the post excerpt (usly used as post summary.)
+ * @property {string} comment_status - the post commant status.
+ * @property {string} ping_status - the post ping status
+ * @property {string} post_password - the hash of the post password.
+ * @property {string} to_ping - is the post to ping.
+ * @property {string} pinged - is the post pinged.
+ * @property {string} post_modified - the time the post was modified in current time.
+ * @property {string} post_modified_gmt - the time the post was modified in GMT time.
+ * @property {string} post_content_filtered - the
+ * @property {string} post_parent - the parent post id.
+ * @property {string} guid - the post guid.
+ * @property {string} menu_order - the post menu order.
+ * @property {string} post_type - the post type.
+ * @property {string} post_mime_type - the post mime type.
+ * @property {string} comment_count - the number of commants on the post.
+ */

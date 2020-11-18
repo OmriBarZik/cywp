@@ -27,6 +27,42 @@ class Post {
   }
 
   /**
+   * Creates a new post.
+   *
+   * @param {object} option
+   * @param {string} option.postAuthor - he ID of the user who added the post. Default is the current user ID.
+   * @param {Date} option.post_date - The date of the post. Default is the current time.
+   * @param {Date} option.post_date_gmt - The date of the post in the GMT timezone. Default is the value of $post_date.
+   * @param {string} option.post_content - The post content. Default empty.
+   * @param {string} option.post_content_filtered - The filtered post content. Default empty.
+   * @param {string} option.post_title - The post title. Default empty.
+   * @param {string} option.post_excerpt - The post excerpt. Default empty.
+   * @param {string} option.post_status - The post status. Default ‘draft’.
+   * @param {string} option.post_type - The post type. Default ‘post’.
+   * @param {string} option.comment_status - Whether the post can accept comments. Accepts ‘open’ or ‘closed’. Default is the value of ‘default_comment_status’ option.
+   * @param {string} option.ping_status - Whether the post can accept pings. Accepts ‘open’ or ‘closed’. Default is the value of ‘default_ping_status’ option.
+   * @param {string} option.post_password - The password to access the post. Default empty.
+   * @param {string} option.post_name - The post name. Default is the sanitized post title when creating a new post.
+   * @param {number} option.from_post - Post id of a post to be duplicated.
+   * @param {string} option.to_ping - Space or carriage return-separated list of URLs to ping. Default empty.
+   * @param {string} option.pinged - Space or carriage return-separated list of URLs that have been pinged. Default empty.
+   * @param {Date} option.post_modified - The date when the post was last modified. Default is the current time.
+   * @param {Date} option.post_modified_gmt - The date when the post was last modified in the GMT timezone. Default is the current time.
+   * @param {number} option.post_parent - Set this for the post it belongs to, if any. Default 0.
+   * @param {number} option.menu_order - The order the post should be displayed in. Default 0.
+   * @param {string} option.post_mime_type - The mime type of the post. Default empty.
+   * @param {string} option.guid - Global Unique ID for referencing the post. Default empty.
+   * @param {string[]} option.post_category - Array of category names, slugs, or IDs. Defaults to value of the ‘default_category’ option.
+   * @param {string[]} option.tags_input - Array of tag names, slugs, or IDs. Default empty.
+   * @param {string[]} option.tax_input - Array of taxonomy terms keyed by their taxonomy name. Default empty.
+   * @param {object[]} option.meta_input - Array in JSON format of post meta values keyed by their post meta key. Default empty.
+   * @returns {Promise<number>} The new post id.
+   */
+  create (option) {
+
+  }
+
+  /**
    * Deletes an existing post.
    *
    * @param {number|number[]} post - One or more IDs of posts to delete.
@@ -54,6 +90,24 @@ class Post {
     return this.wpPost(existsArgs)
       .then(() => true)
       .catch(() => Promise.resolve(false))
+  }
+
+  /**
+   * Gets details about a post.
+   *
+   * @param {number} post The ID of the post to get.
+   * @returns {PluginGetObject} Details about the post.
+   */
+  get (post) {
+    const getArgs = [
+      'list',
+      '--fields=--fields=ID,post_title,post_name,post_date,post_status,post_author,post_date_gmt,post_content,post_excerpt,comment_status,ping_status,post_password,to_ping,pinged,post_modified,post_modified_gmt,post_content_filtered,post_parent,guid,menu_order,post_type,post_mime_type,comment_count', // eslint-disable-line spellcheck/spell-checker
+      '--format=json',
+      post,
+    ]
+
+    return this.wpPost(getArgs)
+      .then(output => JSON.parse(output.stdout))
   }
 
   /**
