@@ -57,7 +57,7 @@
   "husky": {
     "hooks": {
       "pre-push": "npm run coverage",
-      "pre-commit": "lint-staged"
+      "pre-commit": "eslint . --cache"
     }
   },
   "jest": {
