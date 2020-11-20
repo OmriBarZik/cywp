@@ -61,6 +61,8 @@ module.exports = {
           'php',
           'nicename',
           'unspam',
+          'gmt',
+          'guid',
         ],
       },
     ],
