@@ -52,8 +52,8 @@ class Post {
    * @param {number} option.menu_order - The order the post should be displayed in. Default 0.
    * @param {string} option.post_mime_type - The mime type of the post. Default empty.
    * @param {string} option.guid - Global Unique ID for referencing the post. Default empty.
-   * @param {string[]} option.post_category - Array of category names, slugs, or IDs. Defaults to value of the ‘default_category’ option.
-   * @param {string[]} option.tags_input - Array of tag names, slugs, or IDs. Default empty.
+   * @param {string[]} option.post_category - Array of category names, slugs, or ID's. Defaults to value of the ‘default_category’ option.
+   * @param {string[]} option.tags_input - Array of tag names, slugs, or ID's. Default empty.
    * @param {string[]} option.tax_input - Array of taxonomy terms keyed by their taxonomy name. Default empty.
    * @param {object[]} option.meta_input - Array in JSON format of post meta values keyed by their post meta key. Default empty.
    * @returns {Promise<number>} The new post id.
