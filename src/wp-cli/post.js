@@ -6,9 +6,9 @@ const { CheckIfArrayOrNumber, FormatToWordpressDate } = require('./util')
  */
 class PostMeta {
   /**
-   * Constructor for the UserMeta object.
+   * Constructor for the PostMeta object.
    *
-   * @param {Post} post - the user object.
+   * @param {Post} post - the post object.
    */
   constructor (post) {
     /** @type {(commands: string[]) => Promise<RunInContainerOutput>} */
@@ -34,7 +34,7 @@ class PostMeta {
   /**
    * Deletes a meta field.
    *
-   * @param {number} post - The ID of the object.
+   * @param {number} post - The ID of the post.
    * @param {string|'all'} key - The name of the meta field to delete. pass "all" to delete all meta for the post
    * @returns {Promise<RunInContainerOutput>} The command output.
    */
@@ -51,7 +51,7 @@ class PostMeta {
   /**
    * Gets meta field value.
    *
-   * @param {number} post - The ID of the object.
+   * @param {number} post - The ID of the post.
    * @param {string} key - The name of the meta field to get.
    * @returns {Promise<any>} The command output.
    */
@@ -63,10 +63,10 @@ class PostMeta {
   }
 
   /**
-   * Lists all metadata associated with a user.
+   * Lists all metadata associated with a post.
    *
-   * @param {string|number} post - ID for the object.
-   * @returns {Promise<{user_id: number, meta_key: string, meta_value: string}>} list of the user metadata
+   * @param {string|number} post - The ID of the post.
+   * @returns {Promise<{post_id: number, meta_key: string, meta_value: string}>} list of the post metadata
    */
   list (post) {
     const listArgs = ['list', '--format=json', post]
@@ -78,7 +78,7 @@ class PostMeta {
   /**
    * Updates a meta field.
    *
-   * @param {number} post - The user login, user email, or user ID of the user to update metadata for.
+   * @param {number} post - The ID of the post.
    * @param {string} key - The metadata key.
    * @param {string} [value] - The new metadata value.
    * @returns {Promise<RunInContainerOutput>} The command output.
@@ -122,7 +122,7 @@ class Post {
    * Creates a new post.
    *
    * @param {object} option - option object to create a post.
-   * @param {string} option.postAuthor - he ID of the user who added the post. Default is the current user ID.
+   * @param {number} option.postAuthor - he ID of the user who added the post. Default is the current user ID.
    * @param {Date} option.postDate - The date of the post. Default is the current time.
    * @param {Date} option.postDateGmt - The date of the post in the GMT timezone. Default is the value of $post_date.
    * @param {string} option.postContent - The post content. Default empty.
