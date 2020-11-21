@@ -1,5 +1,5 @@
 const { CreateWordpressCliContainer } = require('../docker/presets/containers')
-const { CheckIfArrayOrNumber, FormatToWordpressDate } = require('./util')
+const { CheckIfArrayOrNumber, FormatToWordpressDate, CheckIfArrayOrString } = require('./util')
 
 /**
  * Adds, updates, deletes, and lists post custom fields.
@@ -165,7 +165,6 @@ class Post {
     if (option.pingStatus) { createArgs.push(`--ping_status=${option.pingStatus}`) }
     if (option.pinged) { createArgs.push(`--pinged=${option.pinged}`) }
     if (option.postAuthor) { createArgs.push(`--post_author=${option.postAuthor}`) }
-    if (option.postCategory) { createArgs.push(`--post_category=${option.postCategory}`) }
     if (option.postContent) { createArgs.push(`--post_content=${option.postContent}`) }
     if (option.postContentFiltered) { createArgs.push(`--post_content_filtered=${option.postContentFiltered}`) }
     if (option.postDate) { createArgs.push(`--post_date=${FormatToWordpressDate(option.postDate, 'option.postDate')}`) }
@@ -180,9 +179,15 @@ class Post {
     if (option.postStatus) { createArgs.push(`--post_status=${option.postStatus}`) }
     if (option.postTitle) { createArgs.push(`--post_title=${option.postTitle}`) }
     if (option.postType) { createArgs.push(`--post_type=${option.postType}`) }
-    if (option.tagsInput) { createArgs.push(`--tags_input=${option.tagsInput}`) }
-    if (option.taxInput) { createArgs.push(`--tax_input=${option.taxInput}`) }
     if (option.toPing) { createArgs.push(`--to_ping=${option.toPing}`) }
+
+    option.postCategory = CheckIfArrayOrString(option.postCategory, 'option.postCategory')
+    option.taxInput = CheckIfArrayOrString(option.taxInput, 'option.taxInput')
+    option.tagsInput = CheckIfArrayOrString(option.tagsInput, 'option.tagsInput')
+
+    if (option.postCategory) { createArgs.push(`--post_category=${option.postCategory.join(',')}`) }
+    if (option.taxInput) { createArgs.push(`--tax_input=${option.taxInput.join(',')}`) }
+    if (option.tagsInput) { createArgs.push(`--tags_input=${option.tagsInput.join(',')}`) }
 
     return this.wpPost(createArgs)
   }
@@ -297,7 +302,7 @@ class Post {
 
     option.id = CheckIfArrayOrNumber(option.id, 'option.id')
 
-    createArgs.push.apply(createArgs)
+    createArgs.push.apply(createArgs, option.id)
 
     if (option.commentStatus) { createArgs.push(`--comment_status=${option.commentStatus}`) }
     if (option.guid) { createArgs.push(`--guid=${option.guid}`) }
@@ -306,7 +311,6 @@ class Post {
     if (option.pingStatus) { createArgs.push(`--ping_status=${option.pingStatus}`) }
     if (option.pinged) { createArgs.push(`--pinged=${option.pinged}`) }
     if (option.postAuthor) { createArgs.push(`--post_author=${option.postAuthor}`) }
-    if (option.postCategory) { createArgs.push(`--post_category=${option.postCategory}`) }
     if (option.postContent) { createArgs.push(`--post_content=${option.postContent}`) }
     if (option.postContentFiltered) { createArgs.push(`--post_content_filtered=${option.postContentFiltered}`) }
     if (option.postDate) { createArgs.push(`--post_date=${FormatToWordpressDate(option.postDate, 'option.postDate')}`) }
@@ -321,9 +325,15 @@ class Post {
     if (option.postStatus) { createArgs.push(`--post_status=${option.postStatus}`) }
     if (option.postTitle) { createArgs.push(`--post_title=${option.postTitle}`) }
     if (option.postType) { createArgs.push(`--post_type=${option.postType}`) }
-    if (option.tagsInput) { createArgs.push(`--tags_input=${option.tagsInput}`) }
-    if (option.taxInput) { createArgs.push(`--tax_input=${option.taxInput}`) }
     if (option.toPing) { createArgs.push(`--to_ping=${option.toPing}`) }
+
+    option.postCategory = CheckIfArrayOrString(option.postCategory, 'option.postCategory')
+    option.taxInput = CheckIfArrayOrString(option.taxInput, 'option.taxInput')
+    option.tagsInput = CheckIfArrayOrString(option.tagsInput, 'option.tagsInput')
+
+    if (option.postCategory) { createArgs.push(`--post_category=${option.postCategory.join(',')}`) }
+    if (option.taxInput) { createArgs.push(`--tax_input=${option.taxInput.join(',')}`) }
+    if (option.tagsInput) { createArgs.push(`--tags_input=${option.tagsInput.join(',')}`) }
 
     return this.wpPost(createArgs)
   }
