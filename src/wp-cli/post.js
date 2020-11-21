@@ -150,7 +150,7 @@ class Post {
    * @param {object} option.metaInput - Array in JSON format of post meta values keyed by their post meta key. Default empty.
    * @returns {Promise<RunInContainerOutput>} Retruns newly created post id.
    */
-  create (option) {
+  create (option = {}) {
     const createArgs = ['create', '--porcelain']
 
     if (!option.postExcerpt && !option.postTitle && !option.postContent) {
@@ -181,13 +181,20 @@ class Post {
     if (option.postType) { createArgs.push(`--post_type=${option.postType}`) }
     if (option.toPing) { createArgs.push(`--to_ping=${option.toPing}`) }
 
-    option.postCategory = CheckIfArrayOrString(option.postCategory, 'option.postCategory')
-    option.taxInput = CheckIfArrayOrString(option.taxInput, 'option.taxInput')
-    option.tagsInput = CheckIfArrayOrString(option.tagsInput, 'option.tagsInput')
+    if (option.postCategory) {
+      option.postCategory = CheckIfArrayOrString(option.postCategory, 'option.postCategory')
+      createArgs.push(`--post_category=${option.postCategory.join(',')}`)
+    }
 
-    if (option.postCategory) { createArgs.push(`--post_category=${option.postCategory.join(',')}`) }
-    if (option.taxInput) { createArgs.push(`--tax_input=${option.taxInput.join(',')}`) }
-    if (option.tagsInput) { createArgs.push(`--tags_input=${option.tagsInput.join(',')}`) }
+    if (option.taxInput) {
+      option.taxInput = CheckIfArrayOrString(option.taxInput, 'option.taxInput')
+      createArgs.push(`--tax_input=${option.taxInput.join(',')}`)
+    }
+
+    if (option.tagsInput) {
+      option.tagsInput = CheckIfArrayOrString(option.tagsInput, 'option.tagsInput')
+      createArgs.push(`--tags_input=${option.tagsInput.join(',')}`)
+    }
 
     return this.wpPost(createArgs)
   }
@@ -297,45 +304,52 @@ class Post {
    * @param {object} option.metaInput - Array in JSON format of post meta values keyed by their post meta key. Default empty.
    * @returns {Promise<RunInContainerOutput>} Retruns newly created post id.
    */
-  update (option) {
-    const createArgs = ['create']
+  update (option = {}) {
+    const updateArgs = ['create']
 
     option.id = CheckIfArrayOrNumber(option.id, 'option.id')
 
-    createArgs.push.apply(createArgs, option.id)
+    updateArgs.push.apply(updateArgs, option.id)
 
-    if (option.commentStatus) { createArgs.push(`--comment_status=${option.commentStatus}`) }
-    if (option.guid) { createArgs.push(`--guid=${option.guid}`) }
-    if (option.menuOrder) { createArgs.push(`--menu_order=${option.menuOrder}`) }
-    if (option.metaInput) { createArgs.push(`--meta_input='${JSON.stringify(option.metaInput)}'`) }
-    if (option.pingStatus) { createArgs.push(`--ping_status=${option.pingStatus}`) }
-    if (option.pinged) { createArgs.push(`--pinged=${option.pinged}`) }
-    if (option.postAuthor) { createArgs.push(`--post_author=${option.postAuthor}`) }
-    if (option.postContent) { createArgs.push(`--post_content=${option.postContent}`) }
-    if (option.postContentFiltered) { createArgs.push(`--post_content_filtered=${option.postContentFiltered}`) }
-    if (option.postDate) { createArgs.push(`--post_date=${FormatToWordpressDate(option.postDate, 'option.postDate')}`) }
-    if (option.postDateGmt) { createArgs.push(`--post_date_gmt=${FormatToWordpressDate(option.postDateGmt, 'option.postDateGmt')}`) }
-    if (option.postExcerpt) { createArgs.push(`--post_excerpt=${option.postExcerpt}`) }
-    if (option.postMimeType) { createArgs.push(`--post_mime_type=${option.postMimeType}`) }
-    if (option.postModified) { createArgs.push(`--post_modified=${FormatToWordpressDate(option.postModified, 'option.postModified')}`) }
-    if (option.postModifiedGmt) { createArgs.push(`--post_modified_gmt=${FormatToWordpressDate(option.postModifiedGmt, 'option.postModifiedGmt')}`) }
-    if (option.postName) { createArgs.push(`--post_name=${option.postName}`) }
-    if (option.postParent) { createArgs.push(`--post_parent=${option.postParent}`) }
-    if (option.postPassword) { createArgs.push(`--post_password=${option.postPassword}`) }
-    if (option.postStatus) { createArgs.push(`--post_status=${option.postStatus}`) }
-    if (option.postTitle) { createArgs.push(`--post_title=${option.postTitle}`) }
-    if (option.postType) { createArgs.push(`--post_type=${option.postType}`) }
-    if (option.toPing) { createArgs.push(`--to_ping=${option.toPing}`) }
+    if (option.commentStatus) { updateArgs.push(`--comment_status=${option.commentStatus}`) }
+    if (option.guid) { updateArgs.push(`--guid=${option.guid}`) }
+    if (option.menuOrder) { updateArgs.push(`--menu_order=${option.menuOrder}`) }
+    if (option.metaInput) { updateArgs.push(`--meta_input='${JSON.stringify(option.metaInput)}'`) }
+    if (option.pingStatus) { updateArgs.push(`--ping_status=${option.pingStatus}`) }
+    if (option.pinged) { updateArgs.push(`--pinged=${option.pinged}`) }
+    if (option.postAuthor) { updateArgs.push(`--post_author=${option.postAuthor}`) }
+    if (option.postContent) { updateArgs.push(`--post_content=${option.postContent}`) }
+    if (option.postContentFiltered) { updateArgs.push(`--post_content_filtered=${option.postContentFiltered}`) }
+    if (option.postDate) { updateArgs.push(`--post_date=${FormatToWordpressDate(option.postDate, 'option.postDate')}`) }
+    if (option.postDateGmt) { updateArgs.push(`--post_date_gmt=${FormatToWordpressDate(option.postDateGmt, 'option.postDateGmt')}`) }
+    if (option.postExcerpt) { updateArgs.push(`--post_excerpt=${option.postExcerpt}`) }
+    if (option.postMimeType) { updateArgs.push(`--post_mime_type=${option.postMimeType}`) }
+    if (option.postModified) { updateArgs.push(`--post_modified=${FormatToWordpressDate(option.postModified, 'option.postModified')}`) }
+    if (option.postModifiedGmt) { updateArgs.push(`--post_modified_gmt=${FormatToWordpressDate(option.postModifiedGmt, 'option.postModifiedGmt')}`) }
+    if (option.postName) { updateArgs.push(`--post_name=${option.postName}`) }
+    if (option.postParent) { updateArgs.push(`--post_parent=${option.postParent}`) }
+    if (option.postPassword) { updateArgs.push(`--post_password=${option.postPassword}`) }
+    if (option.postStatus) { updateArgs.push(`--post_status=${option.postStatus}`) }
+    if (option.postTitle) { updateArgs.push(`--post_title=${option.postTitle}`) }
+    if (option.postType) { updateArgs.push(`--post_type=${option.postType}`) }
+    if (option.toPing) { updateArgs.push(`--to_ping=${option.toPing}`) }
 
-    option.postCategory = CheckIfArrayOrString(option.postCategory, 'option.postCategory')
-    option.taxInput = CheckIfArrayOrString(option.taxInput, 'option.taxInput')
-    option.tagsInput = CheckIfArrayOrString(option.tagsInput, 'option.tagsInput')
+    if (option.postCategory) {
+      option.postCategory = CheckIfArrayOrString(option.postCategory, 'option.postCategory')
+      updateArgs.push(`--post_category=${option.postCategory.join(',')}`)
+    }
 
-    if (option.postCategory) { createArgs.push(`--post_category=${option.postCategory.join(',')}`) }
-    if (option.taxInput) { createArgs.push(`--tax_input=${option.taxInput.join(',')}`) }
-    if (option.tagsInput) { createArgs.push(`--tags_input=${option.tagsInput.join(',')}`) }
+    if (option.taxInput) {
+      option.taxInput = CheckIfArrayOrString(option.taxInput, 'option.taxInput')
+      updateArgs.push(`--tax_input=${option.taxInput.join(',')}`)
+    }
 
-    return this.wpPost(createArgs)
+    if (option.tagsInput) {
+      option.tagsInput = CheckIfArrayOrString(option.tagsInput, 'option.tagsInput')
+      updateArgs.push(`--tags_input=${option.tagsInput.join(',')}`)
+    }
+
+    return this.wpPost(updateArgs)
   }
 }
 
