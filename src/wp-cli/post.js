@@ -158,6 +158,7 @@ class Post {
       throw new TypeError('you must provide at least one of option.postExcerpt, option.postTitle or option.postContent')
     }
 
+    if (option.postTitle) { createArgs.push(`--post_title=${option.postTitle}`) }
     if (option.commentStatus) { createArgs.push(`--comment_status=${option.commentStatus}`) }
     if (option.fromPost) { createArgs.push(`--from-post=${option.fromPost}`) }
     if (option.guid) { createArgs.push(`--guid=${option.guid}`) }
@@ -178,7 +179,6 @@ class Post {
     if (option.postParent) { createArgs.push(`--post_parent=${option.postParent}`) }
     if (option.postPassword) { createArgs.push(`--post_password=${option.postPassword}`) }
     if (option.postStatus) { createArgs.push(`--post_status=${option.postStatus}`) }
-    if (option.postTitle) { createArgs.push(`--post_title=${option.postTitle}`) }
     if (option.postType) { createArgs.push(`--post_type=${option.postType}`) }
     if (option.toPing) { createArgs.push(`--to_ping=${option.toPing}`) }
 
