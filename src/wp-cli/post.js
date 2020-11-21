@@ -1,3 +1,4 @@
+require('./types')
 const { CreateWordpressCliContainer } = require('../docker/presets/containers')
 const { CheckIfArrayOrNumber, FormatToWordpressDate, CheckIfArrayOrString } = require('./util')
 
@@ -161,7 +162,7 @@ class Post {
     if (option.fromPost) { createArgs.push(`--from-post=${option.fromPost}`) }
     if (option.guid) { createArgs.push(`--guid=${option.guid}`) }
     if (option.menuOrder) { createArgs.push(`--menu_order=${option.menuOrder}`) }
-    if (option.metaInput) { createArgs.push(`--meta_input='${JSON.stringify(option.metaInput)}'`) }
+    if (option.metaInput) { createArgs.push(`--meta_input=${JSON.stringify(option.metaInput)}`) }
     if (option.pingStatus) { createArgs.push(`--ping_status=${option.pingStatus}`) }
     if (option.pinged) { createArgs.push(`--pinged=${option.pinged}`) }
     if (option.postAuthor) { createArgs.push(`--post_author=${option.postAuthor}`) }
@@ -233,7 +234,7 @@ class Post {
    * Gets details about a post.
    *
    * @param {number} post The ID of the post to get.
-   * @returns {PluginGetObject} Details about the post.
+   * @returns {Promise<PluginGetObject>} Details about the post.
    */
   get (post) {
     const getArgs = [
@@ -250,10 +251,10 @@ class Post {
   /**
    * Gets a list of posts.
    *
-   * @param {PluginListFiltersObject} filters -Limit the output to specific object fields.
-   * @returns {PluginListFiltersObject[]} list of posts that mach the filters.
+   * @param {PostListFiltersObject} filters -Limit the output to specific object fields.
+   * @returns {Promise<PostListFiltersObject[]>} list of posts that mach the filters.
    */
-  list (filters) {
+  list (filters = {}) {
     const listArgs = [
       'list',
       '--fields=ID,post_title,post_name,post_date,post_status,post_author,post_date_gmt,post_content,post_excerpt,comment_status,ping_status,post_password,to_ping,pinged,post_modified,post_modified_gmt,post_content_filtered,post_parent,guid,menu_order,post_type,post_mime_type,comment_count,filter,url',
@@ -314,7 +315,7 @@ class Post {
     if (option.commentStatus) { updateArgs.push(`--comment_status=${option.commentStatus}`) }
     if (option.guid) { updateArgs.push(`--guid=${option.guid}`) }
     if (option.menuOrder) { updateArgs.push(`--menu_order=${option.menuOrder}`) }
-    if (option.metaInput) { updateArgs.push(`--meta_input='${JSON.stringify(option.metaInput)}'`) }
+    if (option.metaInput) { updateArgs.push(`--meta_input=${JSON.stringify(option.metaInput)}`) }
     if (option.pingStatus) { updateArgs.push(`--ping_status=${option.pingStatus}`) }
     if (option.pinged) { updateArgs.push(`--pinged=${option.pinged}`) }
     if (option.postAuthor) { updateArgs.push(`--post_author=${option.postAuthor}`) }

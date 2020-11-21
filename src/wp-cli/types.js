@@ -70,7 +70,7 @@
  */
 
 /**
- * @typedef {object} PluginListFiltersObject
+ * @typedef {object} PostListFiltersObject
  * @property {number} ID - The post id
  * @property {string} post_title - the post title.
  * @property {string} post_name - to post name.
@@ -99,7 +99,7 @@
  */
 
 /**
- * @typedef {object} PluginGetObject
+ * @typedef {object} PostGetObject
  * @property {number} ID - The post id
  * @property {string} post_title - the post title.
  * @property {string} post_name - to post name.
