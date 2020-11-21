@@ -41,9 +41,14 @@ function CheckIfArrayOrNumber (item, purpose) {
  * Format the date to yyyy-mm-dd-hh-ii-ss style.
  *
  * @param {Date} date - the date to format.
+ * @param {string} purpose - use to determent what to throw is the items isn't valid.
  * @returns {string} formatted string.
  */
-function FormatToWordpressDate (date) {
+function FormatToWordpressDate (date, purpose) {
+  if (!(date instanceof Date)) {
+    throw new TypeError(`${purpose} must be instance of Date!`)
+  }
+
   const twoDigits = (number) => 10 > number ? '0' + number : number
 
   return [
