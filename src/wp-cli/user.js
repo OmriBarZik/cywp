@@ -176,14 +176,7 @@ class User {
 
     createArgs.push(`--user_pass=${options.userPass}`)
 
-    if (options.userRegistered) {
-      if (!(options.userRegistered instanceof Date)) {
-        throw new TypeError('options.userRegistered must be instance of Date!')
-      }
-
-      createArgs.push(`--user_registered=${FormatToWordpressDate(options.userRegistered)}`)
-    }
-
+    if (options.userRegistered) { createArgs.push(`--user_registered=${FormatToWordpressDate(options.userRegistered, 'options.userRegistered')}`) }
     if (options.role) { createArgs.push(`--role=${options.role}`) }
     if (options.displayName) { createArgs.push(`--display_name=${options.displayName}`) }
     if (options.userNicename) { createArgs.push(`--user_nicename=${options.userNicename}`) }
@@ -390,14 +383,7 @@ class User {
 
     updateArgs.push.apply(updateArgs, options.user)
 
-    if (options.userRegistered) {
-      if (!(options.userRegistered instanceof Date)) {
-        throw new TypeError('options.userRegistered must be instance of Date!')
-      }
-
-      updateArgs.push(`--user_registered=${FormatToWordpressDate(options.userRegistered)}`)
-    }
-
+    if (options.userRegistered) { updateArgs.push(`--user_registered=${FormatToWordpressDate(options.userRegistered, 'options.userRegistered')}`) }
     if (options.description) { updateArgs.push(`--description=${options.description}`) }
     if (options.displayName) { updateArgs.push(`--display_name=${options.displayName}`) }
     if (options.firstName) { updateArgs.push(`--first_name=${options.firstName}`) }

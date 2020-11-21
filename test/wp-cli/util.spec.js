@@ -28,5 +28,12 @@ describe('util', () => {
 
       expect(FormatToWordpressDate(date)).toBe('2020-12-20-20-40-50')
     })
+
+    it('should throw error if date in not a valid Date', () => {
+      const date = 'some-error'
+
+      expect(() => FormatToWordpressDate(date, 'date'))
+        .toThrow(new TypeError('date must be instance of Date!'))
+    })
   })
 })
