@@ -76,11 +76,12 @@ class UserMeta {
    * @param {string|number} user - The user login, user email, or user ID of the user to update metadata for.
    * @param {string} key - The metadata key.
    * @param {string} value - The new metadata value.
+   * @returns {Promise<RunInContainerOutput>} The command output.
    */
   update (user, key, value) {
     const updateArgs = ['update', user, key, value]
 
-    this.wpUserMeta(updateArgs)
+    return this.wpUserMeta(updateArgs)
   }
 }
 
