@@ -1,5 +1,5 @@
 const { CreateWordpressCliContainer } = require('../docker/presets/containers')
-const { CheckIfArrayOrNumber } = require('./util')
+const { CheckIfArrayOrNumber, FormatToWordpressDate } = require('./util')
 
 /**
  * Manages posts, content, and meta.
@@ -29,37 +29,70 @@ class Post {
   /**
    * Creates a new post.
    *
-   * @param {object} option
+   * @param {object} option - option object to create a post.
    * @param {string} option.postAuthor - he ID of the user who added the post. Default is the current user ID.
-   * @param {Date} option.post_date - The date of the post. Default is the current time.
-   * @param {Date} option.post_date_gmt - The date of the post in the GMT timezone. Default is the value of $post_date.
-   * @param {string} option.post_content - The post content. Default empty.
-   * @param {string} option.post_content_filtered - The filtered post content. Default empty.
-   * @param {string} option.post_title - The post title. Default empty.
-   * @param {string} option.post_excerpt - The post excerpt. Default empty.
-   * @param {string} option.post_status - The post status. Default ‘draft’.
-   * @param {string} option.post_type - The post type. Default ‘post’.
-   * @param {string} option.comment_status - Whether the post can accept comments. Accepts ‘open’ or ‘closed’. Default is the value of ‘default_comment_status’ option.
-   * @param {string} option.ping_status - Whether the post can accept pings. Accepts ‘open’ or ‘closed’. Default is the value of ‘default_ping_status’ option.
-   * @param {string} option.post_password - The password to access the post. Default empty.
-   * @param {string} option.post_name - The post name. Default is the sanitized post title when creating a new post.
-   * @param {number} option.from_post - Post id of a post to be duplicated.
-   * @param {string} option.to_ping - Space or carriage return-separated list of URLs to ping. Default empty.
+   * @param {Date} option.postDate - The date of the post. Default is the current time.
+   * @param {Date} option.postDateGmt - The date of the post in the GMT timezone. Default is the value of $post_date.
+   * @param {string} option.postContent - The post content. Default empty.
+   * @param {string} option.postContentFiltered - The filtered post content. Default empty.
+   * @param {string} option.postTitle - The post title. Default empty.
+   * @param {string} option.postExcerpt - The post excerpt. Default empty.
+   * @param {string} option.postStatus - The post status. Default ‘draft’.
+   * @param {string} option.postType - The post type. Default ‘post’.
+   * @param {string} option.commentStatus - Whether the post can accept comments. Accepts ‘open’ or ‘closed’. Default is the value of ‘default_comment_status’ option.
+   * @param {string} option.pingStatus - Whether the post can accept pings. Accepts ‘open’ or ‘closed’. Default is the value of ‘default_ping_status’ option.
+   * @param {string} option.postPassword - The password to access the post. Default empty.
+   * @param {string} option.postName - The post name. Default is the sanitized post title when creating a new post.
+   * @param {number} option.fromPost - Post id of a post to be duplicated.
+   * @param {string} option.toPing - Space or carriage return-separated list of URLs to ping. Default empty.
    * @param {string} option.pinged - Space or carriage return-separated list of URLs that have been pinged. Default empty.
-   * @param {Date} option.post_modified - The date when the post was last modified. Default is the current time.
-   * @param {Date} option.post_modified_gmt - The date when the post was last modified in the GMT timezone. Default is the current time.
-   * @param {number} option.post_parent - Set this for the post it belongs to, if any. Default 0.
-   * @param {number} option.menu_order - The order the post should be displayed in. Default 0.
-   * @param {string} option.post_mime_type - The mime type of the post. Default empty.
+   * @param {Date} option.postModified - The date when the post was last modified. Default is the current time.
+   * @param {Date} option.postModifiedGmt - The date when the post was last modified in the GMT timezone. Default is the current time.
+   * @param {number} option.postParent - Set this for the post it belongs to, if any. Default 0.
+   * @param {number} option.menuOrder - The order the post should be displayed in. Default 0.
+   * @param {string} option.postMimeType - The mime type of the post. Default empty.
    * @param {string} option.guid - Global Unique ID for referencing the post. Default empty.
-   * @param {string[]} option.post_category - Array of category names, slugs, or ID's. Defaults to value of the ‘default_category’ option.
-   * @param {string[]} option.tags_input - Array of tag names, slugs, or ID's. Default empty.
-   * @param {string[]} option.tax_input - Array of taxonomy terms keyed by their taxonomy name. Default empty.
-   * @param {object[]} option.meta_input - Array in JSON format of post meta values keyed by their post meta key. Default empty.
-   * @returns {Promise<number>} The new post id.
+   * @param {string[]} option.postCategory - Array of category names, slugs, or ID's. Defaults to value of the ‘default_category’ option.
+   * @param {string[]} option.tagsInput - Array of tag names, slugs, or ID's. Default empty.
+   * @param {string[]} option.taxInput - Array of taxonomy terms keyed by their taxonomy name. Default empty.
+   * @param {object} option.metaInput - Array in JSON format of post meta values keyed by their post meta key. Default empty.
+   * @returns {Promise<RunInContainerOutput>} Retruns newly created post id.
    */
   create (option) {
+    const createArgs = ['create', '--porcelain']
 
+    if (!option.postExcerpt && !option.postTitle && !option.postContent) {
+      throw new TypeError('you must provide at least one of option.postExcerpt, option.postTitle or option.postContent')
+    }
+
+    if (option.commentStatus) { createArgs.push(`--comment_status=${option.commentStatus}`) }
+    if (option.fromPost) { createArgs.push(`--from-post=${option.fromPost}`) }
+    if (option.guid) { createArgs.push(`--guid=${option.guid}`) }
+    if (option.menuOrder) { createArgs.push(`--menu_order=${option.menuOrder}`) }
+    if (option.metaInput) { createArgs.push(`--meta_input='${JSON.stringify(option.metaInput)}'`) }
+    if (option.pingStatus) { createArgs.push(`--ping_status=${option.pingStatus}`) }
+    if (option.pinged) { createArgs.push(`--pinged=${option.pinged}`) }
+    if (option.postAuthor) { createArgs.push(`--post_author=${option.postAuthor}`) }
+    if (option.postCategory) { createArgs.push(`--post_category=${option.postCategory}`) }
+    if (option.postContent) { createArgs.push(`--post_content=${option.postContent}`) }
+    if (option.postContentFiltered) { createArgs.push(`--post_content_filtered=${option.postContentFiltered}`) }
+    if (option.postDate) { createArgs.push(`--post_date=${FormatToWordpressDate(option.postDate, 'option.postDate')}`) }
+    if (option.postDateGmt) { createArgs.push(`--post_date_gmt=${FormatToWordpressDate(option.postDateGmt, 'option.postDateGmt')}`) }
+    if (option.postExcerpt) { createArgs.push(`--post_excerpt=${option.postExcerpt}`) }
+    if (option.postMimeType) { createArgs.push(`--post_mime_type=${option.postMimeType}`) }
+    if (option.postModified) { createArgs.push(`--post_modified=${FormatToWordpressDate(option.postModified, 'option.postModified')}`) }
+    if (option.postModifiedGmt) { createArgs.push(`--post_modified_gmt=${FormatToWordpressDate(option.postModifiedGmt, 'option.postModifiedGmt')}`) }
+    if (option.postName) { createArgs.push(`--post_name=${option.postName}`) }
+    if (option.postParent) { createArgs.push(`--post_parent=${option.postParent}`) }
+    if (option.postPassword) { createArgs.push(`--post_password=${option.postPassword}`) }
+    if (option.postStatus) { createArgs.push(`--post_status=${option.postStatus}`) }
+    if (option.postTitle) { createArgs.push(`--post_title=${option.postTitle}`) }
+    if (option.postType) { createArgs.push(`--post_type=${option.postType}`) }
+    if (option.tagsInput) { createArgs.push(`--tags_input=${option.tagsInput}`) }
+    if (option.taxInput) { createArgs.push(`--tax_input=${option.taxInput}`) }
+    if (option.toPing) { createArgs.push(`--to_ping=${option.toPing}`) }
+
+    return this.wpPost(createArgs)
   }
 
   /**
