@@ -65,7 +65,7 @@ class PostMeta {
   /**
    * Lists all metadata associated with a post.
    *
-   * @param {string|number} post - The ID of the post.
+   * @param {number} post - The ID of the post.
    * @returns {Promise<{post_id: number, meta_key: string, meta_value: string}>} list of the post metadata
    */
   list (post) {
