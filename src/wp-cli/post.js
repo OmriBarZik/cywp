@@ -2,6 +2,97 @@ const { CreateWordpressCliContainer } = require('../docker/presets/containers')
 const { CheckIfArrayOrNumber, FormatToWordpressDate } = require('./util')
 
 /**
+ * Adds, updates, deletes, and lists post custom fields.
+ */
+class PostMeta {
+  /**
+   * Constructor for the UserMeta object.
+   *
+   * @param {Post} post - the user object.
+   */
+  constructor (post) {
+    /** @type {(commands: string[]) => Promise<RunInContainerOutput>} */
+    this.wpPostMeta = (commands) => post.wpPost(['meta', ...commands])
+  }
+
+  /**
+   * Adds a meta field.
+   *
+   * @param {number} post - The ID of the post.
+   * @param {string} key -The name of the meta field to create.
+   * @param {string} [value] - The value of the meta field. If omitted, the value is read from STDIN.
+   * @returns {Promise<RunInContainerOutput>} The command output.
+   */
+  add (post, key, value) {
+    const addArgs = ['add', post, key]
+
+    if (value) { addArgs.push(value) }
+
+    return this.wpPostMeta(addArgs)
+  }
+
+  /**
+   * Deletes a meta field.
+   *
+   * @param {number} post - The ID of the object.
+   * @param {string|'all'} key - The name of the meta field to delete. pass "all" to delete all meta for the post
+   * @returns {Promise<RunInContainerOutput>} The command output.
+   */
+  delete (post, key) {
+    const deleteArgs = ['delete', post]
+
+    if ('all' === key) { key = '--all' }
+
+    deleteArgs.push(key)
+
+    return this.wpPostMeta(deleteArgs)
+  }
+
+  /**
+   * Gets meta field value.
+   *
+   * @param {number} post - The ID of the object.
+   * @param {string} key - The name of the meta field to get.
+   * @returns {Promise<any>} The command output.
+   */
+  get (post, key) {
+    const getArgs = ['get', '--format=json', post, key]
+
+    return this.wpPostMeta(getArgs)
+      .then(output => JSON.parse(output.stdout))
+  }
+
+  /**
+   * Lists all metadata associated with a user.
+   *
+   * @param {string|number} post - ID for the object.
+   * @returns {Promise<{user_id: number, meta_key: string, meta_value: string}>} list of the user metadata
+   */
+  list (post) {
+    const listArgs = ['list', '--format=json', post]
+
+    return this.wpPostMeta(listArgs)
+      .then(output => JSON.parse(output.stdout))
+  }
+
+  /**
+   * Updates a meta field.
+   *
+   * @param {number} post - The user login, user email, or user ID of the user to update metadata for.
+   * @param {string} key - The metadata key.
+   * @param {string} [value] - The new metadata value.
+   * @returns {Promise<RunInContainerOutput>} The command output.
+   */
+  update (post, key, value) {
+    const updateArgs = ['update', post, key]
+
+    if (value) { updateArgs.push(value) }
+
+    return this.wpPostMeta(updateArgs)
+  }
+}
+
+/**
  * Manages posts, content, and meta.
  */
 class Post {
@@ -12,6 +103,7 @@ class Post {
    */
   constructor (site) {
     this.site = site
+    this.meta = new PostMeta(this)
   }
 
   /**
