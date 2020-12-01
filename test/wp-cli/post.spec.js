@@ -252,4 +252,34 @@ describe('Post', () => {
         .toHaveBeenLastCalledWith(['create', '--porcelain', '--post_excerpt=excerpt'])
     })
   })
+
+  describe('#delete()', () => {
+    it('should have the arguments to delete post', () => {
+      post.delete(1)
+
+      expect(post.wpPost)
+        .toHaveBeenLastCalledWith(['delete', '--force', 1])
+    })
+
+    it('should have the arguments to delete multiple post', () => {
+      post.delete([1, 2, 3])
+
+      expect(post.wpPost)
+        .toHaveBeenLastCalledWith(['delete', '--force', 1, 2, 3])
+    })
+
+    it('should have the arguments to delete with force post', () => {
+      post.delete(1, true)
+
+      expect(post.wpPost)
+        .toHaveBeenLastCalledWith(['delete', '--force', 1])
+    })
+
+    it('should have the arguments to delete without force post', () => {
+      post.delete(1, false)
+
+      expect(post.wpPost)
+        .toHaveBeenLastCalledWith(['delete', 1])
+    })
+  })
 })

@@ -204,12 +204,15 @@ class Post {
    * Deletes an existing post.
    *
    * @param {number|number[]} post - One or more IDs of posts to delete.
+   * @param {boolean} [force=true] - Skip the trash bin.
    * @returns {Promise<RunInContainerOutput>} The output on the command.
    */
-  delete (post) {
+  delete (post, force = true) {
     post = CheckIfArrayOrNumber(post)
 
-    const deleteArgs = ['delete', '--force']
+    const deleteArgs = ['delete']
+
+    if (force) { deleteArgs.push('--force') }
 
     deleteArgs.push.apply(deleteArgs, post)
 
