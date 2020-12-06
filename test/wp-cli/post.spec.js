@@ -282,4 +282,62 @@ describe('Post', () => {
         .toHaveBeenLastCalledWith(['delete', 1])
     })
   })
+
+  describe('#exists', () => {
+    it('should have the arguments to check if post exists', () => {
+      post.wpPost = jest.fn(() => Promise.resolve())
+
+      return expect(post.exists(1)).resolves.toBeTruthy()
+    })
+
+    it('should have the arguments to check if post not exists', () => {
+      post.wpPost = jest.fn(() => Promise.reject(new Error()))
+
+      return expect(post.exists(1)).resolves.toBeFalsy()
+    })
+  })
+
+  describe('#get', () => {
+    it('should have the arguments to get post data', () => {
+      post.wpPost = jest.fn(() => Promise.resolve({ stdout: {} }))
+
+      post.get(1)
+
+      expect(post.wpPost)
+        .toHaveBeenLastCalledWith([
+          'get',
+          '--fields=ID,post_title,post_name,post_date,post_status,post_author,post_date_gmt,post_content,post_excerpt,comment_status,ping_status,post_password,to_ping,pinged,post_modified,post_modified_gmt,post_content_filtered,post_parent,guid,menu_order,post_type,post_mime_type,comment_count',
+          '--format=json',
+          1,
+        ])
+    })
+  })
+
+  describe('#list', () => {
+    it('should have the arguments to list post data', () => {
+      post.wpPost = jest.fn(() => Promise.resolve({ stdout: {} }))
+
+      post.get(1)
+
+      expect(post.wpPost)
+        .toHaveBeenLastCalledWith([
+          'list',
+          '--fields=ID,post_title,post_name,post_date,post_status,post_author,post_date_gmt,post_content,post_excerpt,comment_status,ping_status,post_password,to_ping,pinged,post_modified,post_modified_gmt,post_content_filtered,post_parent,guid,menu_order,post_type,post_mime_type,comment_count,filter,url',
+          '--format=json',
+        ])
+    })
+
+    it('should have the arguments to list post data with filters', () => {
+      post.wpPost = jest.fn(() => Promise.resolve({ stdout: {} }))
+
+      post.get(1)
+
+      expect(post.wpPost)
+        .toHaveBeenLastCalledWith([
+          'list',
+          '--fields=ID,post_title,post_name,post_date,post_status,post_author,post_date_gmt,post_content,post_excerpt,comment_status,ping_status,post_password,to_ping,pinged,post_modified,post_modified_gmt,post_content_filtered,post_parent,guid,menu_order,post_type,post_mime_type,comment_count,filter,url',
+          '--format=json',
+        ])
+    })
+  })
 })
