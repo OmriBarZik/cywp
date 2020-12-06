@@ -17,7 +17,7 @@ function verifyCommand (command) {
  * Verify if the system have the right dependencies.
  */
 async function verify () {
-  await Promise.all([verifyCommand('git'), verifyCommand('docker'), verifyCommand('docker-compose')])
+  await Promise.all([verifyCommand('docker')])
 
   if (missingDependencies.length) {
     // eslint-disable-next-line no-console
