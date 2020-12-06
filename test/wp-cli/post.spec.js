@@ -317,7 +317,7 @@ describe('Post', () => {
     it('should have the arguments to list post data', () => {
       post.wpPost = jest.fn(() => Promise.resolve({ stdout: {} }))
 
-      post.get(1)
+      post.list()
 
       expect(post.wpPost)
         .toHaveBeenLastCalledWith([
@@ -330,7 +330,7 @@ describe('Post', () => {
     it('should have the arguments to list post data with filters', () => {
       post.wpPost = jest.fn(() => Promise.resolve({ stdout: {} }))
 
-      post.get(1)
+      post.list()
 
       expect(post.wpPost)
         .toHaveBeenLastCalledWith([
