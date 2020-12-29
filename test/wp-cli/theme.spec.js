@@ -11,11 +11,14 @@ describe('Theme', () => {
   beforeAll(async () => {
     theme = new Theme()
     originalWpTheme = theme.wpTheme
+  })
+
+  beforeEach(() => {
     theme.wpTheme = jest.fn()
   })
 
   describe('#wpTheme()', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       theme.wpTheme = originalWpTheme
     })
 
@@ -24,10 +27,6 @@ describe('Theme', () => {
 
       expect(CreateWordpressCliContainer)
         .toHaveBeenLastCalledWith(undefined, ['wp', 'theme'])
-    })
-
-    afterAll(() => {
-      theme.wpTheme = jest.fn()
     })
   })
 

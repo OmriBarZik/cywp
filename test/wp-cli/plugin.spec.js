@@ -11,11 +11,14 @@ describe('Plugin', () => {
   beforeAll(async () => {
     plugin = new Plugin()
     originalWpPlugin = plugin.wpPlugin
+  })
+
+  beforeEach(() => {
     plugin.wpPlugin = jest.fn()
   })
 
   describe('#wpPlugin()', () => {
-    beforeAll(() => {
+    beforeEach(() => {
       plugin.wpPlugin = originalWpPlugin
     })
 
@@ -24,10 +27,6 @@ describe('Plugin', () => {
 
       expect(CreateWordpressCliContainer)
         .toHaveBeenLastCalledWith(undefined, ['wp', 'plugin'])
-    })
-
-    afterAll(() => {
-      plugin.wpPlugin = jest.fn()
     })
   })
 
