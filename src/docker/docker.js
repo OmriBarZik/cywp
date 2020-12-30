@@ -93,6 +93,28 @@ class Docker {
       return new Network(options)
     })
   }
+
+  /**
+   * @param {ContainerOptions} options - the option of the container you want to attach to.
+   *
+   * @returns {Promise<Container>} - return the maching continer.
+   */
+  AttachContainer (options) {
+    const attachContainerArgs = processAttachContainerOptions(options, false, false)
+
+    // return attachContainerArgs
+
+    const process = spawn('docker', attachContainerArgs)
+
+    return ReturnPromise(process, (stdout, stderr) => {
+      return {
+        stdout: cleanID(stdout),
+        stderr: stderr,
+        args: attachContainerArgs,
+        options: options,
+      }
+    })
+  }
 }
 
 /**
@@ -216,6 +238,31 @@ function processCreateContainerOptions (options, run, detach) {
 }
 
 /**
+ * @param {ContainerOptions} options - the option of the container you want to attach to.
+ *
+ * @returns {string[]} Array of arguments
+ */
+function processAttachContainerOptions (options) {
+  processCreateContainerOptions(options, false, false)
+
+  const args = ['container', 'ps', '-a', '--no-trunc', '-q']
+
+  if (options.image) {
+    args.push('--filter', `ancestor=${options.image}`)
+  }
+
+  if (options.id) {
+    args.push('--filter', `id=${options.id}`)
+  }
+
+  if (options.name) {
+    args.push('--filter', `name=${options.name}`)
+  }
+
+  return args
+}
+
+/**
  * Create from the option object string array of arguments for the spwan function.
  *
  * @param {NetworkOption} options - docker network options
@@ -231,6 +278,17 @@ function ProcessCreateNetworkOption (options) {
   args.push(options.name)
 
   return args
+}
+
+/**
+ * clean and extract the id's from the output of the docker command.
+ *
+ * @param {string} stdout - the raw output of a docker command.
+ *
+ * @returns {string[]} the clean output.
+ */
+function cleanID (stdout) {
+  return stdout.split('\n').filter((id) => !!id)
 }
 
 module.exports = { Docker, processCreateContainerOptions, ProcessCreateNetworkOption }
