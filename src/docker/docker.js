@@ -164,8 +164,8 @@ class Docker {
           })
         }
 
-        if (info.Config.Healthcheck) {
-          const healthCheck = info.Config.Healthcheck
+        const healthCheck = info.Config.Healthcheck // eslint-disable-line spellcheck/spell-checker
+        if (healthCheck) {
           attachContainer.options.health.command = healthCheck.Test ? healthCheck.Test[1] : undefined
           attachContainer.options.health.interval = healthCheck.Interval ? (healthCheck.Interval % 1000000) + 'ms' : undefined
           attachContainer.options.health.startPeriod = healthCheck.StartPeriod ? (healthCheck.StartPeriod % 1000000) + 'ms' : undefined
