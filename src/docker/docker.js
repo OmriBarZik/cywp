@@ -242,8 +242,6 @@ function processCreateContainerOptions (options, run, detach) {
  * @returns {string[]} Array of arguments
  */
 function processAttachContainerOptions (options) {
-  processCreateContainerOptions(options, false, false)
-
   const args = ['container', 'ps', '-a', '--no-trunc', '-q']
 
   if (options.image) {
