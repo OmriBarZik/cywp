@@ -20,7 +20,7 @@ class Docker {
     const process = spawn('docker', args)
 
     return ReturnPromise(process, (stdout) => {
-      options.id = stdout.replace('\n', '')
+      options.id = cleanID(stdout)[0]
       options.status = run ? 'started' : 'created'
 
       if (options.rm) { options.status = 'removed' }
@@ -64,7 +64,7 @@ class Docker {
 
     return ReturnPromise(process, (stdout) => {
       const options = {}
-      options.name = stdout.replace('\n', '')
+      options.name = cleanID(stdout)[0]
       options.status = 'alive'
 
       return new Volume(options)
@@ -87,7 +87,7 @@ class Docker {
     const process = spawn('docker', args)
 
     return ReturnPromise(process, (stdout) => {
-      options.id = stdout.replace('\n', '')
+      options.id = cleanID(stdout)[0]
       options.status = 'alive'
 
       return new Network(options)
@@ -107,12 +107,61 @@ class Docker {
     const process = spawn('docker', attachContainerArgs)
 
     return ReturnPromise(process, (stdout, stderr) => {
-      return {
-        stdout: cleanID(stdout),
-        stderr: stderr,
-        args: attachContainerArgs,
-        options: options,
+      const ids = cleanID(stdout)
+
+      if (!ids.length) {
+        return Promise.reject(new Error('docker container not found'))
       }
+
+      if (1 === ids.length && !(options.volumes || options.health || options.exposePorts || options.environmentVariables)) {
+        return new Container(ids[0])
+      }
+
+      ids.map(id => new Container(Object.assign({ id: id }, options)).inspect())
+
+      // return Promise.all(ids)
+      //   .then(values => {
+
+      //   })
+
+      const filterIds = ids.filter((value) => {
+        if (options.volumes) {
+
+        }
+        return true
+      })
+
+      if (!filterIds) {
+
+      }
+
+      if (!(options.volumes || options.health || options.exposePorts || options.environmentVariables)) {
+        if (1 === ids.length) {
+          return new Container(ids[0])
+        }
+
+        return Promise.reject(new Error(''))
+
+        // return {
+        //   stdout: cleanID(stdout),
+        //   stderr: stderr,
+        //   args: attachContainerArgs,
+        //   options: options,
+        // }
+      }
+
+      const containersInfo = []
+
+      cleanID(stdout).forEach(id => {
+        containersInfo.push(new Container({ id: id }).inspect())
+      })
+
+      return Promise.all(containersInfo)
+        .then(infos => {
+          infos.forEach(element => {
+
+          })
+        })
     })
   }
 }
@@ -256,7 +305,11 @@ function processAttachContainerOptions (options) {
   }
 
   if (options.name) {
-    args.push('--filter', `name=${options.name}`)
+    args.push('--filter', `name=^${options.name}$`)
+  }
+
+  if (options.network) {
+    args.push('--filter', `network=^${options.network}$`)
   }
 
   return args
