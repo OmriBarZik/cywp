@@ -53,7 +53,7 @@
   ],
   "husky": {
     "hooks": {
-      "pre-push": "npm-p coverage lint"
+      "pre-push": "run-p coverage lint"
     }
   },
   "jest": {
