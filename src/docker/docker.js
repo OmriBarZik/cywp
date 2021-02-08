@@ -97,71 +97,21 @@ class Docker {
   /**
    * @param {ContainerOptions} options - the option of the container you want to attach to.
    *
-   * @returns {Promise<Container>} - return the maching continer.
+   * @returns {Promise<Container>} - return the first maching container.
    */
   AttachContainer (options) {
     const attachContainerArgs = processAttachContainerOptions(options, false, false)
 
-    // return attachContainerArgs
-
     const process = spawn('docker', attachContainerArgs)
 
-    return ReturnPromise(process, (stdout, stderr) => {
+    return ReturnPromise(process, (stdout) => {
       const ids = cleanID(stdout)
 
       if (!ids.length) {
         return Promise.reject(new Error('docker container not found'))
       }
 
-      if (1 === ids.length && !(options.volumes || options.health || options.exposePorts || options.environmentVariables)) {
-        return new Container(ids[0])
-      }
-
-      ids.map(id => new Container(Object.assign({ id: id }, options)).inspect())
-
-      // return Promise.all(ids)
-      //   .then(values => {
-
-      //   })
-
-      const filterIds = ids.filter((value) => {
-        if (options.volumes) {
-
-        }
-        return true
-      })
-
-      if (!filterIds) {
-
-      }
-
-      if (!(options.volumes || options.health || options.exposePorts || options.environmentVariables)) {
-        if (1 === ids.length) {
-          return new Container(ids[0])
-        }
-
-        return Promise.reject(new Error(''))
-
-        // return {
-        //   stdout: cleanID(stdout),
-        //   stderr: stderr,
-        //   args: attachContainerArgs,
-        //   options: options,
-        // }
-      }
-
-      const containersInfo = []
-
-      cleanID(stdout).forEach(id => {
-        containersInfo.push(new Container({ id: id }).inspect())
-      })
-
-      return Promise.all(containersInfo)
-        .then(infos => {
-          infos.forEach(element => {
-
-          })
-        })
+      return new Container(ids[0])
     })
   }
 }
