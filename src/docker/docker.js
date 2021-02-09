@@ -100,7 +100,7 @@ class Docker {
    * @returns {Promise<Container>} - return the first maching container.
    */
   AttachContainer (options) {
-    const attachContainerArgs = processAttachContainerOptions(options, false, false)
+    const attachContainerArgs = processAttachContainerOptions(options)
 
     const process = spawn('docker', attachContainerArgs)
 
