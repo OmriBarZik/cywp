@@ -173,7 +173,6 @@ class Docker {
           attachContainer.options.health.retries = healthCheck.Retries ? healthCheck.Retries : undefined
         }
 
-        console.log(attachContainer.options)
         return attachContainer
       })
     })
@@ -356,4 +355,4 @@ function cleanID (stdout) {
   return stdout.split('\n').filter((id) => !!id)
 }
 
-module.exports = { Docker, processCreateContainerOptions, ProcessCreateNetworkOption }
+module.exports = { Docker, processCreateContainerOptions, ProcessCreateNetworkOption, processAttachContainerOptions }

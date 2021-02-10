@@ -1,5 +1,5 @@
 const { spawnSync } = require('child_process')
-const { Docker, processCreateContainerOptions, ProcessCreateNetworkOption } = require('../../src/docker/docker')
+const { Docker, processCreateContainerOptions, ProcessCreateNetworkOption, processAttachContainerOptions } = require('../../src/docker/docker')
 const CreateContainer = Docker.prototype.CreateContainer
 const CreateVolume = Docker.prototype.CreateVolume
 const CreateNetwork = Docker.prototype.CreateNetwork
@@ -269,6 +269,32 @@ describe('Docker', () => {
 
         expect(arr).toContain('cywp-network-test')
       })
+    })
+  })
+
+  describe('#processAttachContainerOptions', () => {
+    it('should return args for filter by image', () => {
+      const arr = processAttachContainerOptions({ image: 'test-image' })
+
+      expect(arr).toEqual(['container', 'ps', '-a', '--no-trunc', '-q', '--filter', 'ancestor=test-image'])
+    })
+
+    it('should return args for filter by id', () => {
+      const arr = processAttachContainerOptions({ id: 'test-id' })
+
+      expect(arr).toEqual(['container', 'ps', '-a', '--no-trunc', '-q', '--filter', 'id=test-id'])
+    })
+
+    it('should return args for filter by name', () => {
+      const arr = processAttachContainerOptions({ name: 'test-name' })
+
+      expect(arr).toEqual(['container', 'ps', '-a', '--no-trunc', '-q', '--filter', 'name=^test-name$'])
+    })
+
+    it('should return args for filter by network', () => {
+      const arr = processAttachContainerOptions({ network: 'test-network' })
+
+      expect(arr).toEqual(['container', 'ps', '-a', '--no-trunc', '-q', '--filter', 'network=^test-network$'])
     })
   })
 
