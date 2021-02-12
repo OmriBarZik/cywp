@@ -177,6 +177,29 @@ class Docker {
       })
     })
   }
+
+  /**
+   * @param {string} name - the name of the network you want to attach.
+   * @returns {Promise<Network>} the first network that match the desctiption.
+   */
+  AttachNetwork (name) {
+    if (!name) {
+      throw new Error('name must be provided!')
+    }
+
+    const args = ['network', 'ls', '--no-trunc', '-q', '--filter', `name^${name}$`]
+
+    const process = spawn('docker', args)
+
+    return ReturnPromise(process, (stdout) => {
+      const ids = cleanID(stdout)
+      if (!ids.length) {
+        return Promise.reject(new Error('docker network not found!'))
+      }
+
+      return new Network({ id: ids[0], name: name, status: 'alive' })
+    })
+  }
 }
 
 /**
@@ -300,6 +323,24 @@ function processCreateContainerOptions (options, run, detach) {
 }
 
 /**
+ * Create from the option object string array of arguments for the spwan function.
+ *
+ * @param {NetworkOption} options - docker network options
+ * @returns {string[]} array of arguments
+ */
+function ProcessCreateNetworkOption (options) {
+  const args = ['network', 'create']
+
+  if (!options || !options.name) {
+    throw new Error('options.name must be provided!\nexample:\nnew Network({ name: \'cywp-network\' })')
+  }
+
+  args.push(options.name)
+
+  return args
+}
+
+/**
  * @param {ContainerOptions} options - the option of the container you want to attach to.
  *
  * @returns {string[]} Array of arguments
@@ -322,24 +363,6 @@ function processAttachContainerOptions (options) {
   if (options.network) {
     args.push('--filter', `network=^${options.network}$`)
   }
-
-  return args
-}
-
-/**
- * Create from the option object string array of arguments for the spwan function.
- *
- * @param {NetworkOption} options - docker network options
- * @returns {string[]} array of arguments
- */
-function ProcessCreateNetworkOption (options) {
-  const args = ['network', 'create']
-
-  if (!options || !options.name) {
-    throw new Error('options.name must be provided!\nexample:\nnew Network({ name: \'cywp-network\' })')
-  }
-
-  args.push(options.name)
 
   return args
 }
