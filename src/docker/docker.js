@@ -200,6 +200,29 @@ class Docker {
       return new Network({ id: ids[0], name: name, status: 'alive' })
     })
   }
+
+  /**
+   * @param {string} name - the name of the volume you want to attach.
+   * @returns {Promise<Network>} the first network that match the desctiption.
+   */
+  AttachVolume (name) {
+    if (!name) {
+      throw new Error('name must be provided!')
+    }
+
+    const args = ['volume', 'ls', '-q', '--filter', `name^${name}$`]
+
+    const process = spawn('docker', args)
+
+    return ReturnPromise(process, (stdout) => {
+      const names = cleanID(stdout)
+      if (!names.length) {
+        return Promise.reject(new Error('docker volume not found!'))
+      }
+
+      return new Volume({ name: names[0] })
+    })
+  }
 }
 
 /**
