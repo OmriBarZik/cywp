@@ -74,21 +74,24 @@ class Docker {
   /**
    * Create docker network.
    *
-   * @param {NetworkOption | string} options - gfch
+   * @param {string} name - Name of the network.
    * @returns {Promise<Network>} return promise for network object.
    */
-  CreateNetwork (options) {
-    if ('string' === typeof options) {
-      options = { name: options }
+  CreateNetwork (name) {
+    if (!name) {
+      throw new Error('name must be provided!')
     }
 
-    const args = ProcessCreateNetworkOption(options)
+    const args = ['network', 'create', name]
 
     const process = spawn('docker', args)
 
     return ReturnPromise(process, (stdout) => {
-      options.id = cleanID(stdout)[0]
-      options.status = 'alive'
+      const options = {
+        name: name,
+        id: cleanID(stdout)[0],
+        status: 'alive',
+      }
 
       return new Network(options)
     })
@@ -346,24 +349,6 @@ function processCreateContainerOptions (options, run, detach) {
 }
 
 /**
- * Create from the option object string array of arguments for the spwan function.
- *
- * @param {NetworkOption} options - docker network options
- * @returns {string[]} array of arguments
- */
-function ProcessCreateNetworkOption (options) {
-  const args = ['network', 'create']
-
-  if (!options || !options.name) {
-    throw new Error('options.name must be provided!\nexample:\nnew Network({ name: \'cywp-network\' })')
-  }
-
-  args.push(options.name)
-
-  return args
-}
-
-/**
  * @param {ContainerOptions} options - the option of the container you want to attach to.
  *
  * @returns {string[]} Array of arguments
@@ -401,4 +386,4 @@ function cleanID (stdout) {
   return stdout.split('\n').filter((id) => !!id)
 }
 
-module.exports = { Docker, processCreateContainerOptions, ProcessCreateNetworkOption, processAttachContainerOptions }
+module.exports = { Docker, processCreateContainerOptions, processAttachContainerOptions }
