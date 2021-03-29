@@ -1,5 +1,5 @@
 const { spawnSync } = require('child_process')
-const { Docker, processCreateContainerOptions, ProcessCreateNetworkOption, processAttachContainerOptions } = require('../../src/docker/docker')
+const { Docker, processCreateContainerOptions, processAttachContainerOptions } = require('../../src/docker/docker')
 const CreateContainer = Docker.prototype.CreateContainer
 const CreateVolume = Docker.prototype.CreateVolume
 const CreateNetwork = Docker.prototype.CreateNetwork
@@ -250,28 +250,6 @@ describe('Docker', () => {
     })
   })
 
-  describe('#ProcessCreateNetworkOption()', () => {
-    describe('##Errors', () => {
-      it('should throw error when value not present', () => {
-        expect(() => { ProcessCreateNetworkOption() }).toThrow()
-      })
-
-      it('should throw error when name value is not present', () => {
-        expect(() => { ProcessCreateNetworkOption({}) }).toThrow()
-
-        expect(() => { ProcessCreateNetworkOption({ name: '' }) }).toThrow()
-      })
-    })
-
-    describe('##Returns', () => {
-      it('should contains docker image name', () => {
-        const arr = ProcessCreateNetworkOption({ name: 'cywp-network-test' })
-
-        expect(arr).toContain('cywp-network-test')
-      })
-    })
-  })
-
   describe('#processAttachContainerOptions', () => {
     it('should return args for filter by image', () => {
       const arr = processAttachContainerOptions({ image: 'test-image' })
@@ -420,11 +398,11 @@ describe('Docker', () => {
     })
 
     it('should throw reject for creating network with the same name', async () => {
-      const network = await CreateNetwork({ name: 'cywp-name-error-create-network-test' })
+      const network = await CreateNetwork('cywp-name-error-create-network-test')
 
       networkIds.push(network.options.id)
 
-      return expect(CreateNetwork({ name: 'cywp-name-error-create-network-test' })).rejects.toBeTruthy()
+      return expect(CreateNetwork('cywp-name-error-create-network-test')).rejects.toBeTruthy()
     })
 
     afterAll(() => {
