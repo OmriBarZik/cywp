@@ -14,8 +14,14 @@ class Docker {
    * @param {boolean} detach - Should the Promise resolve when the container exits.
    * @returns {Promise<Container>} Return promise for continer object
    */
-  CreateContainer (options, run = false, detach = true) {
+  async CreateContainer (options, run = false, detach = true) {
     const args = processCreateContainerOptions(options, run, detach)
+
+    const container = await this.AttachContainer(options)
+
+    if (null != container) {
+      return container
+    }
 
     const process = spawn('docker', args)
 
@@ -111,7 +117,7 @@ class Docker {
       const ids = cleanID(stdout)
 
       if (!ids.length) {
-        return Promise.reject(new Error('docker container not found'))
+        return null
       }
 
       const attachOptions = Object.assign({
