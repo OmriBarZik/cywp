@@ -1,9 +1,10 @@
 const { spawnSync } = require('child_process')
 const { Docker, processCreateContainerOptions, processAttachContainerOptions } = require('../../src/docker/docker')
-const CreateContainer = Docker.prototype.CreateContainer
-const CreateVolume = Docker.prototype.CreateVolume
-const CreateNetwork = Docker.prototype.CreateNetwork
-const RunInContainer = Docker.prototype.RunInContainer
+const docker = new Docker()
+const CreateContainer = docker.CreateContainer
+const CreateVolume = docker.CreateVolume
+const CreateNetwork = docker.CreateNetwork
+const RunInContainer = docker.RunInContainer
 
 describe('Docker', () => {
   describe('#processCreateContainerOptions()', () => {
