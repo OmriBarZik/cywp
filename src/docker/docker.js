@@ -19,7 +19,7 @@ class Docker {
 
     const container = await this.AttachContainer(options)
 
-    if (null != container) {
+    if (container) {
       return container
     }
 
@@ -65,7 +65,13 @@ class Docker {
    * @param {string} name - Name of the volume.
    * @returns {Promise<Volume>} return promise for volume object.
    */
-  CreateVolume (name) {
+  async CreateVolume (name) {
+    const volume = await this.AttachVolume(name)
+
+    if (volume) {
+      return volume
+    }
+
     const process = spawn('docker', ['volume', 'create', name])
 
     return ReturnPromise(process, (stdout) => {
@@ -83,9 +89,15 @@ class Docker {
    * @param {string} name - Name of the network.
    * @returns {Promise<Network>} return promise for network object.
    */
-  CreateNetwork (name) {
+  async CreateNetwork (name) {
     if (!name) {
       throw new Error('name must be provided!')
+    }
+
+    const network = await this.AttachNetwork(name)
+
+    if (network) {
+      return network
     }
 
     const args = ['network', 'create', name]
@@ -196,12 +208,13 @@ class Docker {
       throw new Error('name must be provided!')
     }
 
-    const args = ['network', 'ls', '--no-trunc', '-q', '--filter', `name^${name}$`]
+    const args = ['network', 'ls', '--no-trunc', '--quiet', '--filter', `name=^${name}$`]
 
     const process = spawn('docker', args)
 
     return ReturnPromise(process, (stdout) => {
       const ids = cleanID(stdout)
+
       if (!ids.length) {
         return null
       }
@@ -219,17 +232,18 @@ class Docker {
       throw new Error('name must be provided!')
     }
 
-    const args = ['volume', 'ls', '-q', '--filter', `name^${name}$`]
+    const args = ['volume', 'ls', '-q', '--filter', `name=^${name}$`]
 
     const process = spawn('docker', args)
 
     return ReturnPromise(process, (stdout) => {
       const names = cleanID(stdout)
+
       if (!names.length) {
         return null
       }
 
-      return new Volume({ name: names[0] })
+      return new Volume({ name: names[0], status: 'alive' })
     })
   }
 }
