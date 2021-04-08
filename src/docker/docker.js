@@ -203,7 +203,7 @@ class Docker {
     return ReturnPromise(process, (stdout) => {
       const ids = cleanID(stdout)
       if (!ids.length) {
-        return Promise.reject(new Error('docker network not found!'))
+        return null
       }
 
       return new Network({ id: ids[0], name: name, status: 'alive' })
@@ -226,7 +226,7 @@ class Docker {
     return ReturnPromise(process, (stdout) => {
       const names = cleanID(stdout)
       if (!names.length) {
-        return Promise.reject(new Error('docker volume not found!'))
+        return null
       }
 
       return new Volume({ name: names[0] })
