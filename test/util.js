@@ -15,6 +15,7 @@ let originalCreateContainer
  */
 function InitTestCreateContainer (suiteName) {
   originalCreateContainer = Docker.prototype.CreateContainer
+  originalCreateContainer = originalCreateContainer.bind(new Docker())
 
   containerIds[suiteName] = []
   volumeIds[suiteName] = []
