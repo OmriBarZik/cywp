@@ -116,6 +116,9 @@ class Docker {
   }
 
   /**
+   * Returns the container that math the spesfection
+   * the option must includ NAME or ID else the method will return NULL
+   *
    * @param {ContainerOptions} options - the option of the container you want to attach to.
    *
    * @returns {Promise<Container>} - return the first maching container.
@@ -128,7 +131,7 @@ class Docker {
     return ReturnPromise(process, (stdout) => {
       const ids = cleanID(stdout)
 
-      if (!ids.length) {
+      if (!ids.length || !options.id || !options.name) {
         return null
       }
 
