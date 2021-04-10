@@ -1,5 +1,6 @@
 const Container = require('../container') // eslint-disable-line no-unused-vars
 const { Docker } = require('../docker')
+const docker = new Docker()
 
 /**
  * Create mysql continer.
@@ -12,7 +13,7 @@ const { Docker } = require('../docker')
 function CreateMysqlContainer (name, port, run = false) {
   CheckParameters(name, port)
 
-  return Docker.prototype.CreateContainer({
+  return docker.CreateContainer({
     image: 'mysql:5.7',
     name: `cywp-${name}-mysql`,
     network: 'cywp-network',
@@ -47,7 +48,7 @@ function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
     throw new TypeError('mysqlContainer must be instance of container')
   }
 
-  return Docker.prototype.CreateContainer({
+  return docker.CreateContainer({
     exposePorts: [{ docker: 80, host: port }],
     environmentVariables: [
       { name: 'WORDPRESS_DB_HOST', value: `${mysqlContainer.options.name}:${mysqlContainer.options.exposePorts[0].host}` },
@@ -84,7 +85,7 @@ function CreateWordpressCliContainer (wordpress, commands) {
     throw new TypeError('commands must be an array')
   }
 
-  return Docker.prototype.RunInContainer({
+  return docker.RunInContainer({
     volumes: wordpress.options.volumes,
     image: 'wordpress:cli',
     network: wordpress.options.network,
