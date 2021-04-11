@@ -53,6 +53,7 @@ module.exports = {
           'wordpress',
           'mysql',
           'twentyseventeen',
+          'twentytwenty',
           'spwan',
           'usr',
           'cmd',
