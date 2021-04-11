@@ -392,7 +392,7 @@ function processAttachContainerOptions (options) {
   }
 
   if (options.network) {
-    args.push('--filter', `network=^${options.network}$`)
+    args.push('--filter', `network=${options.network}`)
   }
 
   return args
