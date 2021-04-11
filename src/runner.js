@@ -19,13 +19,12 @@ function runner (on, config) {
   config = checkConfig(config)
 
   on('before:browser:launch', async () => {
-    console.log('hello')
     network = await setupNetwork()
     debug('created docker network')
     mysql = await SetupDatabase(3306)
-    debug('created mysql container ')
+    debug('created mysql container')
     wordpress = await SetupSite(config.env.cywpWordpressName, config.env.cywpWordpressPort, mysql)
-    debug('created wordpress container ')
+    debug('created wordpress container')
   })
 
   on('after:run', async () => {
