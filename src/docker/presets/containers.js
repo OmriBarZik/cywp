@@ -10,16 +10,13 @@ const docker = new Docker()
  * @param {boolean} run - should the container run at the instance of creation.
  * @returns {Promise<Container>} retrun promise for mysql continer object.
  */
-function CreateMysqlContainer (name, port, run = false) {
-  CheckParameters(name, port)
+function CreateMysqlContainer (name, run = false) {
+  CheckParameters(name, 3306)
 
   return docker.CreateContainer({
     image: 'mysql:5.7',
     name: `cywp-${name}-mysql`,
     network: 'cywp-network',
-    exposePorts: [
-      { host: port, docker: 3306 },
-    ],
     environmentVariables: [
       { name: 'MYSQL_ROOT_PASSWORD', value: 'cywp' },
     ],
@@ -51,7 +48,7 @@ function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
   return docker.CreateContainer({
     exposePorts: [{ docker: 80, host: port }],
     environmentVariables: [
-      { name: 'WORDPRESS_DB_HOST', value: `${mysqlContainer.options.name}:${mysqlContainer.options.exposePorts[0].host}` },
+      { name: 'WORDPRESS_DB_HOST', value: `${mysqlContainer.options.name}:3306` },
       { name: 'WORDPRESS_DB_PASSWORD', value: 'cywp' },
       { name: 'WORDPRESS_DB_USER', value: 'root' },
       { name: 'WORDPRESS_DB_NAME', value: `cywp-${name}-db` },
