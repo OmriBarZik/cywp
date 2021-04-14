@@ -199,7 +199,7 @@ class Docker {
 
         return attachContainer
       })
-    })
+    }).catch(() => null)
   }
 
   /**
