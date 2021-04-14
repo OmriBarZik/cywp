@@ -22,7 +22,7 @@ async function runner (on, config) {
     console.log('created docker network')
     mysql = await SetupDatabase()
     console.log('created mysql container')
-    wordpress = await SetupSite(config.env.cywpWordpressName, config.env.cywpWordpressPort, mysql)
+    wordpress = await SetupSite(config.env.cywpWordpressTheme, config.env.cywpWordpressPort, mysql)
     console.log('created wordpress container')
   } catch (error) {
     console.log(error)
