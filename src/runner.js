@@ -1,4 +1,3 @@
-const debug = require('debug')('cywp:cypress')
 const checkConfig = require('./config')
 // const { Docker } = require('./docker/docker')
 const { SetupDatabase, SetupSite, setupNetwork } = require('./workflow/environment')
@@ -6,7 +5,7 @@ const { SetupDatabase, SetupSite, setupNetwork } = require('./workflow/environme
 /**
  * @type {Cypress.PluginConfig}
  */
-function runner (on, config) {
+async function runner (on, config) {
   // const docker = new Docker()
 
   /** @type {import('./docker/network')} */
@@ -18,14 +17,16 @@ function runner (on, config) {
 
   config = checkConfig(config)
 
-  on('before:browser:launch', async () => {
+  try {
     network = await setupNetwork()
-    debug('created docker network')
-    mysql = await SetupDatabase(3306)
-    debug('created mysql container')
+    console.log('created docker network')
+    mysql = await SetupDatabase()
+    console.log('created mysql container')
     wordpress = await SetupSite(config.env.cywpWordpressName, config.env.cywpWordpressPort, mysql)
-    debug('created wordpress container')
-  })
+    console.log('created wordpress container')
+  } catch (error) {
+    console.log(error)
+  }
 
   on('after:run', async () => {
     await wordpress.rm(true)
