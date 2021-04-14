@@ -131,7 +131,11 @@ class Docker {
     return ReturnPromise(process, (stdout) => {
       const ids = cleanID(stdout)
 
-      if (!(ids.length || options.id || options.name)) {
+      if (!ids.length) {
+        return null
+      }
+
+      if (!(options.id || options.name)) {
         return null
       }
 
