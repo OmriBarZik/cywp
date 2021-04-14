@@ -17,7 +17,6 @@ function setupNetwork () {
 /**
  * Setup mysql container. return the mysql object only when the database is ready.
  *
- * @param {number} port - the mysql port exposed to the host.
  * @returns {import('../docker/container')} return when mysql database ready.
  *
  * @example
