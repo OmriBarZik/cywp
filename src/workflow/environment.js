@@ -25,8 +25,8 @@ function setupNetwork () {
  *  const mysql = await setupDatabase(3306);
  * }
  */
-async function SetupDatabase (port) {
-  const mysql = await CreateMysqlContainer('main', port, true)
+async function SetupDatabase () {
+  const mysql = await CreateMysqlContainer('main', true)
 
   let mysqlReady = false
 
