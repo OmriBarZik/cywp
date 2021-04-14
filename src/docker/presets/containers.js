@@ -84,6 +84,7 @@ function CreateWordpressCliContainer (wordpress, commands) {
 
   return docker.RunInContainer({
     volumes: wordpress.options.volumes,
+    environmentVariables: wordpress.options.environmentVariables,
     image: 'wordpress:cli',
     network: wordpress.options.network,
     name: `${wordpress.options.name}-cli`,
