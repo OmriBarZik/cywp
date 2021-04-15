@@ -362,6 +362,14 @@ function processCreateContainerOptions (options, run, detach) {
     })
   }
 
+  if (options.grope && !options.user) {
+    throw new Error('options.grope must be used with options.user')
+  }
+
+  if (options.user) {
+    args.push('--user', options.grope ? options.user + ':' + options.grope : options.user)
+  }
+
   args.push(options.image)
 
   if (options.commands) {

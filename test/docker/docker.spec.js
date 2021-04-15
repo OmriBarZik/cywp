@@ -73,6 +73,10 @@ describe('Docker', () => {
       it('should throw an error when commands is not array', () => {
         expect(() => processCreateContainerOptions({ image: 'test', commands: 'first' })).toThrow()
       })
+
+      it('should throw an error when grope is used without user', () => {
+        expect(() => processCreateContainerOptions({ image: 'test', grope: 'grope-without-user' })).toThrow()
+      })
     })
 
     describe('##Returns', () => {
@@ -243,6 +247,27 @@ describe('Docker', () => {
 
         expect(arr).toContain('--health-timeout')
         expect(arr).toContain('2s')
+      })
+
+      it('should contains argument for custom user', () => {
+        const arr = processCreateContainerOptions({
+          image: 'test',
+          user: 'user-argument',
+        })
+
+        expect(arr).toContain('--user')
+        expect(arr).toContain('user-argument')
+      })
+
+      it('should contains argument for custom user and grope', () => {
+        const arr = processCreateContainerOptions({
+          image: 'test',
+          user: 'user-argument',
+          grope: 'grope-argument',
+        })
+
+        expect(arr).toContain('--user')
+        expect(arr).toContain('user-argument:grope-argument')
       })
     })
   })
