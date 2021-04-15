@@ -65,6 +65,7 @@ module.exports = {
           'gmt',
           'guid',
           'fs',
+          'or',
         ],
       },
     ],
