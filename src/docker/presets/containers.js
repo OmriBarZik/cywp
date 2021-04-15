@@ -88,6 +88,8 @@ function CreateWordpressCliContainer (wordpress, commands) {
     network: wordpress.options.network,
     name: `${wordpress.options.name}-cli`,
     commands: commands,
+    user: '33',
+    grope: '33',
     rm: true,
   }, true, false)
 }
