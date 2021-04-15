@@ -1,5 +1,27 @@
 const checkConfig = require('./config')
 const { SetupDatabase, SetupSite, setupNetwork } = require('./workflow/environment')
+const Plugin = require('./wp-cli/plugin')
+
+/**
+ * @param {import('./wp-cli/plugin')} plugin - the site to install the plugin.
+ * @param {{name: string, version: string}[]} pluginList - list of plugins to install.
+ */
+async function installPlugins (plugin, pluginList) {
+  console.log('started: installing plugins')
+
+  for (const item of pluginList) {
+    console.log(`started: installing ${item.name}`)
+    try {
+      await plugin.install(item.name, true, 'latest' === item.version ? '' : item.version)
+
+      console.log(`finished: installing ${item.name}`)
+    } catch (error) {
+      console.error(`failed installing ${item.name}`)
+    }
+  }
+
+  console.log('finished: installing plugins')
+}
 
 /**
  * @type {Cypress.PluginConfig}
@@ -15,7 +37,18 @@ async function runner (on, config) {
   console.log('finished: creating mysql container')
 
   console.log('started: creating wordpress container')
-  const wordpress = await SetupSite(config.env.cywpWordpressTheme, config.env.cywpWordpressPort, mysql)
+  const wordpress = await SetupSite(config.env.cywpTheme, config.env.cywpWordpressPort, mysql, config.env.cywpLocalPlugins)
+
+  const plugin = new Plugin(wordpress)
+
+  if (config.env.cywpRemotePlugins.length) {
+    await installPlugins(plugin, config.env.cywpRemotePlugins)
+  }
+  if (config.env.cywpLocalPlugins.length) {
+    const pluginList = config.env.cywpLocalPlugins.map(({ ...plugin }) => plugin.name)
+    plugin.activate(pluginList)
+  }
+
   console.log('finished: creating wordpress container')
 
   on('after:run', async () => {

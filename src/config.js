@@ -1,3 +1,6 @@
+const { existsSync } = require('fs')
+const { resolve } = require('path')
+
 /**
  * checks and setup all cywp settings.
  *
@@ -10,9 +13,11 @@ function checkConfig (config) {
   const cywpConfig = {
     cywpWordpressVersion: configJson.wordpressVersion,
     cywpWordpressPort: configJson.wordpressPort,
-    cywpWordpressPlugins: configJson.wordpressPlugins,
-    cywpWordpressTheme: configJson.wordpressTheme,
     cywpWordpressName: 'cywp-tmp-wordpress',
+    cywpLocalPlugins: [],
+    cywpRemotePlugins: [],
+    cywpTheme: configJson.wordpressTheme,
+    cywpThemeVersion: configJson.wordpressThemeVersion,
   }
 
   if (!configJson.wordpressVersion) {
@@ -22,7 +27,7 @@ function checkConfig (config) {
 
   if (!configJson.wordpressTheme) {
     console.warn('wordpress theme was not provided using default theme twentytwenty')
-    cywpConfig.cywpWordpressTheme = 'twentytwenty'
+    cywpConfig.cywpTheme = 'twentytwenty'
   }
 
   if (!configJson.wordpressPort) {
@@ -30,7 +35,19 @@ function checkConfig (config) {
     cywpConfig.cywpWordpressPort = 8000
   }
 
-  cywpConfig.cywpWordpressName = `cywp-${cywpConfig.cywpWordpressTheme}-wordpress`
+  if (configJson.wordpressPlugins) {
+    for (const plugin in configJson.wordpressPlugins) {
+      const pathOrVersion = configJson.wordpressPlugins[plugin]
+
+      if (existsSync(pathOrVersion)) {
+        cywpConfig.cywpLocalPlugins.push({ host: resolve(pathOrVersion), docker: `/var/www/html/wp-content/plugins/${plugin}`, name: plugin })
+      } else {
+        cywpConfig.cywpRemotePlugins.push({ name: plugin, version: pathOrVersion })
+      }
+    }
+  }
+
+  cywpConfig.cywpWordpressName = `cywp-${cywpConfig.cywpTheme}-wordpress`
 
   Object.assign(config.env, cywpConfig)
 
