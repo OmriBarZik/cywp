@@ -23,6 +23,8 @@
  * @property {number} health.retries - Consecutive failures needed to report unhealthy
  * @property {string} health.startPeriod - Start period for the container to initialize before starting health-retries countdown (ms|s|m|h) (default 30s)
  * @property {string} health.timeout - Maximum time to allow one check to run (ms|s|m|h) (default 30s)
+ * @property {string} user - Sets the user name or UID.
+ * @property {string} grope - Sets group name or GID, must be used with user.
  */
 
 /** @typedef RunInContainerOutput
