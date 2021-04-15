@@ -1,13 +1,10 @@
 const checkConfig = require('./config')
-// const { Docker } = require('./docker/docker')
 const { SetupDatabase, SetupSite, setupNetwork } = require('./workflow/environment')
 
 /**
  * @type {Cypress.PluginConfig}
  */
 async function runner (on, config) {
-  // const docker = new Docker()
-
   config = checkConfig(config)
 
   const network = await setupNetwork()
