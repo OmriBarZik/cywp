@@ -6,7 +6,6 @@ const docker = new Docker()
  * Create mysql continer.
  *
  * @param {string} name - The name of the container.
- * @param {number} port - The port expose to the host.
  * @param {boolean} run - should the container run at the instance of creation.
  * @returns {Promise<Container>} retrun promise for mysql continer object.
  */

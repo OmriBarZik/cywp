@@ -43,9 +43,9 @@ async function SetupDatabase () {
 }
 
 /**
- * @param {string} name -
- * @param {number} port -
- * @param {import('../docker/container')} mysql -
+ * @param {string} name - the name of the container, the real container name will be cywp-<YOUR NAME>-wordpress
+ * @param {number} port - the expose port of the wordpress site
+ * @param {import('../docker/container')} mysql - the mysql container that the site will connect to.
  * @returns {import('../docker/container')} Wordpress Container.
  *
  * @example
