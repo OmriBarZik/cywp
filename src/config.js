@@ -41,7 +41,7 @@ function checkConfig (config) {
       const pathOrVersion = configJson.wordpressPlugins[plugin]
 
       if (existsSync(pathOrVersion)) {
-        cywpConfig.cywpLocalPlugins.push({ host: resolve(pathOrVersion), docker: `/var/www/html/wp-content/plugins/${plugin}`, name: plugin })
+        cywpConfig.cywpLocalPlugins.push({ host: resolve(pathOrVersion), docker: `/var/www/html/wp-content/plugins/${plugin}:ro`, name: plugin })
       } else {
         cywpConfig.cywpRemotePlugins.push({ name: plugin, version: pathOrVersion })
       }
@@ -50,7 +50,7 @@ function checkConfig (config) {
 
   if (configJson.wordpressThemePath) {
     if (existsSync(configJson.wordpressThemePath)) {
-      cywpConfig.cywpThemePath.push({ host: resolve(configJson.wordpressThemePath), docker: `/var/www/html/wp-content/themes/${cywpConfig.cywpTheme}` })
+      cywpConfig.cywpThemePath.push({ host: resolve(configJson.wordpressThemePath), docker: `/var/www/html/wp-content/themes/${cywpConfig.cywpTheme}:ro` })
     } else {
       console.error('theme path no good, using default theme - twentytwenty!')
       cywpConfig.cywpTheme = 'twentytwenty'
