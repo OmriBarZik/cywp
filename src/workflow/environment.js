@@ -27,6 +27,10 @@ function setupNetwork () {
 async function SetupDatabase () {
   const mysql = await CreateMysqlContainer('main', true)
 
+  if ('running' !== await mysql.status()) {
+    await mysql.start()
+  }
+
   let mysqlReady = false
 
   while (!mysqlReady) {
@@ -52,6 +56,10 @@ async function SetupDatabase () {
  */
 async function SetupSite (name, port, mysql) {
   const wordpress = await CreateWordpressContainer(name, port, mysql, true)
+
+  if ('running' !== await wordpress.status()) {
+    await wordpress.start()
+  }
 
   const dbName = wordpress.options.environmentVariables.find(env => 'WORDPRESS_DB_NAME' === env.name).value
   const mysqlPassword = mysql.options.environmentVariables.find(env => 'MYSQL_ROOT_PASSWORD' === env.name).value
