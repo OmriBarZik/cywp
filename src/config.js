@@ -18,6 +18,7 @@ function checkConfig (config) {
     cywpRemotePlugins: [],
     cywpTheme: configJson.wordpressTheme,
     cywpThemeVersion: configJson.wordpressThemeVersion,
+    cywpThemePath: [],
   }
 
   if (!configJson.wordpressVersion) {
@@ -44,6 +45,15 @@ function checkConfig (config) {
       } else {
         cywpConfig.cywpRemotePlugins.push({ name: plugin, version: pathOrVersion })
       }
+    }
+  }
+
+  if (configJson.wordpressThemePath) {
+    if (existsSync(configJson.wordpressThemePath)) {
+      cywpConfig.cywpThemePath.push({ host: resolve(configJson.wordpressThemePath), docker: `/var/www/html/wp-content/themes/${cywpConfig.cywpTheme}` })
+    } else {
+      console.error('theme path no good, using default theme - twentytwenty!')
+      cywpConfig.cywpTheme = 'twentytwenty'
     }
   }
 

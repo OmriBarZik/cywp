@@ -1,6 +1,7 @@
 const checkConfig = require('./config')
 const { SetupDatabase, SetupSite, setupNetwork } = require('./workflow/environment')
 const Plugin = require('./wp-cli/plugin')
+const Theme = require('./wp-cli/theme')
 
 /**
  * @param {import('./wp-cli/plugin')} plugin - the site to install the plugin.
@@ -37,18 +38,28 @@ async function runner (on, config) {
   console.log('finished: creating mysql container')
 
   console.log('started: creating wordpress container')
-  const wordpress = await SetupSite(config.env.cywpTheme, config.env.cywpWordpressPort, mysql, config.env.cywpLocalPlugins)
+  const volumes = [].concat(config.env.cywpLocalPlugins, config.env.cywpThemePath)
+  const wordpress = await SetupSite(config.env.cywpTheme, config.env.cywpWordpressPort, mysql, volumes)
 
   const plugin = new Plugin(wordpress)
+  const theme = new Theme(wordpress)
+
+  console.log('started: installing theme')
+  if (config.env.cywpThemePath.length) {
+    await theme.activate(config.env.cywpTheme)
+  } else {
+    await theme.install(config.env.cywpTheme, true, config.env.cywpThemeVersion)
+  }
+  console.log('finished: installing theme')
 
   if (config.env.cywpRemotePlugins.length) {
     await installPlugins(plugin, config.env.cywpRemotePlugins)
   }
+
   if (config.env.cywpLocalPlugins.length) {
     const pluginList = config.env.cywpLocalPlugins.map(({ ...plugin }) => plugin.name)
     plugin.activate(pluginList)
   }
-
   console.log('finished: creating wordpress container')
 
   on('after:run', async () => {
