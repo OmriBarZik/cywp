@@ -8,25 +8,18 @@ const { SetupDatabase, SetupSite, setupNetwork } = require('./workflow/environme
 async function runner (on, config) {
   // const docker = new Docker()
 
-  /** @type {import('./docker/network')} */
-  let network
-  /** @type {import('./docker/container')} */
-  let mysql
-  /** @type {import('./docker/container')} */
-  let wordpress
-
   config = checkConfig(config)
 
-  try {
-    network = await setupNetwork()
-    console.log('created docker network')
-    mysql = await SetupDatabase()
-    console.log('created mysql container')
-    wordpress = await SetupSite(config.env.cywpWordpressTheme, config.env.cywpWordpressPort, mysql)
-    console.log('created wordpress container')
-  } catch (error) {
-    console.log(error)
-  }
+  const network = await setupNetwork()
+  console.log('created docker network')
+
+  console.log('started: creating mysql container')
+  const mysql = await SetupDatabase()
+  console.log('finished: creating mysql container')
+
+  console.log('started: creating wordpress container')
+  const wordpress = await SetupSite(config.env.cywpWordpressTheme, config.env.cywpWordpressPort, mysql)
+  console.log('finished: creating wordpress container')
 
   on('after:run', async () => {
     await wordpress.rm(true)
