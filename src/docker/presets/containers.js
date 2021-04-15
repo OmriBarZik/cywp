@@ -34,10 +34,11 @@ function CreateMysqlContainer (name, run = false) {
  * @param {string} name - The name of the container.
  * @param {number} port - The port expose to the host.
  * @param {Container} mysqlContainer - The mysql container object.
+ * @param {[{host: string, docker: string}]} volumes - additional volumes to add local files to the container.
  * @param {boolean} [run] - Should the container run at the instance of creation.
  * @returns {Promise<Container>} Retrun promise for WordPress continer object.
  */
-function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
+function CreateWordpressContainer (name, port, mysqlContainer, volumes = [], run = false) {
   CheckParameters(name, port)
 
   if (!(mysqlContainer instanceof Container)) {
@@ -56,7 +57,7 @@ function CreateWordpressContainer (name, port, mysqlContainer, run = false) {
       { host: `cywp-${name}-volume`, docker: '/var/www/html' },
       { host: `cywp-${name}-volume-themes`, docker: '/var/www/html/wp-content/themes' },
       { host: `cywp-${name}-volume-plugins`, docker: '/var/www/html/wp-content/plugins' },
-    ],
+    ].concat(volumes),
     image: 'wordpress',
     network: 'cywp-network',
     name: `cywp-${name}-wordpress`,
@@ -80,6 +81,8 @@ function CreateWordpressCliContainer (wordpress, commands) {
   if (!Array.isArray(commands)) {
     throw new TypeError('commands must be an array')
   }
+
+  console.log(wordpress.options)
 
   return docker.RunInContainer({
     volumes: wordpress.options.volumes,
