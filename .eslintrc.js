@@ -64,6 +64,7 @@ module.exports = {
           'unspam',
           'gmt',
           'guid',
+          'fs',
         ],
       },
     ],
