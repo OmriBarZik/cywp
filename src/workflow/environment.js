@@ -50,8 +50,8 @@ async function SetupDatabase () {
  * @returns {import('../docker/container')} Wordpress Container.
  * @example
  * async function foo () {
- * const mysql = await setupDatabase(3306);
- * const wordpress = await SetupSite('my-site', 8000, mysql)
+ *  const mysql = await setupDatabase(3306);
+ *  const wordpress = await SetupSite('my-site', 8000, mysql)
  * }
  */
 async function SetupSite (name, port, mysql, volumes) {
