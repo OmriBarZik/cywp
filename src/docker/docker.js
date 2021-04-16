@@ -60,6 +60,18 @@ class Docker {
   }
 
   /**
+   * Pull docker image.
+   *
+   * @param {string} image - Image to pull from docker hub.
+   * @returns {Promise<string>} - iamge name when pull successfully.
+   */
+  pullImage (image) {
+    const imagePull = spawn('docker', ['pull', image])
+
+    return ReturnPromise(imagePull, () => image)
+  }
+
+  /**
    * Create docker volume.
    *
    * @param {string} name - Name of the volume.
