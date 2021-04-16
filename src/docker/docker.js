@@ -131,7 +131,11 @@ class Docker {
     return ReturnPromise(process, (stdout) => {
       const ids = cleanID(stdout)
 
-      if (!ids.length || !options.id || !options.name) {
+      if (!ids.length) {
+        return null
+      }
+
+      if (!(options.id || options.name)) {
         return null
       }
 
@@ -199,7 +203,7 @@ class Docker {
 
         return attachContainer
       })
-    })
+    }).catch(() => null)
   }
 
   /**
@@ -400,7 +404,7 @@ function processAttachContainerOptions (options) {
   }
 
   if (options.network) {
-    args.push('--filter', `network=^${options.network}$`)
+    args.push('--filter', `network=${options.network}`)
   }
 
   return args

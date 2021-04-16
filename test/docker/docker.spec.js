@@ -294,7 +294,7 @@ describe('Docker', () => {
     it('should return args for filter by network', () => {
       const arr = processAttachContainerOptions({ network: 'test-network' })
 
-      expect(arr).toEqual(['container', 'ps', '-a', '--no-trunc', '-q', '--filter', 'network=^test-network$'])
+      expect(arr).toEqual(['container', 'ps', '-a', '--no-trunc', '-q', '--filter', 'network=test-network'])
     })
   })
 
