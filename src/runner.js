@@ -39,7 +39,7 @@ async function runner (on, config) {
 
   console.log('started: creating wordpress container')
   const volumes = [].concat(config.env.cywpLocalPlugins, config.env.cywpThemePath)
-  const wordpress = await SetupSite(config.env.cywpTheme, config.env.cywpWordpressPort, mysql, volumes)
+  const wordpress = await SetupSite(config.env.cywpTheme, config.env.cywpWordpressPort, mysql, config.env.cywpWordpressVersion, volumes)
 
   const plugin = new Plugin(wordpress)
   const theme = new Theme(wordpress)
