@@ -8,10 +8,23 @@ Help you create testing environments for your WordPress plugins and themes.
 npm install --dave-save cypress-for-WordPress
 ```
 
+Add this at the `index.js` file in the plugin folder.
+```js
+module.exports = (on, config) => {
+  return require('cypress-for-wordpress')(on, config)
+}
+```
+
+this will read the configuration and return the modefied cypress config.
+
 ## Configuration
 you can customize your site by using the following configuration in your `cypress.json` file.
 #### example
-```jsonc
+```jsoncmodule.exports = (on, config) => {
+  return require('cypress-for-wordpress')(on, config)
+  // `on` is used to hook into various events Cypress emits
+  // `config` is the resolved Cypress config
+}
 {
   "wordpressVersion": "latest", // WordPress version of the site.
   "wordpressPort": "8000", // On waht port the site will be expose.
