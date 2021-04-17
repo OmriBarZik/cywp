@@ -1,5 +1,6 @@
 const checkConfig = require('./config')
 const { SetupDatabase, SetupSite, setupNetwork } = require('./workflow/environment')
+const { verify } = require('./verify')
 const Plugin = require('./wp-cli/plugin')
 const Theme = require('./wp-cli/theme')
 const { Docker } = require('./docker/docker')
@@ -30,6 +31,13 @@ async function installPlugins (plugin, pluginList) {
  */
 async function runner (on, config) {
   config = checkConfig(config)
+
+  console.log('Started: Verifying docker')
+  const verifyOutput = await verify()
+  if (!verifyOutput.verified) {
+    throw new Error(verifyOutput.message)
+  }
+  console.log('Finished: Verifying docker')
 
   console.log('Started: Pulling docker images')
   const docker = new Docker()

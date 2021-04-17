@@ -1,31 +1,55 @@
 const commandExists = require('command-exists')
-
-const missingDependencies = []
+const { ReturnPromise } = require('./docker/util')
+const { spawn } = require('child_process')
 
 /**
- * Checks whatever the given command exsists, if not. the name fo the
- * command will be added to the missingDependencies array
+ * Checks if docker is installed on the system.
  *
- * @param {string} command - the command
- * @returns {Promise<string>} - retrun if the command exsists.
+ * @returns {Promise<boolean>} If docker is installed on the system.
  */
-function verifyCommand (command) {
-  return commandExists(command).catch(() => missingDependencies.push(command))
+function verifyDocker () {
+  return commandExists('docker')
+    .then(() => true)
+    .catch(() => Promise.reject(new Error('Docker is\'t installed on this system! Please install docker and try again.')))
 }
 
 /**
- * Verify if the system have the right dependencies.
+ * Checks if docker is running.
+ *
+ * @returns {Promise<boolean} If docker is running.
  */
-async function verify () {
-  await Promise.all([verifyCommand('git'), verifyCommand('docker'), verifyCommand('docker-compose')])
+function verifyDockerRunning () {
+  const stats = spawn('docker', ['stats', '--no-stream'])
 
-  if (missingDependencies.length) {
-    // eslint-disable-next-line no-console
-    console.error(`The dependencies [ ${missingDependencies.join(' | ')} ] are missing\nplease install them and try again`)
-    process.exit(1)
-  }
+  return ReturnPromise(stats, () => { })
+    .then(() => true)
+    .catch(() => Promise.reject(new Error('Docker is\'t running! please start docker and try again.')))
+}
+
+/**
+ * Verify if the system have the right dependencies to run cywp.
+ * If not will throw a reject.
+ *
+ * @returns {Promise<boolean>} If the system can run cywp.
+ */
+function unsafeVerify () {
+  return verifyDocker()
+    .then(verifyDockerRunning)
+}
+
+/**
+ * Verify if the system have the right dependencies to run cywp. if not returns the error message
+ *
+ * @returns {Promise<{ message: string, verified: boolean }>} If the system can run cywp. if not returns error message.
+ */
+function verify () {
+  return verifyDocker()
+    .then(verifyDockerRunning)
+    .then(() => { return { message: '', verified: true } })
+    .catch(error => { return { message: error.message, verified: false } })
 }
 
 module.exports = {
   verify,
+  unsafeVerify,
 }
