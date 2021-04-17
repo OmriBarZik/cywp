@@ -19,10 +19,10 @@ you can customize your site by using the following configuration in your `cypres
   "wordpressThemeVersion": "latest", // Version of the theme.
   "wordpressThemePath": "/path/to/theme", // Make the Site to use localy installed theme.
   "wordpressPlugins": { // List of the plugin you want to install on your site.
-     "LocalPlugin": "./",
-     "OtherLocalPlugin": "/path/to/plugin/LocalPlugin", // Path to locally installed plugin.
+     "LocalPlugin": "./", // Relative path to localy installed Path.
+     "OtherLocalPlugin": "/path/to/plugin/LocalPlugin", // Absulute Path to locally installed plugin.
      "RemotePlugin": "1.0.0", // Version of the plugins the runner will install automatically.
-     "OtherRemotePlugin": "latest"
+     "OtherRemotePlugin": "latest" // Use the latest version available.
   }
 }
 ```
