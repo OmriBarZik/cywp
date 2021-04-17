@@ -1,4 +1,4 @@
-# cypress-for-wordpress
+# cypress-for-wordpress [![Test](https://github.com/OmriBarZik/cywp/actions/workflows/tests.yml/badge.svg)](https://github.com/OmriBarZik/cywp/actions/workflows/tests.yml)
 Help you create testing environments for your WordPress plugins and themes.
 ## requirement
 1. you must have cypress 6.7 or above
