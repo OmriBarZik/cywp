@@ -1,6 +1,6 @@
 const { Docker } = require('../../src/docker/docker')
 const { spawnSync } = require('child_process')
-const CreateNetwork = Docker.prototype.CreateNetwork
+const docker = new Docker()
 
 describe('Network', () => {
   let networkIds
@@ -11,7 +11,7 @@ describe('Network', () => {
 
   describe('#rm()', () => {
     it('should remove network', async () => {
-      const network = await CreateNetwork('cywp-rm-network-test')
+      const network = await docker.CreateNetwork('cywp-rm-network-test')
 
       return network.rm().then((network) => {
         expect(network.options.status).toBe('dead')
@@ -24,7 +24,7 @@ describe('Network', () => {
 
   describe('#inspect()', () => {
     it('should get network info', async () => {
-      const network = await CreateNetwork('cywp-inspect-object-network-test')
+      const network = await docker.CreateNetwork('cywp-inspect-object-network-test')
 
       networkIds.push(network.options.id)
 
@@ -32,7 +32,7 @@ describe('Network', () => {
     })
 
     it('should get network info with filter', async () => {
-      const network = await CreateNetwork('cywp-inspect-filter-network-test')
+      const network = await docker.CreateNetwork('cywp-inspect-filter-network-test')
 
       networkIds.push(network.options.id)
 

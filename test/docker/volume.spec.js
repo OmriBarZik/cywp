@@ -1,11 +1,11 @@
 const { Docker } = require('../../src/docker/docker')
 const { spawnSync } = require('child_process')
-const CreateVolume = Docker.prototype.CreateVolume
+const docker = new Docker()
 
 describe('Volume', () => {
   describe('#rm()', () => {
     it('should remove volume', async () => {
-      const volume = await CreateVolume('cywp-volume-rm-test')
+      const volume = await docker.CreateVolume('cywp-volume-rm-test')
 
       await volume.rm()
       expect(volume.options.status).toBe('dead')
@@ -15,7 +15,7 @@ describe('Volume', () => {
     })
 
     it('should remove volume with force', async () => {
-      const volume = await CreateVolume('cywp-volume-force-rm-test')
+      const volume = await docker.CreateVolume('cywp-volume-force-rm-test')
 
       await volume.rm(true)
 

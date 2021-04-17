@@ -1,9 +1,6 @@
 const { spawnSync } = require('child_process')
-const { Docker, processCreateContainerOptions, ProcessCreateNetworkOption } = require('../../src/docker/docker')
-const CreateContainer = Docker.prototype.CreateContainer
-const CreateVolume = Docker.prototype.CreateVolume
-const CreateNetwork = Docker.prototype.CreateNetwork
-const RunInContainer = Docker.prototype.RunInContainer
+const { Docker, processCreateContainerOptions, processAttachContainerOptions } = require('../../src/docker/docker')
+const docker = new Docker()
 
 describe('Docker', () => {
   describe('#processCreateContainerOptions()', () => {
@@ -75,6 +72,10 @@ describe('Docker', () => {
 
       it('should throw an error when commands is not array', () => {
         expect(() => processCreateContainerOptions({ image: 'test', commands: 'first' })).toThrow()
+      })
+
+      it('should throw an error when grope is used without user', () => {
+        expect(() => processCreateContainerOptions({ image: 'test', grope: 'grope-without-user' })).toThrow()
       })
     })
 
@@ -247,28 +248,53 @@ describe('Docker', () => {
         expect(arr).toContain('--health-timeout')
         expect(arr).toContain('2s')
       })
+
+      it('should contains argument for custom user', () => {
+        const arr = processCreateContainerOptions({
+          image: 'test',
+          user: 'user-argument',
+        })
+
+        expect(arr).toContain('--user')
+        expect(arr).toContain('user-argument')
+      })
+
+      it('should contains argument for custom user and grope', () => {
+        const arr = processCreateContainerOptions({
+          image: 'test',
+          user: 'user-argument',
+          grope: 'grope-argument',
+        })
+
+        expect(arr).toContain('--user')
+        expect(arr).toContain('user-argument:grope-argument')
+      })
     })
   })
 
-  describe('#ProcessCreateNetworkOption()', () => {
-    describe('##Errors', () => {
-      it('should throw error when value not present', () => {
-        expect(() => { ProcessCreateNetworkOption() }).toThrow()
-      })
+  describe('#processAttachContainerOptions', () => {
+    it('should return args for filter by image', () => {
+      const arr = processAttachContainerOptions({ image: 'test-image' })
 
-      it('should throw error when name value is not present', () => {
-        expect(() => { ProcessCreateNetworkOption({}) }).toThrow()
-
-        expect(() => { ProcessCreateNetworkOption({ name: '' }) }).toThrow()
-      })
+      expect(arr).toEqual(['container', 'ps', '-a', '--no-trunc', '-q', '--filter', 'ancestor=test-image'])
     })
 
-    describe('##Returns', () => {
-      it('should contains docker image name', () => {
-        const arr = ProcessCreateNetworkOption({ name: 'cywp-network-test' })
+    it('should return args for filter by id', () => {
+      const arr = processAttachContainerOptions({ id: 'test-id' })
 
-        expect(arr).toContain('cywp-network-test')
-      })
+      expect(arr).toEqual(['container', 'ps', '-a', '--no-trunc', '-q', '--filter', 'id=test-id'])
+    })
+
+    it('should return args for filter by name', () => {
+      const arr = processAttachContainerOptions({ name: 'test-name' })
+
+      expect(arr).toEqual(['container', 'ps', '-a', '--no-trunc', '-q', '--filter', 'name=^test-name$'])
+    })
+
+    it('should return args for filter by network', () => {
+      const arr = processAttachContainerOptions({ network: 'test-network' })
+
+      expect(arr).toEqual(['container', 'ps', '-a', '--no-trunc', '-q', '--filter', 'network=test-network'])
     })
   })
 
@@ -280,7 +306,7 @@ describe('Docker', () => {
     })
 
     it('should create docker container', async () => {
-      const container = await CreateContainer({ image: 'hello-world' })
+      const container = await docker.CreateContainer({ image: 'hello-world' })
       const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`, '--filter', 'status=created'])
 
       containerIds.push(container.options.id)
@@ -289,16 +315,8 @@ describe('Docker', () => {
       expect(container.options.status).toEqual('created')
     })
 
-    it('should throw reject for creating container with the same name', async () => {
-      const container = await CreateContainer({ image: 'hello-world', name: 'test' })
-
-      containerIds.push(container.options.id)
-
-      return expect(CreateContainer({ image: 'hello-world', name: 'test' })).rejects.toBeTruthy()
-    })
-
     it('should create running docker container', async () => {
-      const container = await CreateContainer({ image: 'hello-world' }, true)
+      const container = await docker.CreateContainer({ image: 'hello-world' }, true)
       const containerCheck = spawnSync('docker', ['ps', '-a', '-q', '--filter', `id=${container.options.id}`])
 
       containerIds.push(container.options.id)
@@ -308,7 +326,7 @@ describe('Docker', () => {
     })
 
     it('should create and remove automatically docker container', async () => {
-      const container = await CreateContainer({ image: 'hello-world', rm: true }, true)
+      const container = await docker.CreateContainer({ image: 'hello-world', rm: true }, true)
 
       containerIds.push(container.options.id)
 
@@ -322,15 +340,15 @@ describe('Docker', () => {
 
   describe('#RunInContainer()', () => {
     it('should throw error empty option.command', () => {
-      expect(() => RunInContainer({})).toThrow()
+      expect(() => docker.RunInContainer({})).toThrow()
     })
 
     it('should throw error when rm is not true', () => {
-      expect(() => RunInContainer({ commands: ['test'] })).toThrow()
+      expect(() => docker.RunInContainer({ commands: ['test'] })).toThrow()
     })
 
     it('run tmp docker', () => {
-      return expect(RunInContainer({
+      return expect(docker.RunInContainer({
         image: 'hello-world',
         commands: ['./hello'],
         rm: true,
@@ -346,7 +364,7 @@ describe('Docker', () => {
     })
 
     it('should create a volume', async () => {
-      const volume = await CreateVolume('cywp-docker-CreateVolume-test')
+      const volume = await docker.CreateVolume('cywp-docker-CreateVolume-test')
       volumeNames.push('cywp-docker-CreateVolume-test')
 
       const volumeCheck = spawnSync('docker', ['volume', 'ls', '-q', '-f', `name=${volume.options.name}`])
@@ -358,7 +376,7 @@ describe('Docker', () => {
     })
 
     it('should throw error for creating a volume', async () => {
-      return expect(CreateVolume('!')).rejects.toBeTruthy()
+      return expect(docker.CreateVolume('!')).rejects.toBeTruthy()
     })
 
     afterAll(() => {
@@ -374,7 +392,7 @@ describe('Docker', () => {
     })
 
     it('should create docker network with object', async () => {
-      const network = await CreateNetwork({ name: 'cywp-create-network-with-object-test' })
+      const network = await docker.CreateNetwork({ name: 'cywp-create-network-with-object-test' })
       const networkCheck = spawnSync('docker', ['network', 'ls', '-q', '--filter', `id=${network.options.id}`])
 
       networkIds.push(network.options.id)
@@ -384,21 +402,13 @@ describe('Docker', () => {
     })
 
     it('should create docker network with string', async () => {
-      const network = await CreateNetwork('cywp-create-network-with-string-test')
+      const network = await docker.CreateNetwork('cywp-create-network-with-string-test')
       const networkCheck = spawnSync('docker', ['network', 'ls', '-q', '--filter', `id=${network.options.id}`])
 
       networkIds.push(network.options.id)
 
       expect(networkCheck.stdout).not.toHaveLength(0)
       expect(network.options.status).toEqual('alive')
-    })
-
-    it('should throw reject for creating network with the same name', async () => {
-      const network = await CreateNetwork({ name: 'cywp-name-error-create-network-test' })
-
-      networkIds.push(network.options.id)
-
-      return expect(CreateNetwork({ name: 'cywp-name-error-create-network-test' })).rejects.toBeTruthy()
     })
 
     afterAll(() => {
