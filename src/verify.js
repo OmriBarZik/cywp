@@ -21,7 +21,7 @@ function verifyDocker () {
 function verifyDockerRunning () {
   const stats = spawn('docker', ['stats', '--no-stream'])
 
-  return ReturnPromise(stats, () => {})
+  return ReturnPromise(stats, () => { })
     .then(() => true)
     .catch(() => Promise.reject(new Error('Docker is\'t running! please start docker and try again.')))
 }
@@ -32,12 +32,9 @@ function verifyDockerRunning () {
  *
  * @returns {Promise<boolean>} If the system can run cywp.
  */
-function verify () {
-  return safeVerify()
-    .catch(err => {
-      console.error(err.message)
-      process.exit(1)
-    })
+function unsafeVerify () {
+  return verifyDocker()
+    .then(verifyDockerRunning)
 }
 
 /**
@@ -45,12 +42,14 @@ function verify () {
  *
  * @returns {Promise<boolean,Error>} If the system can run cywp.
  */
-function safeVerify () {
+function verify () {
   return verifyDocker()
     .then(verifyDockerRunning)
+    .then(() => { return { verify: true } })
+    .catch(message => { return { message: message, verify: false } })
 }
 
 module.exports = {
-  verify,
-  safeVerify,
+  verify: unsafeVerify,
+  safeVerify: verify,
 }
