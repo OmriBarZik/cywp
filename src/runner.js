@@ -2,6 +2,7 @@ const checkConfig = require('./config')
 const { SetupDatabase, SetupSite, setupNetwork } = require('./workflow/environment')
 const Plugin = require('./wp-cli/plugin')
 const Theme = require('./wp-cli/theme')
+const { Docker } = require('./docker/docker')
 
 /**
  * @param {import('./wp-cli/plugin')} plugin - the site to install the plugin.
@@ -29,6 +30,20 @@ async function installPlugins (plugin, pluginList) {
  */
 async function runner (on, config) {
   config = checkConfig(config)
+
+  console.log('Started: Pulling docker images')
+  const docker = new Docker()
+  const finishedPullCallback = (image) => { console.log('pulled ' + image) }
+
+  await Promise.all([
+    docker.pullImage('wordpress' + (config.env.cywpWordpressVersion ? `:${config.env.cywpWordpressVersion}` : ''))
+      .then(finishedPullCallback),
+    docker.pullImage('mysql:5.7')
+      .then(finishedPullCallback),
+    docker.pullImage('wordpress:cli')
+      .then(finishedPullCallback),
+  ])
+  console.log('Finished: Pulling docker images')
 
   const network = await setupNetwork()
   console.log('created docker network')
