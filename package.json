@@ -1,6 +1,6 @@
 {
   "name": "cypress-for-wordpress",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "cypress environment builder for wordpress",
   "author": "Omri BarZik <omri@bar-zik.com>",
   "main": "index.js",
