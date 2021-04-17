@@ -196,12 +196,16 @@ class Docker {
         }
 
         if (info.Mounts) {
-          info.Mounts.forEach(mount => {
-            attachContainer.options.volumes.push({
-              docker: mount.Destination,
-              host: mount.Name,
+          info.Mounts.filter(mount => !attachContainer.options.volumes.find(volume => volume.docker === mount.Destination))
+            .forEach(mount => {
+              if ('volume' !== mount.Type) {
+                return
+              }
+              attachContainer.options.volumes.push({
+                docker: mount.Destination,
+                host: mount.Name,
+              })
             })
-          })
         }
 
         const healthCheck = info.Config.Healthcheck // eslint-disable-line spellcheck/spell-checker
@@ -350,7 +354,7 @@ function processCreateContainerOptions (options, run, detach) {
     }
 
     options.environmentVariables.forEach(item => {
-      if (!item.name || !item.value) {
+      if (!item.name || item.value === undefined) {
         throw new Error(`options.environmentVariables must contain array of object with name and value as properties\n${errorExample}`)
       }
 
