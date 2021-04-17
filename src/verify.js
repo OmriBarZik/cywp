@@ -21,7 +21,7 @@ function verifyDocker () {
 function verifyDockerRunning () {
   const stats = spawn('docker', ['stats', '--no-stream'])
 
-  return ReturnPromise(stats, () => { })
+  return ReturnPromise(stats, () => {})
     .then(() => true)
     .catch(() => Promise.reject(new Error('Docker is\'t running! please start docker and try again.')))
 }
