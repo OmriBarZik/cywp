@@ -12,6 +12,10 @@
   "bugs": {
     "url": "https://github.com/OmriBarZik/cywp/issues"
   },
+  "files": [
+    "src/**",
+    "bin/**"
+  ],
   "directories": {
     "lib": "./src ",
     "test": "./test",
