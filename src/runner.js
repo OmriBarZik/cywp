@@ -86,7 +86,7 @@ async function runner (on, config) {
   console.log('finished: creating wordpress container')
 
   on('after:run', async () => {
-    await wordpress.rm(true)
+    await wordpress.rm(true, true, true)
     await mysql.rm(true)
     await network.rm()
   })
