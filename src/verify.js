@@ -32,7 +32,7 @@ function verifyDockerRunning () {
  *
  * @returns {Promise<boolean>} If the system can run cywp.
  */
-async function verify () {
+function verify () {
   return safeVerify()
     .catch(err => {
       console.error(err.message)
@@ -45,7 +45,7 @@ async function verify () {
  *
  * @returns {Promise<boolean,Error>} If the system can run cywp.
  */
-async function safeVerify () {
+function safeVerify () {
   return verifyDocker()
     .then(verifyDockerRunning)
 }
