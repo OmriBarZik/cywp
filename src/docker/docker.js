@@ -31,6 +31,8 @@ class Docker {
 
       if (options.rm) { options.status = 'removed' }
 
+      if (!options.volumes) { options.volumes = [] }
+
       return Promise.all(options.volumes.map(({ ...volume }) => this.AttachVolume(volume.host)))
         .then(volumes => volumes.filter(volume => volume))
         .then(volumes => new Container(options, volumes))
