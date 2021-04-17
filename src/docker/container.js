@@ -7,9 +7,11 @@ class Container {
    * Create and run a new docker container.
    *
    * @param {ContainerOptions} options the docker container options
+   * @param {import('./volume')[]} volumes array of docker volumes.
    */
-  constructor (options) {
+  constructor (options, volumes) {
     this.options = options
+    this.volumes = volumes
   }
 
   /**
@@ -43,19 +45,25 @@ class Container {
    * Remove the continer
    *
    * @param {boolean} force Force the removal of a running container.
-   * @param {boolean} volumes Remove anonymous volumes associated with the container.
+   * @param {boolean} anonymousVolumes Remove anonymous volumes associated with the container.
+   * @param {boolean} externalVolumes Remove external volumes associated with the container.
    * @returns {Promise<Container>} Return the current container.
    */
-  rm (force = false, volumes = true) {
+  rm (force = false, anonymousVolumes = true, externalVolumes) {
     const rmArgs = ['rm']
 
     if (force) { rmArgs.push('--force') }
-    if (volumes) { rmArgs.push('--volumes') }
+    if (anonymousVolumes) { rmArgs.push('--volumes') }
 
     rmArgs.push(this.options.id)
 
-    return this.dockerContainer(rmArgs, () => {
+    return this.dockerContainer(rmArgs, async () => {
       this.options.status = 'removed'
+
+      if (externalVolumes) {
+        await Promise.all(this.volumes.slice().map(volume => volume.rm()))
+      }
+
       return this
     })
   }

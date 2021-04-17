@@ -31,7 +31,11 @@ class Docker {
 
       if (options.rm) { options.status = 'removed' }
 
-      return new Container(options)
+      if (!options.volumes) { options.volumes = [] }
+
+      return Promise.all(options.volumes.map(({ ...volume }) => this.AttachVolume(volume.host)))
+        .then(volumes => volumes.filter(volume => volume))
+        .then(volumes => new Container(options, volumes))
     })
   }
 
@@ -217,7 +221,12 @@ class Docker {
           attachContainer.options.health.retries = healthCheck.Retries ? healthCheck.Retries : undefined
         }
 
-        return attachContainer
+        return Promise.all(attachContainer.options.volumes.map(({ ...volume }) => this.AttachVolume(volume.host)))
+          .then(volumes => volumes.filter(volume => volume))
+          .then(volumes => {
+            attachContainer.volumes = volumes
+            return attachContainer
+          })
       })
     }).catch(() => null)
   }
