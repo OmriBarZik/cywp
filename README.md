@@ -20,11 +20,7 @@ this will read the configuration and return the modefied cypress config.
 ## Configuration
 you can customize your site by using the following configuration in your `cypress.json` file.
 #### example
-```jsoncmodule.exports = (on, config) => {
-  return require('cypress-for-wordpress')(on, config)
-  // `on` is used to hook into various events Cypress emits
-  // `config` is the resolved Cypress config
-}
+```jsonc
 {
   "wordpressVersion": "latest", // WordPress version of the site.
   "wordpressPort": "8000", // On waht port the site will be expose.
