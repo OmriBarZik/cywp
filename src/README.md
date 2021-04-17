@@ -1,15 +1,15 @@
 # cypress-for-wordpress
-Help you create testing environments to your wordpress plugins and themes.
-## prerequirement
+Help you create testing environments for your WordPress plugins and themes.
+## requirement
 1. you must have cypress 6.7 or above
 2. you must have docker up and running on your system.
 ## installation
 ```bash
-npm install --dave-save cypress-for-wordpress
+npm install --dave-save cypress-for-WordPress
 ```
 
 ## Configuration
-you can constomize your site by using the folling configeration in youe `cypress.json` file.
+you can customize your site by using the following configuration in your `cypress.json` file.
 #### example
 ```jsonc
 {
@@ -28,7 +28,7 @@ you can constomize your site by using the folling configeration in youe `cypress
 ```
 ### wordpressVersion
 #### default `latest`
-This set the wordpress version your site will run on. 
+This set the WordPress version your site will run on. 
 ### wordpressPort
 #### default `8000`
 Sets what port your site will be expose.
@@ -43,13 +43,13 @@ What version of the theme run on.
 Path to localy installed theme.
 this option enebale you to test your own theme on a vertual site.
 
-If this config is set the pluign will create a bind betwin the given path and the docker container and ignore the `wordpressThemePath` config. 
+If this config is set the plugin will create a bind between the given path and the docker container and ignore the `wordpressThemePath` config. 
 this path must contain a theme with the same name as you set at `wordpressTheme`
 ### wordpressPlugins
 #### default `none`
-Object the that containes two types of plugins.
+Object the that contains two types of plugins.
 #### Local Plugins
-You set local plugin by passing its path. Its very importent that the plugin's name wiil be the same as the parameter
+You set the local plugins by passing its path. The plugin's name must be the same as the parameter
 
 you can use relative and absolute paths. 
 ```jsonc
@@ -61,9 +61,9 @@ you can use relative and absolute paths.
 ```
 
 #### Remote Plugins
-Remote plugins are plugins that will be download from wordpress official site, install and activate on the site.
+Remote plugins are plugins that will be download from the WordPress official site, install and activate on the site.
 
-You set remote plugins by passeing the wanted version
+You set remote plugins by passing the wanted version
 ```jsonc
 {
   "wordpressPlugins": {
