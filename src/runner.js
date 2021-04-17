@@ -34,7 +34,7 @@ async function runner (on, config) {
 
   console.log('Started: Verifying docker')
   const verifyOutput = await verify()
-  if (!verifyOutput.verify) {
+  if (!verifyOutput.verified) {
     throw new Error(verifyOutput.message)
   }
   console.log('Finished: Verifying docker')

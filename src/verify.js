@@ -40,13 +40,13 @@ function unsafeVerify () {
 /**
  * Verify if the system have the right dependencies to run cywp. if not returns the error message
  *
- * @returns {Promise<{ message: string, verify: boolean }>} If the system can run cywp. if not returns error message.
+ * @returns {Promise<{ message: string, verified: boolean }>} If the system can run cywp. if not returns error message.
  */
 function verify () {
   return verifyDocker()
     .then(verifyDockerRunning)
-    .then(() => { return { message: '', verify: true } })
-    .catch(message => { return { message: message, verify: false } })
+    .then(() => { return { message: '', verified: true } })
+    .catch(error => { return { message: error.message, verified: false } })
 }
 
 module.exports = {
