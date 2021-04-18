@@ -1,9 +1,9 @@
 # cypress-for-wordpress [![Test](https://github.com/OmriBarZik/cywp/actions/workflows/tests.yml/badge.svg)](https://github.com/OmriBarZik/cywp/actions/workflows/tests.yml)
 Help you create testing environments for your WordPress plugins and themes.
-## requirement
-1. you must have cypress 6.7 or above
-2. you must have docker up and running on your system.
-## installation
+## Requirement
+1. cypress 6.7 or above
+2. docker up and running on your system.
+## Installation
 ```bash
 npm install --dave-save cypress-for-WordPress
 ```
@@ -15,18 +15,18 @@ module.exports = (on, config) => {
 }
 ```
 
-this will analize the plugin configuration and will set the `baseUrl`. for more info [see](https://docs.cypress.io/guides/references/configuration#Global).
+This will analize the plugin configuration and will set the `baseUrl`. For more info [see](https://docs.cypress.io/guides/references/configuration#Global).
 
 ## Configuration
-you can config your site by using the following configuration in your `cypress.json` file.
-#### example
+You can config your site by using the following configuration in your `cypress.json` file.
+#### Example
 ```jsonc
 {
   "wordpressVersion": "latest", // WordPress version of the site.
   "wordpressPort": "8000", // On waht port the site will be expose.
   "wordpressTheme": "twentytwenty", // The theme of the site.
   "wordpressThemeVersion": "latest", // Version of the theme.
-  "wordpressThemePath": "/path/to/theme", // uses localy installed theme.
+  "wordpressThemePath": "/path/to/theme", // Uses localy installed theme.
   "wordpressPlugins": { // List of plugins you want to be installed on the site.
      "LocalPlugin": "./", // Relative path to localy installed plugin.
      "OtherLocalPlugin": "/path/to/plugin/LocalPlugin", // Absulute Path to localy installed plugin.
@@ -36,36 +36,36 @@ you can config your site by using the following configuration in your `cypress.j
 }
 ```
 ### wordpressVersion
-#### default `latest`
+#### Default `latest`
 Sets the WordPress version on the site. 
 ### wordpressPort
-#### default `8000`
+#### Default `8000`
 Sets on which port the site will be expose.
 ### wordpressTheme
-#### default `twentytwenty`
+#### Default `twentytwenty`
 Sets the theme of the site.
 ### wordpressThemePath
-#### default `latest`
+#### Default `latest`
 Sets the theme's version.
 ### wordpressThemePath
-#### default `none`
+#### Default `none`
 Path to localy installed theme.
-this option enebale you to test your own theme on a vertual site.
+This option enebale you to test your own theme on a vertual site.
 
-If this config is set the plugin will create a bind between the given path and the docker container. the `wordpressThemePath` config weill be ignored.
-This path must contain a theme with the same name as mentioned at `wordpressTheme`
+If this config is set the plugin will create a bind between the given path and the docker container. The `wordpressThemePath` config weill be ignored.
+This path must contain a theme with the same name as mentioned at `wordpressTheme`.
 ### wordpressPlugins
-#### default `none`
+#### Default `none`
 Object the that contains two types of plugins.
 #### Local Plugins
-You set the local plugins by passing its path. The plugin's name must be the same as the parameter
+You set the local plugins by passing its path. The plugin's name must be the same as the parameter.
 
-you can use relative and absolute paths.
+You can use relative and absolute paths.
 ```jsonc
 {
   "wordpressPlugins": {
     "LocalPath": "./", // To expose current project to the docker contianer.
-    "otherLocalPath": "/path/to/plugin/" // this path contians otherLocalPath.php
+    "otherLocalPath": "/path/to/plugin/" // This path contians otherLocalPath.php
 }
 ```
 
