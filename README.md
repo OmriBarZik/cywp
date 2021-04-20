@@ -4,12 +4,12 @@ Cypress-for-wordpres helps you create testing environments for your WordPress pl
 
 Cypress is an end-to-end tool. WordPress is the most popular system for building sites. *cypress-for-WordPress* (CYWP) is a wrapper that helps build an entire local WordPress environment with docker and run an end-to-end flow. It is helpful for continuous integration processes and builds.
 
-## requirement
+## Requirement
 
 1. You must have cypress 6.7 or above
 2. You must have docker up and running on your system.
 
-## installation
+## Installation
 
 ```bash
 npm install --dave-save cypress-for-WordPress
@@ -28,7 +28,7 @@ cypress-for-wordpress will analyze the plugin configuration and will set the `ba
 
 You can configure your site by using the following configuration in your `cypress.json` file.
 
-#### example
+#### Example
 ```jsonc
 {
   "wordpressVersion": "latest", // WordPress version of the site.
