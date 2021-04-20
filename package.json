@@ -28,12 +28,13 @@
   },
   "scripts": {
     "start": "node index",
-    "test": "snyk test && jest",
+    "test": "jest",
+    "snyk": "snyk test --dev",
     "coverage": "jest --coverage",
     "coverage:ci": "npm run coverage && codecov",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "pre-push": "run-p coverage lint",
+    "pre-push": "run-p coverage lint snyk",
     "prepare": "husky install"
   },
   "peerDependencies": {
