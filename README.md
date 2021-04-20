@@ -1,9 +1,16 @@
 # cypress-for-wordpress [![Test](https://github.com/OmriBarZik/cywp/actions/workflows/tests.yml/badge.svg)](https://github.com/OmriBarZik/cywp/actions/workflows/tests.yml)
-Help you create testing environments for your WordPress plugins and themes.
-## Requirement
-1. cypress 6.7 or above
-2. docker up and running on your system.
-## Installation
+
+Cypress-for-wordpres helps you create testing environments for your WordPress plugins and themes.
+
+Cypress is an end-to-end tool. WordPress is the most popular system for building sites. *cypress-for-WordPress* (CYWP) is a wrapper that helps build an entire local WordPress environment with docker and run an end-to-end flow. It is helpful for continuous integration processes and builds.
+
+## requirement
+
+1. you must have cypress 6.7 or above
+2. you must have docker up and running on your system.
+
+## installation
+
 ```bash
 npm install --dave-save cypress-for-WordPress
 ```
@@ -15,11 +22,13 @@ module.exports = (on, config) => {
 }
 ```
 
-This will analize the plugin configuration and will set the `baseUrl`. For more info [see](https://docs.cypress.io/guides/references/configuration#Global).
+cypress-for-wordpress will analyze the plugin configuration and will set the `baseUrl`. for more info [see Cypress configuration documentation](https://docs.cypress.io/guides/references/configuration#Global).
 
 ## Configuration
-You can config your site by using the following configuration in your `cypress.json` file.
-#### Example
+
+you can configure your site by using the following configuration in your `cypress.json` file.
+
+#### example
 ```jsonc
 {
   "wordpressVersion": "latest", // WordPress version of the site.
@@ -52,13 +61,13 @@ Sets the theme's version.
 Path to localy installed theme.
 This option enebale you to test your own theme on a vertual site.
 
-If this config is set the plugin will create a bind between the given path and the docker container. The `wordpressThemePath` config weill be ignored.
+If this config is set, the plugin will create a bind between the given path and the docker container. The `wordpressThemePath` config will be ignored.
 This path must contain a theme with the same name as mentioned at `wordpressTheme`.
 ### wordpressPlugins
 #### Default `none`
 Object the that contains two types of plugins.
 #### Local Plugins
-You set the local plugins by passing its path. The plugin's name must be the same as the parameter.
+You set the local plugins bypassing its path. The plugin's name must be the same as the parameter.
 
 You can use relative and absolute paths.
 ```jsonc
@@ -70,9 +79,9 @@ You can use relative and absolute paths.
 ```
 
 #### Remote Plugins
-Remote plugins are plugins that will be download from the WordPress official site, install and activate on the site.
+Remote plugins are plugins that will be downloaded from the WordPress official site, installed, and activated on the site.
 
-You add remote plugins by passing the wanted version.
+You add remote plugins bypassing the wanted version.
 ```jsonc
 {
   "wordpressPlugins": {
