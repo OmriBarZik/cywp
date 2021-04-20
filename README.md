@@ -6,8 +6,8 @@ Cypress is an end-to-end tool. WordPress is the most popular system for building
 
 ## requirement
 
-1. you must have cypress 6.7 or above
-2. you must have docker up and running on your system.
+1. You must have cypress 6.7 or above
+2. You must have docker up and running on your system.
 
 ## installation
 
@@ -26,7 +26,7 @@ cypress-for-wordpress will analyze the plugin configuration and will set the `ba
 
 ## Configuration
 
-you can configure your site by using the following configuration in your `cypress.json` file.
+You can configure your site by using the following configuration in your `cypress.json` file.
 
 #### example
 ```jsonc
