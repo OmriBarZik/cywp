@@ -43,9 +43,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Run tests
-        run: |
-          npm run coverage
-          npm run snyk
+        run: npm run coverage
 
       - name: Uplode coverage
         if: ${{ matrix.node-version == '12.x' }}
