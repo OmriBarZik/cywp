@@ -4,7 +4,12 @@
   "description": "cypress environment builder for wordpress",
   "author": "Omri BarZik <omri@bar-zik.com>",
   "main": "index.js",
-  "license": "MIT",
+  "licenses": [
+    {
+      "type": "GPLv2",
+      "url": "https://www.gnu.org/licenses/old-licenses/gpl-2.0.txt"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/OmriBarZik/cywp.git"
