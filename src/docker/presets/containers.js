@@ -106,7 +106,7 @@ function CheckParameters (name, port) {
   if ('string' !== typeof name) {
     throw new TypeError('name must be a valid string!')
   }
-  if (!Number.isInteger(port)) {
+  if (!Number.isInteger(+port)) {
     throw new TypeError('port to expose must be an integer!')
   }
 }
