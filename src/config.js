@@ -8,7 +8,7 @@ const { resolve, join } = require('path')
  * @returns {boolean} If a valid version.
  */
 function validateVersion (version) {
-  return /^\d+(\.\d+){0,2}$/.test(version)
+  return /^\d+(\.\d+){0,2}$/.test(version) || 'latest' === version
 }
 
 /**
@@ -46,7 +46,40 @@ function setWordpressPort (wordpressPort) {
     throw new Error('invalid wordpress port! please check \'wordpressPort\' and try again')
   }
 
-  return wordpressPort
+  return +wordpressPort
+}
+
+/**
+ * checks and validate wordpress theme.
+ *
+ * @param {string} wordpressTheme raw user wordpress theme.
+ * @returns {string} validate wordpress theme.
+ */
+function setWordpressTheme (wordpressTheme) {
+  if (!wordpressTheme) {
+    console.warn('wordpress theme was not provided using default theme twentytwenty')
+    return 'twentytwenty'
+  }
+
+  return wordpressTheme
+}
+
+/**
+ * checks and validate wordpress theme version.
+ *
+ * @param {string} themeVersion raw user wordpress theme version.
+ * @returns {string} validate wordpress theme version.
+ */
+function SetWordpressThemeVersion (themeVersion) {
+  if (!themeVersion) {
+    return 'latest'
+  }
+
+  if (!validateVersion(themeVersion)) {
+    throw new Error('invalid theme version! please check \'wordpressThemeVersion\' and try again.')
+  }
+
+  return themeVersion
 }
 
 /**
@@ -61,17 +94,12 @@ function checkConfig (config) {
   const cywpConfig = {
     cywpWordpressVersion: setWordpressVersion(configJson.wordpressVersion),
     cywpWordpressPort: setWordpressPort(configJson.wordpressPort),
+    cywpTheme: setWordpressTheme(configJson.wordpressTheme),
+    cywpThemeVersion: SetWordpressThemeVersion(configJson.wordpressThemeVersion),
     cywpWordpressName: 'cywp-tmp-wordpress',
     cywpLocalPlugins: [],
     cywpRemotePlugins: [],
-    cywpTheme: configJson.wordpressTheme,
-    cywpThemeVersion: configJson.wordpressThemeVersion,
     cywpThemePath: [],
-  }
-
-  if (!configJson.wordpressTheme) {
-    console.warn('wordpress theme was not provided using default theme twentytwenty')
-    cywpConfig.cywpTheme = 'twentytwenty'
   }
 
   if (configJson.wordpressPlugins) {
