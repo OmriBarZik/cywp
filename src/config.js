@@ -83,6 +83,76 @@ function SetWordpressThemeVersion (themeVersion) {
 }
 
 /**
+ * checks and validate wordpress theme path.
+ *
+ * @param {string} wordpressThemePath - raw user wordpress theme path.
+ * @param {string} wordpressTheme - name of the wordpress theme.
+ * @returns {{host: string, docker: string}[]} docker volume object.
+ */
+function setWordpressThemePath (wordpressThemePath, wordpressTheme) {
+  if (!wordpressThemePath) {
+    return []
+  }
+
+  if (!existsSync(wordpressThemePath)) {
+    throw new Error('invalid theme path! please check \'wordpressThemePath\' and try again.')
+  }
+
+  return [{ host: resolve(wordpressThemePath), docker: `/var/www/html/wp-content/themes/${wordpressTheme}:ro` }]
+}
+
+/**
+ * @typedef RemotePlugin
+ * @type {object}
+ * @property {string} name - name of the plugin.
+ * @property {string} version - version of the plugin.
+ */
+/**
+ * @typedef LocalPlugin - local plugin arguments.
+ * @type {object}
+ * @property {string} host - path on local machine.
+ * @property {string} docker - path on docker container.
+ * @property {string} name - name of the plugin.
+ */
+/**
+ * checks and validate wordpress plugins.
+ *
+ * @param {object} wordpressPlugins raw user wordpress plugins.
+ * @returns {{local: LocalPlugin[], remote: RemotePlugin[]}} tuple.
+ */
+function setWordpressPlugins (wordpressPlugins) {
+  const plugins = { local: [], remote: [] }
+
+  if (!wordpressPlugins) {
+    return plugins
+  }
+
+  for (const plugin in wordpressPlugins) {
+    const pluginData = wordpressPlugins[plugin]
+
+    if (!existsSync(pluginData)) {
+      plugins.remote.push({ name: plugin, version: pluginData })
+      continue
+    }
+
+    const pluginDir = resolve(pluginData)
+    const pluginFile = join(pluginDir, `${plugin}.php`)
+
+    if (!existsSync(pluginFile)) {
+      throw new Error(`${plugin}.php is not found in ${pluginDir}. pleas provide a valid plugin path and try again.`)
+    }
+
+    if (!readFileSync(pluginFile).toString().match(new RegExp(`Plugin Name:.*${plugin}`))) {
+      throw new Error(pluginFile + 'must be a valid plugin, please note that the plugin name matches the cypress.json config.')
+    }
+
+    plugins.local.push({ host: pluginDir, docker: `/var/www/html/wp-content/plugins/${plugin}:ro`, name: plugin })
+  }
+
+  return plugins
+}
+
+/**
  * checks and setup all cywp settings.
  *
  * @param {Cypress.ConfigOptions} config the original cypress config.
@@ -96,42 +166,10 @@ function checkConfig (config) {
     cywpWordpressPort: setWordpressPort(configJson.wordpressPort),
     cywpTheme: setWordpressTheme(configJson.wordpressTheme),
     cywpThemeVersion: SetWordpressThemeVersion(configJson.wordpressThemeVersion),
-    cywpWordpressName: 'cywp-tmp-wordpress',
-    cywpLocalPlugins: [],
-    cywpRemotePlugins: [],
-    cywpThemePath: [],
+    cywpPlugins: setWordpressPlugins(configJson.wordpressPlugins),
   }
 
-  if (configJson.wordpressPlugins) {
-    for (const plugin in configJson.wordpressPlugins) {
-      const pathOrVersion = configJson.wordpressPlugins[plugin]
-
-      if (existsSync(pathOrVersion)) {
-        const pluginDir = resolve(pathOrVersion)
-        const pluginPath = join(pluginDir, `${plugin}.php`)
-        if (!existsSync(pluginPath)) {
-          throw new Error(`${plugin}.php not found in ${pluginDir}. pleas provide a valid plugin path and try again.`)
-        }
-
-        if (!readFileSync(pluginPath).toString().match(new RegExp(`Plugin Name:.*${plugin}`))) {
-          throw new Error(pluginPath + 'must be a valid plugin, please note that the plugin name matches the cypress.json config.')
-        }
-
-        cywpConfig.cywpLocalPlugins.push({ host: pluginDir, docker: `/var/www/html/wp-content/plugins/${plugin}:ro`, name: plugin })
-      } else {
-        cywpConfig.cywpRemotePlugins.push({ name: plugin, version: pathOrVersion })
-      }
-    }
-  }
-
-  if (configJson.wordpressThemePath) {
-    if (existsSync(configJson.wordpressThemePath)) {
-      cywpConfig.cywpThemePath.push({ host: resolve(configJson.wordpressThemePath), docker: `/var/www/html/wp-content/themes/${cywpConfig.cywpTheme}:ro` })
-    } else {
-      console.error('theme path no good, using default theme - twentytwenty!')
-      cywpConfig.cywpTheme = 'twentytwenty'
-    }
-  }
+  cywpConfig.cywpThemePath = setWordpressThemePath(configJson.wordpressThemePath, cywpConfig.cywpTheme)
 
   cywpConfig.cywpWordpressName = `cywp-${cywpConfig.cywpTheme}-wordpress`
 
