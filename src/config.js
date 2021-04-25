@@ -41,7 +41,7 @@ function checkConfig (config) {
       const pathOrVersion = configJson.wordpressPlugins[plugin]
 
       if (existsSync(pathOrVersion)) {
-        if (!join(pathOrVersion, `${plugin}.php`)) {
+        if (!existsSync(join(pathOrVersion, `${plugin}.php`))) {
           throw new Error(`${plugin}.php not found in ${pathOrVersion}. pleas provide a valid plugin path and try again.`)
         }
 
