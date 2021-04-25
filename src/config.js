@@ -1,5 +1,5 @@
 const { existsSync } = require('fs')
-const { resolve } = require('path')
+const { resolve, join } = require('path')
 
 /**
  * checks and setup all cywp settings.
@@ -41,6 +41,10 @@ function checkConfig (config) {
       const pathOrVersion = configJson.wordpressPlugins[plugin]
 
       if (existsSync(pathOrVersion)) {
+        if (!join(pathOrVersion, `${plugin}.php`)) {
+          throw new Error(`${plugin}.php not found in ${pathOrVersion}. pleas provide a valid plugin path and try again.`)
+        }
+
         cywpConfig.cywpLocalPlugins.push({ host: resolve(pathOrVersion), docker: `/var/www/html/wp-content/plugins/${plugin}:ro`, name: plugin })
       } else {
         cywpConfig.cywpRemotePlugins.push({ name: plugin, version: pathOrVersion })
