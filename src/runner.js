@@ -61,7 +61,7 @@ async function runner (on, config) {
   console.log('finished: creating mysql container')
 
   console.log('started: creating wordpress container')
-  const volumes = [].concat(config.env.cywpLocalPlugins, config.env.cywpThemePath)
+  const volumes = [].concat(config.env.cywpPlugins.local, config.env.cywpThemePath)
   const wordpress = await SetupSite(config.env.cywpTheme, config.env.cywpWordpressPort, mysql, config.env.cywpWordpressVersion, volumes)
 
   const plugin = new Plugin(wordpress)
@@ -75,13 +75,13 @@ async function runner (on, config) {
   }
   console.log('finished: installing theme')
 
-  if (config.env.cywpRemotePlugins.length) {
-    await installPlugins(plugin, config.env.cywpRemotePlugins)
+  if (config.env.cywpPlugins.remote.length) {
+    await installPlugins(plugin, config.env.cywpPlugins.remote)
   }
 
-  if (config.env.cywpLocalPlugins.length) {
-    const pluginList = config.env.cywpLocalPlugins.map(({ ...plugin }) => plugin.name)
-    plugin.activate(pluginList)
+  if (config.env.cywpPlugins.local.length) {
+    const pluginList = config.env.cywpPlugins.local.map(({ ...plugin }) => plugin.name)
+    await plugin.activate(pluginList)
   }
   console.log('finished: creating wordpress container')
 
