@@ -1,6 +1,6 @@
 const checkConfig = require('./config')
 const { SetupDatabase, SetupSite, setupNetwork } = require('./workflow/environment')
-const { verify } = require('./verify')
+const { unsafeVerify } = require('./verify')
 const Plugin = require('./wp-cli/plugin')
 const Theme = require('./wp-cli/theme')
 const { Docker } = require('./docker/docker')
@@ -18,12 +18,14 @@ async function logger (message, callback, ...args) {
   try {
     console.log(`started:\t${message}`)
 
-    data = await callback(...args)// eslint-disable-line standard/no-callback-literal
+    data = await callback(...args) // eslint-disable-line standard/no-callback-literal
 
     console.log(`finished:\t${message}`)
-  } catch (error) {
-    console.error(`failed:\t${message}\nError:${error}`)
-    throw new Error(error)
+  } catch (e) {
+    const error = e instanceof Error ? e : new Error(e)
+
+    console.error(`failed:\t\t${message}\n${error}`)
+    throw error
   }
 
   return data
@@ -34,19 +36,10 @@ async function logger (message, callback, ...args) {
  * @param {{name: string, version: string}[]} pluginList - list of plugins to install.
  */
 async function installPlugins (plugin, pluginList) {
+  console.log(plugin)
+  console.log(pluginList)
   for (const item of pluginList) {
     await logger(`Installing ${item.name}`, plugin.install, item.name, true, 'latest' === item.version ? '' : item.version)
-  }
-}
-
-/**
- * verifying that docker is installed and running.
- */
-async function verifyDocker () {
-  const verifyOutput = await verify()
-
-  if (!verifyOutput.verified) {
-    throw new Error(verifyOutput.message)
   }
 }
 
@@ -57,7 +50,7 @@ async function verifyDocker () {
  */
 async function pullDockerImages (cywpWordpressVersion) {
   const docker = new Docker()
-  const finishedPullCallback = (image) => { console.log('pulled:\t' + image) }
+  const finishedPullCallback = (image) => { console.log('pulled:\t\t' + image) }
 
   await Promise.all([
     docker.pullImage(`wordpress:${cywpWordpressVersion}`).then(finishedPullCallback),
@@ -67,6 +60,8 @@ async function pullDockerImages (cywpWordpressVersion) {
 }
 
 /**
+ * setup the wordpress container.
+ *
  * @param {import('./docker/container')} mysql mysql container
  * @param {object} config - cywp config.
  * @returns {import('./docker/container')} fully setup wordpress container.
@@ -91,10 +86,9 @@ async function CreateWordpress (mysql, config) {
   }
 
   if (config.cywpPlugins.local.length) {
-    await logger('Installing Local Plugins', () => {
-      const pluginList = config.cywpPlugins.local.map(({ ...plugin }) => plugin.name)
-      return plugin.activate(pluginList)
-    })
+    const pluginList = config.cywpPlugins.local.map(({ ...item }) => item.name)
+
+    await logger('Installing Local Plugins', plugin.activate, pluginList)
   }
 
   return wordpress
@@ -106,7 +100,7 @@ async function CreateWordpress (mysql, config) {
 async function runner (on, config) {
   config = checkConfig(config)
 
-  await logger('Verifying Docker', verifyDocker)
+  await logger('Verifying Docker', unsafeVerify)
 
   await logger('Pulling Docker Images', pullDockerImages, config.env.cywpWordpressVersion)
 

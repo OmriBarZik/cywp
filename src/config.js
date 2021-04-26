@@ -131,6 +131,10 @@ function setWordpressPlugins (wordpressPlugins) {
     const pluginData = wordpressPlugins[plugin]
 
     if (!existsSync(pluginData)) {
+      if (!validateVersion(pluginData)) {
+        throw new Error(`invalid plugin version! please check "wordpressPlugins": {"${plugin}": "${pluginData}"} and try again.`)
+      }
+
       plugins.remote.push({ name: plugin, version: pluginData })
       continue
     }
@@ -143,7 +147,7 @@ function setWordpressPlugins (wordpressPlugins) {
     }
 
     if (!readFileSync(pluginFile).toString().match(new RegExp(`Plugin Name:.*${plugin}`))) {
-      throw new Error(pluginFile + 'must be a valid plugin, please note that the plugin name matches the cypress.json config.')
+      throw new Error(`${pluginFile} must be a valid plugin, please note that the plugin name matches the cypress.json config.`)
     }
 
     plugins.local.push({ host: pluginDir, docker: `/var/www/html/wp-content/plugins/${plugin}:ro`, name: plugin })
