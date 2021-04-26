@@ -19,7 +19,7 @@ function validateVersion (version) {
  */
 function setWordpressVersion (wordpressVersion) {
   if (!wordpressVersion) {
-    console.info('wordpress version not found, using latest')
+    console.log('wordpress version not found, using latest')
     return 'latest'
   }
 
@@ -38,7 +38,7 @@ function setWordpressVersion (wordpressVersion) {
  */
 function setWordpressPort (wordpressPort) {
   if (!wordpressPort) {
-    console.warn('wordpress port was not provided using default port 8000')
+    console.log('wordpress port was not provided using default port 8000')
     return 8000
   }
 
@@ -57,7 +57,7 @@ function setWordpressPort (wordpressPort) {
  */
 function setWordpressTheme (wordpressTheme) {
   if (!wordpressTheme) {
-    console.warn('wordpress theme was not provided using default theme twentytwenty')
+    console.log('wordpress theme was not provided using default theme twentytwenty')
     return 'twentytwenty'
   }
 
