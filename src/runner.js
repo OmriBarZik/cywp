@@ -6,6 +6,19 @@ const Theme = require('./wp-cli/theme')
 const { Docker } = require('./docker/docker')
 
 /**
+ * Display a message at the start and the end of each run.
+ *
+ * @param {string} message - whats massage to send at the start and the end of each method call.
+ * @param {Function} callback - function to run.
+ * @param {...any} args - callback args.
+ */
+function logger (message, callback, ...args) {
+  console.log(`started:\t${message}`)
+  callback(args)
+  console.log(`finished:\t${message}`)
+}
+
+/**
  * @param {import('./wp-cli/plugin')} plugin - the site to install the plugin.
  * @param {{name: string, version: string}[]} pluginList - list of plugins to install.
  */
@@ -83,6 +96,7 @@ async function runner (on, config) {
     const pluginList = config.env.cywpPlugins.local.map(({ ...plugin }) => plugin.name)
     await plugin.activate(pluginList)
   }
+
   console.log('finished: creating wordpress container')
 
   on('after:run', async () => {
