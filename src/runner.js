@@ -78,7 +78,7 @@ async function CreateWordpress (mysql, config) {
       return theme.activate(config.cywpTheme)
     }
 
-    return theme.install(config.cywpTheme, true, config.cywpThemeVersion)
+    return theme.install(config.cywpTheme, true, 'latest' === config.cywpThemeVersion ? '' : config.cywpThemeVersion)
   })
 
   if (config.cywpPlugins.remote.length) {
