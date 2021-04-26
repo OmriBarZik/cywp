@@ -71,8 +71,8 @@ function setWordpressTheme (wordpressTheme) {
  * @returns {string} validate wordpress theme version.
  */
 function SetWordpressThemeVersion (themeVersion) {
-  if (!themeVersion) {
-    return 'latest'
+  if (!themeVersion || 'latest' === themeVersion) {
+    return ''
   }
 
   if (!validateVersion(themeVersion)) {
