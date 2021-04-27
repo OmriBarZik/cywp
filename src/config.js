@@ -146,7 +146,10 @@ function setWordpressPlugins (wordpressPlugins) {
       throw new Error(`${plugin}.php is not found in ${pluginDir}. pleas provide a valid plugin path and try again.`)
     }
 
-    if (!readFileSync(pluginFile).toString().match(new RegExp(`Plugin Name:.*${plugin}`))) {
+    // eslint-disable-next-line spellcheck/spell-checker
+    const re = new RegExp(`Plugin Name:.*(${plugin}|${plugin.replace(/-/, ' ')}|${plugin.replace(/ /, '-')})`, 'ig')
+
+    if (!readFileSync(pluginFile).toString().match(re)) {
       throw new Error(`${pluginFile} must be a valid plugin, please note that the plugin name matches the cypress.json config.`)
     }
 
