@@ -103,27 +103,13 @@ function preperTasks (wordpress, mysql) {
   const wp = new WPCLI(wordpress)
 
   const tasks = {
-    wordpress (commands) {
-      return wordpress.exec(commands)
-    },
-    mysql (commands) {
-      return mysql.exec(commands)
-    },
-    wp (commands) {
-      return wp.wp(commands)
-    },
-    'wp:plugin': (commands) => {
-      return wp.plugin.wpPlugin(commands)
-    },
-    'wp:theme': (commands) => {
-      return wp.theme.wpTheme(commands)
-    },
-    'wp:user': (commands) => {
-      return wp.user.wpUser(commands)
-    },
-    'wp:user:meta': (commands) => {
-      return wp.user.Meta.wpUserMeta(commands)
-    },
+    wordpress: (commands) => wordpress.exec(commands),
+    mysql: (commands) => mysql.exec(commands),
+    wp: (commands) => wp.wp(commands),
+    'wp:plugin': (commands) => wp.plugin.wpPlugin(commands),
+    'wp:theme': (commands) => wp.theme.wpTheme(commands),
+    'wp:user': (commands) => wp.user.wpUser(commands),
+    'wp:user:meta': (commands) => wp.user.Meta.wpUserMeta(commands),
   }
 
   const filter = (param) => 'constructor' !== param
@@ -151,6 +137,12 @@ function preperTasks (wordpress, mysql) {
   tasks['wp:user:delete'] = ({ user, reassign }) => wp.user.delete(user, reassign)
   tasks['wp:user:removeCap'] = ({ user, cap }) => wp.user.removeCap(user, cap)
   tasks['wp:user:removeRole'] = ({ user, role }) => wp.user.removeRole(user, role)
+
+  tasks['wp:user:meta:add'] = ({ user, key, value }) => wp.user.Meta.add(user, key, value)
+  tasks['wp:user:meta:delete'] = ({ user, key }) => wp.user.Meta.delete(user, key)
+  tasks['wp:user:meta:get'] = ({ user, key }) => wp.user.Meta.get(user, key)
+  tasks['wp:user:meta:list'] = (user) => wp.user.Meta.add(user)
+  tasks['wp:user:meta:update'] = ({ user, key, value }) => wp.user.Meta.update(user, key, value)
 
   return tasks
 }
