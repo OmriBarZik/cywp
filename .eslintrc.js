@@ -58,6 +58,7 @@ module.exports = {
           'usr',
           'cmd',
           'wp',
+          'wpcli',
           'uri',
           'php',
           'nicename',
