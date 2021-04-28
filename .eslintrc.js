@@ -66,6 +66,7 @@ module.exports = {
           'guid',
           'fs',
           'ro',
+          'phpmyadmin',
         ],
       },
     ],
