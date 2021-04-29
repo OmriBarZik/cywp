@@ -1,6 +1,19 @@
 const { existsSync, readFileSync } = require('fs')
 const { resolve, join } = require('path')
 
+let globalQuite = false
+
+/**
+ * print message on the console.
+ *
+ * @param {string} message message to print.
+ */
+function log (message) {
+  if (!globalQuite) {
+    console.log(message)
+  }
+}
+
 /**
  * checks if version is a valid version. i.g (x.y.z)
  *
@@ -19,7 +32,7 @@ function validateVersion (version) {
  */
 function setWordpressVersion (wordpressVersion) {
   if (!wordpressVersion) {
-    console.log('wordpress version not found, using latest')
+    log('wordpress version not found, using latest')
     return 'latest'
   }
 
@@ -38,7 +51,7 @@ function setWordpressVersion (wordpressVersion) {
  */
 function setWordpressPort (wordpressPort) {
   if (!wordpressPort) {
-    console.log('wordpress port was not provided using default port 8000')
+    log('wordpress port was not provided using default port 8000')
     return 8000
   }
 
@@ -57,7 +70,7 @@ function setWordpressPort (wordpressPort) {
  */
 function setWordpressTheme (wordpressTheme) {
   if (!wordpressTheme) {
-    console.log('wordpress theme was not provided using default theme twentytwenty')
+    log('wordpress theme was not provided using default theme twentytwenty')
     return 'twentytwenty'
   }
 
@@ -163,10 +176,13 @@ function setWordpressPlugins (wordpressPlugins) {
  * checks and setup all cywp settings.
  *
  * @param {Cypress.ConfigOptions} config the original cypress config.
+ * @param {boolean} quiet if to print warning messages
  * @returns {Cypress.ConfigOptions} Update Config.
  */
-function checkConfig (config) {
+function checkConfig (config, quiet) {
   const configJson = require(config.configFile)
+
+  globalQuite = quiet
 
   const cywpConfig = {
     cywpWordpressVersion: setWordpressVersion(configJson.wordpressVersion),
