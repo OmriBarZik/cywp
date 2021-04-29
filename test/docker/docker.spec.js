@@ -392,7 +392,7 @@ describe('Docker', () => {
     })
 
     it('should create docker network with object', async () => {
-      const network = await docker.CreateNetwork({ name: 'cywp-create-network-with-object-test' })
+      const network = await docker.CreateNetwork('cywp-create-network-with-object-test')
       const networkCheck = spawnSync('docker', ['network', 'ls', '-q', '--filter', `id=${network.options.id}`])
 
       networkIds.push(network.options.id)
