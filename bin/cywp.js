@@ -150,8 +150,10 @@ function getConfig () {
     const userHelper = program.project ? 'please check the \'--project\' path!'
       : 'create cypress.json or use --path to direct to a valid cypress project'
 
-    return console.error(`${errorMassage}\n${userHelper}`)
+    console.error(`${errorMassage}\n${userHelper}`)
+
+    process.exit(1)
   }
 
-  return checkConfig({ configFile: cypressPath, env: {} })
+  return checkConfig({ configFile: cypressPath, env: {} }, true)
 }
