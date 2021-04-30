@@ -93,11 +93,21 @@ class Container {
   /**
    * Return the container logs
    *
+   * the comamnds stdout and stderr are available at logs().stdout and logs().stderr
+   *
    * @param {object} options - options object for logs.
    * @param {string} options.since - Show logs since timestamp (e.g. 2020-01-02T13:23:37) or relative (e.g. 42m for 42 minutes)
    * @param {string} options.tail - Number of lines to show from the end of the logs (default "all")
    * @param {boolean} options.timeStamps - show time stamps.
-   * @returns {Promise<{stdout: string, stderr: string, container: Container}}>} Return Promise for container logs.
+   * @returns {Promise<Container>} Return Promise for container.
+   *
+   * @example
+   * ```js
+   * logs().then(container => {
+   *  console.log(container.stdout)
+   *  console.error(container.stderr)
+   * })
+   * ```
    */
   logs (options = {}) {
     const logsArgs = ['logs']
@@ -109,11 +119,10 @@ class Container {
     logsArgs.push(this.options.id)
 
     return this.dockerContainer(logsArgs, (stdout, stderr) => {
-      return {
-        stdout: stdout,
-        stderr: stderr,
-        container: this,
-      }
+      this.stdout = stdout
+      this.stderr = stderr
+
+      return this
     })
   }
 
@@ -164,8 +173,17 @@ class Container {
   /**
    * Run commands in a running container.
    *
+   * the comamnds stdout and stderr are available at exec().stdout and exec().stderr
+   *
    * @param {Array} commands - Commands to run.
    * @returns {Promise<Container>} Return the current container.
+   * @example
+   * ```js
+   * exec().then(container => {
+   *  console.log(container.stdout)
+   *  console.error(container.stderr)
+   * })
+   * ```
    */
   exec (commands) {
     if (!Array.isArray(commands)) {
@@ -178,7 +196,10 @@ class Container {
 
     execArgs.push.apply(execArgs, commands)
 
-    return this.dockerContainer(execArgs, () => {
+    return this.dockerContainer(execArgs, (stdout, stderr) => {
+      this.stdout = stdout
+      this.stderr = stderr
+
       return this
     })
   }

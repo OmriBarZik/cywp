@@ -15,8 +15,11 @@ const docker = new Docker()
 
 program
   .option('-p, --project <project-path>', 'path to cypress project')
+  .enablePositionalOptions(true)
 
-program.command('exec')
+program
+  .command('exec')
+  .passThroughOptions(true)
   .arguments('<container> <command> [args...]')
   .description('execute command on a specified container', {
     container: 'Container to run the command. (wordpress|mysql|wpcli)',
@@ -36,13 +39,13 @@ program.command('rm [container]')
 
 program.command('start [container]')
   .description('start cypress-for-wordpress environment', {
-    container: 'if set create and start a specific container (wordpress|mysql|phpmyadmin)',
+    container: 'if set create and start a specific container (wordpress|mysql)',
   })
   .action(start)
 
 program.command('stop [container]')
   .description('stop all project\'s containers', {
-    container: 'stop a specific container (wordpress|mysql|phpmyadmin)',
+    container: 'stop a specific container (wordpress|mysql)',
   })
   .option('-a, --all', 'stop all containers that starts with \'cywp-\' prefix')
   .action(stop)
@@ -65,6 +68,8 @@ async function exec (container, command, args) {
       return console.error('container not working, use \'cywp start\' to start the containers')
     }
     return attachedContainer.exec([command].concat(args))
+      .then(container => console.log(container.stdout))
+      .catch(err => console.error(err))
   }
 
   if ('mysql' === container) {
@@ -80,6 +85,7 @@ async function exec (container, command, args) {
 
     if (wordpress) {
       return CreateWordpressCliContainer(wordpress, [command].concat(args))
+        .then(data => console.log(data.stdout))
     }
 
     console.log('wordpress not running! please start wordpress to use wpcli')
@@ -143,7 +149,7 @@ function stop () {
  * @returns {object} cypress config
  */
 function getConfig () {
-  const cypressPath = path.join(path.resolve(program.project || process.cwd()), 'cypress.json')
+  const cypressPath = path.join(path.resolve(program.opts().project || process.cwd()), 'cypress.json')
 
   if (!fs.existsSync(cypressPath)) {
     const errorMassage = `cypress.json was not found in ${path.dirname(cypressPath)}!`
