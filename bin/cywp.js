@@ -58,89 +58,114 @@ program.parse()
  * @param {string} container the container to run the command on.
  * @param {string} command command to pass to the container.
  * @param {string[]} args command arguments.
- * @returns {any} docker container.
  */
 async function exec (container, command, args) {
-  const config = getConfig()
-
-  const containerCallback = (attachedContainer) => {
-    if (!attachedContainer) {
-      return console.error('container not working, use \'cywp start\' to start the containers')
-    }
+  const execContainer = (attachedContainer) => {
     return attachedContainer.exec([command].concat(args))
       .then(container => console.log(container.stdout))
       .catch(err => console.error(err))
   }
 
-  if ('mysql' === container) {
-    return docker.AttachContainer({ name: 'cywp-main-mysql' }).then(containerCallback)
+  switch (container) {
+    case 'mysql':
+      getMysql()
+        .then(execContainer)
+        .catch(commandFailed)
+      break
+    case 'wordpress':
+      getWordpress()
+        .then(execContainer)
+        .catch(commandFailed)
+      break
+    case 'wpcli':
+      getWordpress()
+        .catch(() => commandFailed('wordpress not running! please start wordpress to use wpcli'))
+        .then(wordpress => CreateWordpressCliContainer(wordpress, [command].concat(args)))
+        .then(container => console.log(container.stdout))
+        .catch(commandFailed)
+      break
+    default:
+      commandFailed('invalid container argument! container must be \'wordpress\', \'mysql\' or \'wpcli\'!')
+      break
   }
-
-  if ('wordpress' === container) {
-    return docker.AttachContainer({ name: config.env.cywpWordpressName }).then(containerCallback)
-  }
-
-  if ('wpcli' === container) {
-    const wordpress = await docker.AttachContainer({ name: config.env.cywpWordpressName })
-
-    if (wordpress) {
-      return CreateWordpressCliContainer(wordpress, [command].concat(args))
-        .then(data => console.log(data.stdout))
-    }
-
-    console.log('wordpress not running! please start wordpress to use wpcli')
-  }
-
-  return console.error('invalid container argument! container must be \'wordpress\', \'mysql\' or \'wpcli\'!')
 }
 
 /**
- * @param {{all:string}} options - clean command option object.
+ * @param {string} container container name.
+ * @param {{all:string, force: boolean, volumes: boolean}} options - clean command option object.
  */
-function rm (options) {
-  console.log('clean project ' + options.all)
+function rm (container, options) {
+  switch (container) {
+    case 'wordpress':
+      getWordpress()
+        .then(container => container.rm(options.force, true, options.volumes))
+        .catch(commandFailed)
+      break
+    case 'mysql':
+      getWordpress()
+        .then(container => container.rm(options.force, true, options.volumes))
+        .catch(commandFailed)
+      break
+    case undefined:
+      rm('wordpress', options)
+      rm('mysql', options)
+      break
+    default:
+      commandFailed('invalid container argument! container must be \'wordpress\' or \'mysql\'!')
+      break
+  }
 }
 
 /**
  * Start a specific container or cywp runner
  *
- * @param {string} container the container type. ()
- * @returns {void}
+ * @param {string} container the container type.
  */
 async function start (container) {
   const config = getConfig()
 
-  if (!container) {
-    return runner(() => { }, config)
-  }
-
   switch (container) {
-    case 'wordpress': {
-      const mysql = await docker.AttachContainer({ name: 'cywp-main-mysql' })
-
-      if (!mysql) {
-        console.error('mysql container must be running to start wordpress')
-        break
-      }
-
-      CreateWordpress(mysql, config)
-
+    case 'wordpress':
+      getMysql()
+        .then(mysql => CreateWordpress(mysql, config))
+        .catch(() => commandFailed('mysql container must be running to start wordpress'))
       break
-    }
     case 'mysql':
       SetupDatabase()
       break
+    case undefined:
+      runner(() => { }, config)
+      break
     default:
-      console.error('invalid container argument! container must be \'wordpress\' or \'mysql\'!')
+      commandFailed('invalid container argument! container must be \'wordpress\' or \'mysql\'!')
       break
   }
 }
 
 /**
- *
+ * @param {string} container container name
+ * @param {object} options cli options
  */
-function stop () {
-
+function stop (container, options) {
+  switch (container) {
+    case 'wordpress':
+      getWordpress()
+        .then(container => container.stop())
+        .catch(commandFailed)
+      break
+    case 'mysql':
+      getMysql()
+        .then(container => container.stop())
+        .catch(commandFailed)
+      break
+    case undefined:
+      stop('wordpress', options)
+      stop('mysql', options)
+      break
+    default:
+      commandFailed('invalid container argument! container must be \'wordpress\' or \'mysql\'!')
+      break
+  }
 }
 
 /**
@@ -162,4 +187,42 @@ function getConfig () {
   }
 
   return checkConfig({ configFile: cypressPath, env: {} }, true)
+}
+
+/**
+ * get project wordpress container.
+ *
+ * @returns {Promise<import('../src/docker/container')>} wordpress container.
+ */
+function getWordpress () {
+  const config = getConfig()
+  const errorMessage = 'wordpress was not found!'
+
+  return docker.AttachContainer({ name: config.env.cywpWordpressName })
+    .then(container => container || Promise.reject(new Error(errorMessage)))
+}
+
+/**
+ * get project mysql container.
+ *
+ * @returns {Promise<import('../src/docker/container')>} mysql container.
+ */
+function getMysql () {
+  const errorMessage = 'mysql was not found!'
+
+  return docker.AttachContainer({ name: 'cywp-main-mysql' })
+    .then(container => container || Promise.reject(new Error(errorMessage)))
+}
+
+/**
+ * @param {string | Error} errorMessage error message to print
+ */
+function commandFailed (errorMessage) {
+  if (errorMessage instanceof Error) {
+    errorMessage = errorMessage.message
+  }
+
+  console.error('Error:' + -errorMessage)
+
+  process.exit(1)
 }
