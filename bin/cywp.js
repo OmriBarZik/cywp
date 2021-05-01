@@ -222,7 +222,7 @@ function commandFailed (errorMessage) {
     errorMessage = errorMessage.message
   }
 
-  console.error('Error:' + -errorMessage)
+  console.error('Error: ' + errorMessage)
 
   process.exit(1)
 }
