@@ -90,3 +90,9 @@ You add remote plugins bypassing the wanted version.
   }
 }
 ```
+### Docker Pull Skip
+To skip docker pull just need to set the environment variable `cypress_docker_pull` to 1.
+```bash
+cypress_docker_pull=1 npm run test
+```
+

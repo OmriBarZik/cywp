@@ -11,7 +11,7 @@ async function runner (on, config) {
 
   await logger('Verifying Docker', unsafeVerify)
 
-  await logger('Pulling Docker Images', () => pullDockerImages(config.env.cywpWordpressVersion))
+  await logger('Pulling Docker Images', () => pullDockerImages(config.env.cywpWordpressVersion, config.env.skip_pull))
 
   const network = await logger('Creating Docker Network', setupNetwork)
 
