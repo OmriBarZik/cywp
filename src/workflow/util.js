@@ -41,8 +41,14 @@ async function installPlugins (plugin, pluginList) {
  * pull all docker images that the runner require.
  *
  * @param {string} cywpWordpressVersion - wanted wordpress version.
+ * @param {boolean} skipPull - if to skip docker images pull.
+ * @returns {void}
  */
-async function pullDockerImages (cywpWordpressVersion) {
+async function pullDockerImages (cywpWordpressVersion, skipPull) {
+  if (skipPull) {
+    return console.log('status:\t\tskipped docker pull')
+  }
+
   const docker = new Docker()
   const finishedPullCallback = (image) => { console.log('pulled:\t\t' + image) }
 
