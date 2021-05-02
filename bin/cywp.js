@@ -202,10 +202,9 @@ function getConfig () {
  */
 function getWordpress () {
   const config = getConfig()
-  const errorMessage = 'wordpress was not found!'
 
   return docker.AttachContainer({ name: config.env.cywpWordpressName })
-    .then(container => container || Promise.reject(new Error(errorMessage)))
+    .then(container => container || Promise.reject(new Error('wordpress was not found!')))
 }
 
 /**
@@ -214,10 +213,8 @@ function getWordpress () {
  * @returns {Promise<import('../src/docker/container')>} mysql container.
  */
 function getMysql () {
-  const errorMessage = 'mysql was not found!'
-
   return docker.AttachContainer({ name: 'cywp-main-mysql' })
-    .then(container => container || Promise.reject(new Error(errorMessage)))
+    .then(container => container || Promise.reject(new Error('mysql was not found!')))
 }
 
 /**
