@@ -149,6 +149,8 @@ async function start (container) {
 }
 
 /**
+ * stop running containers
+ *
  * @param {string} container container name
  * @param {object} options cli options
  */
@@ -218,6 +220,8 @@ function getMysql () {
 }
 
 /**
+ * print error message and exit with code 1.
+ *
  * @param {string | Error} errorMessage error message to print
  */
 function commandFailed (errorMessage) {
