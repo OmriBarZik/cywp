@@ -102,7 +102,7 @@ function rm (container, options) {
         .catch(commandFailed)
       break
     case 'mysql':
-      getWordpress()
+      getMysql()
         .then(container => container.rm(options.force, true, options.volumes))
         .catch(commandFailed)
       break
@@ -126,12 +126,18 @@ async function start (container) {
 
   switch (container) {
     case 'wordpress':
-      getMysql()
-        .then(mysql => CreateWordpress(mysql, config))
-        .catch(() => commandFailed('mysql container must be running to start wordpress'))
+      getWordpress()
+        .then(wordpress => wordpress.start())
+        .catch(() => {
+          return getMysql
+            .catch(() => commandFailed('mysql container must be running to start wordpress'))
+            .then(mysql => CreateWordpress(mysql, config.env))
+        })
       break
     case 'mysql':
-      SetupDatabase()
+      getMysql()
+        .then(mysql => mysql.start())
+        .catch(SetupDatabase)
       break
     case undefined:
       runner(() => { }, config)
