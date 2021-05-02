@@ -41,6 +41,7 @@ program.command('start [container]')
   .description('start cypress-for-wordpress environment', {
     container: 'if set create and start a specific container (wordpress|mysql)',
   })
+  .option('-s --skip-pull', 'sets if to skip docker pull')
   .action(start)
 
 program.command('stop [container]')
@@ -120,9 +121,12 @@ function rm (container, options) {
  * Start a specific container or cywp runner
  *
  * @param {string} container the container type.
+ * @param {{skipPull:string}} options - start command option object.
  */
-async function start (container) {
+async function start (container, options) {
   const config = getConfig()
+
+  config.env.skip_pull = options.skipPull || process.env.cypress_skip_pull || process.env.CYPRESS_SKIP_PULL
 
   switch (container) {
     case 'wordpress':
