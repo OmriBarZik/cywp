@@ -103,7 +103,7 @@ function rm (container, options) {
       break
     case 'mysql':
       getMysql()
-        .then(container => container.rm(options.force, true, options.volumes))
+        .then(container => container.rm(options.force, true))
         .catch(commandFailed)
       break
     case undefined:
