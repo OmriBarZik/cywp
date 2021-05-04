@@ -51,6 +51,10 @@ program.command('stop [container]')
   .option('-a, --all', 'stop all containers that starts with \'cywp-\' prefix')
   .action(stop)
 
+program.command('status')
+  .description('display current containers status.')
+  .action(status)
+
 program.parse()
 
 /**
@@ -178,6 +182,23 @@ function stop (container, options) {
       commandFailed('invalid container argument! container must be \'wordpress\' or \'mysql\'!')
       break
   }
+}
+
+/**
+ * display containers status.
+ */
+function status () {
+  Promise.all([
+    getWordpress()
+      .then(wordpress => wordpress.status())
+      .then(status => 'exited' === status ? 'stopped' : status)
+      .catch(() => 'offline'),
+    getMysql()
+      .then(mysql => mysql.status())
+      .then(status => 'exited' === status ? 'stopped' : status)
+      .catch(() => 'offline'),
+  ])
+    .then(status => console.log(`wordpress:\t${status[0]}\nmysql:\t\t${status[1]}`))
 }
 
 /**
