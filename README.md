@@ -24,6 +24,28 @@ module.exports = (on, config) => {
 
 cypress-for-wordpress will analyze the plugin configuration and will set the `baseUrl`. for more info [see Cypress configuration documentation](https://docs.cypress.io/guides/references/configuration#Global).
 
+
+## Usage 
+
+You can access wp cli right from your cypress tests by using `cy.task`.
+
+#### Examples
+```js
+describe('wordpress check', () => {
+  it('should execute commands on wordpress',() => {
+
+    cy.task('wordpress', ['ls', '/']).then(files => {
+      cy.log(files);
+    });
+
+    cy.task('wp:plugin:install', {plugin: 'elementor', activate: true})
+
+
+    cy.task('wp:theme:isInstalled', 'twentytwenty')
+  })
+```
+for the full list of apis please check out the [docs](./docs)
+
 ## Configuration
 
 You can configure your site by using the following configuration in your `cypress.json` file.
