@@ -12,7 +12,7 @@ Cypress is an end-to-end tool. WordPress is the most popular system for building
 ## Installation
 
 ```bash
-npm install --save-dev cypress-for-WordPress
+npm install --save-dev cypress-for-wordpress
 ```
 
 Add this at the `index.js` file in the plugin folder.
