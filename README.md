@@ -24,6 +24,10 @@ module.exports = (on, config) => {
 
 cypress-for-wordpress will analyze the plugin configuration and will set the `baseUrl`. for more info [see Cypress configuration documentation](https://docs.cypress.io/guides/references/configuration#Global).
 
+## Usege
+
+you can contorl the wordpress site that CYWP created by using [`cy.task()`](https://docs.cypress.io/api/commands/task).
+
 ## Configuration
 
 You can configure your site by using the following configuration in your `cypress.json` file.
