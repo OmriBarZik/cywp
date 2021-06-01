@@ -6,7 +6,7 @@ describe('#UserMeta', () => {
   let originalWpUserMeta
 
   beforeAll(() => {
-    userMeta = new UserMeta({wpUser: jest.fn()})
+    userMeta = new UserMeta({ wpUser: jest.fn() })
     originalWpUserMeta = userMeta.wpUserMeta
   })
 
@@ -25,7 +25,6 @@ describe('#UserMeta', () => {
       expect(userMeta.user.wpUser)
         .toHaveBeenLastCalledWith(['meta'])
     })
-
   })
 
   describe('##add()', () => {
