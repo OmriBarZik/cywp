@@ -12,7 +12,7 @@ Cypress is an end-to-end tool. WordPress is the most popular system for building
 ## Installation
 
 ```bash
-npm install --dave-save cypress-for-WordPress
+npm install --save-dev cypress-for-wordpress
 ```
 
 Add this at the `index.js` file in the plugin folder.
@@ -90,3 +90,9 @@ You add remote plugins bypassing the wanted version.
   }
 }
 ```
+### Docker Pull Skip
+To skip docker pull just need to set the environment variable `cypress_docker_pull` to 1.
+```bash
+cypress_docker_pull=1 npm run test
+```
+
