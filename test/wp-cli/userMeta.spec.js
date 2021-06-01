@@ -1,17 +1,31 @@
 const UserMeta = require('../../src/wp-cli/userMeta')
 
-jest.mock('../../src/docker/presets/containers')
-
 describe('#UserMeta', () => {
   /** @type {UserMeta} */
   let userMeta
+  let originalWpUserMeta
 
   beforeAll(() => {
-    userMeta = new UserMeta()
+    userMeta = new UserMeta({wpUser: jest.fn()})
+    originalWpUserMeta = userMeta.wpUserMeta
   })
 
   beforeEach(async () => {
     userMeta.wpUserMeta = jest.fn()
+  })
+
+  describe('##wpUserMeta', () => {
+    beforeEach(() => {
+      userMeta.wpUserMeta = originalWpUserMeta
+    })
+
+    it('should have the arguments for wp user meta', () => {
+      userMeta.wpUserMeta([])
+
+      expect(userMeta.user.wpUser)
+        .toHaveBeenLastCalledWith(['meta'])
+    })
+
   })
 
   describe('##add()', () => {
