@@ -44,7 +44,7 @@ describe('wordpress check', () => {
     cy.task('wp:theme:isInstalled', 'twentytwenty')
   })
 ```
-for the full list of apis please check out the [docs](./docs)
+for the full list of apis please check out the [API section](#API)
 
 ## Configuration
 
