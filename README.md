@@ -27,7 +27,7 @@ cypress-for-wordpress will analyze the plugin configuration and will set the `ba
 
 ## Usage 
 
-you can control the wordrpess site and the database at cypress runtime by using [`cy.task()`](https://docs.cypress.io/api/commands/task).
+you can control the wordrpess site and the database right from your tests by using [`cy.task()`](https://docs.cypress.io/api/commands/task).
 
 #### Examples
 ```js
@@ -112,6 +112,22 @@ You add remote plugins bypassing the wanted version.
   }
 }
 ```
+
+## API
+this aria sohw the full list of API avilble.
+### contianers
+Controlling the docker contianers
+#### wordpress
+exsecute commands on the wordpress contianer.
+##### arguments
+1. commands
+   * type        - `string[]`
+   * Description - what commands to exsecute on the container
+##### Examples
+```js 
+cy.task('wordpress', <commands>)
+```
+
 ### Docker Pull Skip
 To skip docker pull just need to set the environment variable `cypress_skip_pull` to 1.
 ```bash
