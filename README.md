@@ -27,7 +27,7 @@ cypress-for-wordpress will analyze the plugin configuration and will set the `ba
 
 ## Usage 
 
-You can access wp cli right from your cypress tests by using `cy.task`.
+you can control the wordrpess site and the database at cypress runtime by using [`cy.task()`](https://docs.cypress.io/api/commands/task).
 
 #### Examples
 ```js
