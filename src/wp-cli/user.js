@@ -1,4 +1,5 @@
 require('./types')
+const Container = require('../docker/container')
 const { CreateWordpressCliContainer } = require('../docker/presets/containers')
 const { FormatToWordpressDate, CheckIfArrayOrString } = require('./util')
 
@@ -12,7 +13,6 @@ class UserMeta {
    * @param {User} user - the user object.
    */
   constructor (user) {
-    /** @type {(commands: string[]) => Promise<RunInContainerOutput>} */
     this.wpUserMeta = (commands) => user.wpUser(['meta', ...commands])
   }
 
@@ -91,7 +91,7 @@ class User {
   /**
    * Constructor for the User object.
    *
-   * @param {import('../docker/container')} site - the wordpress site to work on.
+   * @param {Container} site - the wordpress site to work on.
    */
   constructor (site) {
     this.site = site
@@ -268,7 +268,7 @@ class User {
    * Return the user's capabilities
    *
    * @param {string|number} user - User to check
-   * @returns {Promise<{name: string}[]>} List of the user capabilities.
+   * @returns {Promise<Array<{name: string}>>} List of the user capabilities.
    */
   listCaps (user) {
     const listCapsArgs = ['list-caps', '--format=json', user]
