@@ -119,14 +119,33 @@ this aria sohw the full list of API avilble.
 Controlling the docker contianers
 #### wordpress
 exsecute commands on the wordpress contianer.
-##### arguments
-1. commands
-   * type        - `string[]`
-   * Description - what commands to exsecute on the container
-##### Examples
 ```js 
 cy.task('wordpress', <commands>)
 ```
+##### arguments
+1. commands
+   * type        - `string[]`
+   * Description - commands to exsecute on the container
+
+#### mysql
+exsecute commands on the wordpress contianer.
+```js 
+cy.task('mysql', <commands>)
+```
+##### arguments
+1. commands
+   * type        - `string[]`
+   * Description - commands to exsecute on the container
+
+#### wp
+create a temperery wp-cli contianer that connect to the wordpress contianer and excexute the give commands. 
+```js 
+cy.task('wp', <commands>)
+```
+##### arguments
+1. commands
+   * type        - `string[]`
+   * Description - commands to exsecute on the container
 
 ### Docker Pull Skip
 To skip docker pull just need to set the environment variable `cypress_skip_pull` to 1.
