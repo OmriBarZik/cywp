@@ -1,5 +1,4 @@
 require('./types')
-const Container = require('../docker/container')
 const { CreateWordpressCliContainer } = require('../docker/presets/containers')
 const { FormatToWordpressDate, CheckIfArrayOrString } = require('./util')
 const UserMeta = require('./userMeta')
@@ -11,7 +10,7 @@ class User {
   /**
    * Constructor for the User object.
    *
-   * @param {Container} site - the wordpress site to work on.
+   * @param {import('../docker/container')} site - the wordpress site to work on.
    */
   constructor (site) {
     this.site = site
