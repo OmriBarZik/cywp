@@ -113,6 +113,12 @@ You add remote plugins bypassing the wanted version.
 }
 ```
 
+### Docker Pull Skip
+To skip docker pull just need to set the environment variable `cypress_skip_pull` to 1.
+```bash
+cypress_skip_pull=1 npm run test
+```
+
 ## API
 this aria sohw the full list of API avilble.
 ### contianers
@@ -123,9 +129,7 @@ exsecute commands on the wordpress contianer.
 cy.task('wordpress', <commands>)
 ```
 ##### arguments
-1. commands
-   * type        - `string[]`
-   * Description - commands to exsecute on the container
+1. {string[]} commands - commands to exsecute on the container
 
 #### mysql
 exsecute commands on the wordpress contianer.
@@ -133,9 +137,7 @@ exsecute commands on the wordpress contianer.
 cy.task('mysql', <commands>)
 ```
 ##### arguments
-1. commands
-   * type        - `string[]`
-   * Description - commands to exsecute on the container
+1. {string[]} commands - commands to exsecute on the container
 
 #### wp
 create a temperery wp-cli contianer that connect to the wordpress contianer and excexute the give commands. 
@@ -143,13 +145,4 @@ create a temperery wp-cli contianer that connect to the wordpress contianer and 
 cy.task('wp', <commands>)
 ```
 ##### arguments
-1. commands
-   * type        - `string[]`
-   * Description - commands to exsecute on the container
-
-### Docker Pull Skip
-To skip docker pull just need to set the environment variable `cypress_skip_pull` to 1.
-```bash
-cypress_skip_pull=1 npm run test
-```
-
+1. {string[]} commands - commands to exsecute on the container
