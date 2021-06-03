@@ -1,6 +1,14 @@
 ## Typedefs
 
 <dl>
+<dt><a href="#ContainerOptions">ContainerOptions</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#RunInContainerOutput">RunInContainerOutput</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#VolumeOptions">VolumeOptions</a> : <code>object</code></dt>
+<dd></dd>
+<dt><a href="#NetworkOption">NetworkOption</a> : <code>object</code></dt>
+<dd></dd>
 <dt><a href="#ThemeGetObject">ThemeGetObject</a></dt>
 <dd></dd>
 <dt><a href="#ThemeListFiltersObject">ThemeListFiltersObject</a></dt>
@@ -12,6 +20,73 @@
 <dt><a href="#UserGetObject">UserGetObject</a></dt>
 <dd></dd>
 </dl>
+
+<a name="ContainerOptions"></a>
+
+## ContainerOptions : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| exposePorts | <code>Array.&lt;object&gt;</code> | list of objects that specified what ports to expose. |
+| exposePorts.host | <code>number</code> | port expose at the host machine. |
+| exposePorts.docker | <code>number</code> | port expose at the container. |
+| environmentVariables | <code>Array.&lt;object&gt;</code> | list of objects that specified what environment variables pass to the docker container. |
+| environmentVariables.name | <code>string</code> | the name of the environment variable that passes to the docker container. |
+| environmentVariables.value | <code>string</code> | the value of the environment variable that passes to the docker container. |
+| volumes | <code>Array.&lt;object&gt;</code> | list of objects that specified what volumes are expose. |
+| volumes.host | <code>string</code> | what path is expose at the host. |
+| volumes.docker | <code>string</code> | where the expose path is contained in the docker container. |
+| network | <code>string</code> | the network the container is in. |
+| image | <code>string</code> | the name if the docker image. |
+| name | <code>string</code> | name of the container. |
+| id | <code>string</code> | the container id, set when the container is created. |
+| rm | <code>boolean</code> | remove the container after it exits. |
+| status | <code>&#x27;created&#x27;</code> \| <code>&#x27;started&#x27;</code> \| <code>&#x27;removed&#x27;</code> \| <code>&#x27;stopped&#x27;</code> | the container status (created|started|removed|stopped) |
+| commands | <code>Array.&lt;string&gt;</code> | commands to pass to the container. |
+| health | <code>object</code> | Object to check container health. |
+| health.command | <code>string</code> | Command to run to check health. |
+| health.interval | <code>string</code> | Time between running the check (ms|s|m|h) (default 30s) |
+| health.retries | <code>number</code> | Consecutive failures needed to report unhealthy |
+| health.startPeriod | <code>string</code> | Start period for the container to initialize before starting health-retries countdown (ms|s|m|h) (default 30s) |
+| health.timeout | <code>string</code> | Maximum time to allow one check to run (ms|s|m|h) (default 30s) |
+| user | <code>string</code> | Sets the user name or UID. |
+| grope | <code>string</code> | Sets group name or GID, must be used with user. |
+
+<a name="RunInContainerOutput"></a>
+
+## RunInContainerOutput : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| stdout | <code>string</code> | Container output from log stream. |
+| stderr | <code>string</code> | Container output from error stream. |
+
+<a name="VolumeOptions"></a>
+
+## VolumeOptions : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | The volume id, set when the volume is created. |
+| status | <code>&#x27;alive&#x27;</code> \| <code>&#x27;dead&#x27;</code> | Tells if the volume is alive (alive|dead) |
+
+<a name="NetworkOption"></a>
+
+## NetworkOption : <code>object</code>
+**Kind**: global typedef  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| name | <code>string</code> | the name of the docker network. |
+| id | <code>string</code> | the network id, set when the network is created. |
+| status | <code>&#x27;alive&#x27;</code> \| <code>&#x27;dead&#x27;</code> | Tells if the network is alive (alive|dead) |
 
 <a name="ThemeGetObject"></a>
 
