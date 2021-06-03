@@ -11,7 +11,7 @@ Adds, updates, deletes, and lists user custom fields.
     * [.delete(user, key)](#UserMeta+delete) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
     * [.get(user, key)](#UserMeta+get) ⇒ <code>Promise.&lt;any&gt;</code>
     * [.list(user)](#UserMeta+list) ⇒ <code>Promise.&lt;{user\_id: number, meta\_key: string, meta\_value: string}&gt;</code>
-    * [.update(user, key, value)](#UserMeta+update)
+    * [.update(user, key, value)](#UserMeta+update) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
 
 <a name="new_UserMeta_new"></a>
 
@@ -77,10 +77,11 @@ Lists all metadata associated with a user.
 
 <a name="UserMeta+update"></a>
 
-### userMeta.update(user, key, value)
+### userMeta.update(user, key, value) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
 Updates a meta field.
 
 **Kind**: instance method of [<code>UserMeta</code>](#UserMeta)  
+**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - The command output.  
 
 | Param | Type | Description |
 | --- | --- | --- |
