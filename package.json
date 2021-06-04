@@ -19,7 +19,7 @@
   },
   "files": [
     "src/**",
-    "bin/**"
+    "bin/cywp.js"
   ],
   "directories": {
     "lib": "./src ",
