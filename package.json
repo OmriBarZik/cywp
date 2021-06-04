@@ -35,7 +35,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "pre-push": "run-p coverage lint snyk",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "docs": "node bin/preperdocs.js"
   },
   "peerDependencies": {
     "cypress": ">=6.7.x"
