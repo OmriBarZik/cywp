@@ -8,7 +8,7 @@ const jsdoc2md = require('jsdoc-to-markdown')
 /**
  * @param {string} dir - base dir to read files from.
  * @param {string[]} exclude - what directories to exclude.
- * @returns {Promise<Array>} array with all the file name in a directory.
+ * @returns {Promise<Array<string>>} array with all the file name in a directory.
  */
 async function getFiles (dir, exclude = []) {
   const dirents = await readdir(dir, { withFileTypes: true })
@@ -22,27 +22,58 @@ async function getFiles (dir, exclude = []) {
 }
 
 /**
- * the main function of the cli.
+ * render markdown for types files
+ *
+ * @returns {Promise<string>} rendered markdown for types.
  */
-async function preperdocs () {
+async function preperTypeFile () {
   const allFiles = await getFiles(process.cwd(), ['node_modules', 'test', 'coverage'])
   const typsFiles = allFiles.filter(file => 'types' === basename(file, '.js'))
 
-  await jsdoc2md.render({ files: typsFiles })
-    .then(markdown => writeFile(resolve(process.cwd(), 'docs-tmp/types.md'), markdown))
+  return jsdoc2md.render({ files: typsFiles })
+}
 
-  const rawWpcliFiles = await getFiles(resolve(process.cwd(), 'src/wp-cli'), ['node_modules', 'test', 'coverage'])
+/**
+ * @returns {Array<{file: string, markdown: Promise<string>}>}
+ */
+async function preperWpcliFiles () {
+  const wpcliFiles = await getFiles(resolve(process.cwd(), 'src/wp-cli'), ['index.js', 'util.js', 'types.js'])
 
-  const wpcliFiles = await rawWpcliFiles.filter(file => !['index', 'util', 'types'].find(exclude => exclude === basename(file, '.js')))
+  /**
+   * expect to get type import path and return the only file name capitalize.
+   *
+   * @param {string} importPath the regex match im import type. ig "import('./class')"
+   * @param {string} className only the name of the import class
+   * @returns {string} import file name capitalize.
+   */
+  const replaceImport = (importPath, className) => className[0].toUpperCase() + className.slice(1)
 
-  const wpcliFilesContent = await Promise.all(wpcliFiles.map(async file => ({
+  return wpcliFiles.map(file => ({
     file: basename(file, '.js'),
-    content: (await readFile(file)).toLocaleString()
-      .replace(/import\(.*\/(.+)'\)/g, (importPath, className) => className[0].toUpperCase() + className.slice(1)),
-  })))
+    markdown: readFile(file)
+      .then(fileContent => fileContent.toLocaleString().replace(/import\(.*\/(.+)'\)/g, replaceImport))
+      .then(fileContent => jsdoc2md.render({ source: fileContent })),
+  }))
+}
 
-  wpcliFilesContent.map(content => jsdoc2md.render({ source: content.content })
-    .then(render => writeFile(`docs-tmp/${content.file}.md`, render)))
+/**
+ * the main function of the cli.
+ */
+async function preperdocs () {
+  const markdownFiles = []
+
+  const typeMarkdownPromise = preperTypeFile()
+
+  markdownFiles.push({ file: 'types', markdown: typeMarkdownPromise })
+
+  markdownFiles.push.apply(markdownFiles, await preperWpcliFiles())
+
+  const links = await Promise.all(markdownFiles.map(async files => {
+    const data = (await files.markdown).match(/<a> name="(.*)"<\/a>/)
+    return data
+  }))
+
+  console.log(links)
 }
 
 preperdocs()
