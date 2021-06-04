@@ -69,7 +69,9 @@ async function preperdocs () {
   markdownFiles.push.apply(markdownFiles, await preperWpcliFiles())
 
   const links = await Promise.all(markdownFiles.map(async files => {
-    const data = (await files.markdown).match(/<a> name="(.*)"<\/a>/)
+    const markdown = await files.markdown
+    const data = markdown.match(/<a name="(.*)"><\/a>/g).map(match => match)
+
     return data
   }))
 
