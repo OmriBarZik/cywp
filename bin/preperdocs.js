@@ -35,14 +35,14 @@ async function preperdocs () {
 
   const wpcliFiles = await rawWpcliFiles.filter(file => !['index', 'util', 'types'].find(exclude => exclude === basename(file, '.js')))
 
-  const wpcliFilesContent = await Promise.all(wpcliFiles.map(file => readFile(file).then(content => content.toLocaleString())))
+  const wpcliFilesContent = await Promise.all(wpcliFiles.map(async file => ({
+    file: basename(file, '.js'),
+    content: (await readFile(file)).toLocaleString()
+      .replace(/import\(.*\/(.+)'\)/g, (importPath, className) => className[0].toUpperCase() + className.slice(1)),
+  })))
 
-  wpcliFilesContent.map(content => content.replace(/import\(.*\/(.+)'\)/g, (path, type) => console.log(path, type)))
+  wpcliFilesContent.map(content => jsdoc2md.render({ source: content.content })
+    .then(render => writeFile(`docs-tmp/${content.file}.md`, render)))
 }
-
-// getFiles(process.cwd(), ['node_modules', 'test', 'coverage'])
-//   .then(data => console.log(data))
-//   .catch(data => console.error(data))
-// // console.log(process.cwd())
 
 preperdocs()
