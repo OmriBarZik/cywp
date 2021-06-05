@@ -70,9 +70,13 @@ async function preperdocs () {
 
   const links = await Promise.all(markdownFiles.map(async files => {
     const markdown = await files.markdown
-    const data = markdown.match(/<a name="(.*)"><\/a>/g).map(match => match)
+    const types = markdown.match(/<a name="(.*)"><\/a>/g)
+      .map(match => match.substring(9, match.length - 6))
 
-    return data
+    return {
+      file: files.file,
+      types: types,
+    }
   }))
 
   console.log(links)
