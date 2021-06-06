@@ -58,16 +58,13 @@ async function preperWpcliFiles () {
 }
 
 /**
- * the main function of the cli.
+ * excract all the type links
+ *
+ * @param {Array<{file: string, markdown: string}>} markdownFiles nulinked markdown files
+ * @returns {object} object of links
  */
-async function preperdocs () {
-  const markdownFiles = []
-
-  markdownFiles.push({ file: 'types', markdown: await preperTypeFile() })
-
-  markdownFiles.push.apply(markdownFiles, await preperWpcliFiles())
-
-  let links = markdownFiles.map(files => {
+function extractLinks (markdownFiles) {
+  const links = markdownFiles.map(files => {
     const markdown = files.markdown
     const types = markdown.match(/<a name="(.*)"><\/a>/g)
       .map(match => match.substring(9, match.length - 6))
@@ -81,13 +78,24 @@ async function preperdocs () {
     return typesObject
   })
 
-  links = Object.assign({}, ...links)
+  return Object.assign({}, ...links)
+}
+
+/**
+ * the main function of the cli.
+ */
+async function preperdocs () {
+  const markdownFiles = []
+
+  markdownFiles.push({ file: 'types', markdown: await preperTypeFile() })
+
+  markdownFiles.push.apply(markdownFiles, await preperWpcliFiles())
+
+  const links = extractLinks()
 
   const docsDir = resolve(process.cwd(), 'docs')
 
-  if (!existsSync(docsDir)) {
-    await mkdir(docsDir)
-  }
+  if (!existsSync(docsDir)) { await mkdir(docsDir) }
 
   const regex = new RegExp(`&lt;(${Object.keys(links).join('|')})&gt;`, 'g')
 
