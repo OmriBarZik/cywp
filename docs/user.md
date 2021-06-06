@@ -7,20 +7,20 @@ Manages users, along with their roles, capabilities, and meta.
 
 * [User](#User)
     * [new User(site)](#new_User_new)
-    * [.wpUser(commands)](#User+wpUser) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
-    * [.addCap(user, cap)](#User+addCap) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
-    * [.addRole(user, role)](#User+addRole) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
-    * [.create(options)](#User+create) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
-    * [.delete(user, [reassign])](#User+delete) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
-    * [.get(user)](#User+get) ⇒ <code>Promise.[&lt;UserGetObject&gt;](./types#UserGetObject)</code>
-    * [.list([filters])](#User+list) ⇒ <code>Promise.&lt;Array.[&lt;UserGetObject&gt;](./types#UserGetObject)&gt;</code>
+    * [.wpUser(commands)](#User+wpUser) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
+    * [.addCap(user, cap)](#User+addCap) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
+    * [.addRole(user, role)](#User+addRole) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
+    * [.create(options)](#User+create) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
+    * [.delete(user, [reassign])](#User+delete) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
+    * [.get(user)](#User+get) ⇒ <code>Promise.[&lt;UserGetObject&gt;](./types.md#UserGetObject)</code>
+    * [.list([filters])](#User+list) ⇒ <code>Promise.&lt;Array.[&lt;UserGetObject&gt;](./types.md#UserGetObject)&gt;</code>
     * [.listCaps(user)](#User+listCaps) ⇒ <code>Promise.&lt;Array.&lt;{name: string}&gt;&gt;</code>
-    * [.removeCap(user, cap)](#User+removeCap) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
-    * [.removeRole(user, cap)](#User+removeRole) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
-    * [.setRole(user, role)](#User+setRole) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
-    * [.spam(user)](#User+spam) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
-    * [.unspam(user)](#User+unspam) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
-    * [.update(options)](#User+update) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+    * [.removeCap(user, cap)](#User+removeCap) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
+    * [.removeRole(user, cap)](#User+removeRole) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
+    * [.setRole(user, role)](#User+setRole) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
+    * [.spam(user)](#User+spam) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
+    * [.unspam(user)](#User+unspam) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
+    * [.update(options)](#User+update) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
 
 <a name="new_User_new"></a>
 
@@ -34,11 +34,11 @@ Constructor for the User object.
 
 <a name="User+wpUser"></a>
 
-### user.wpUser(commands) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+### user.wpUser(commands) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
 Run wp user command on a wp cli continer that connect to the site provied in the constructor.
 
 **Kind**: instance method of [<code>User</code>](#User)  
-**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code> - The output of the command.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -46,11 +46,11 @@ Run wp user command on a wp cli continer that connect to the site provied in the
 
 <a name="User+addCap"></a>
 
-### user.addCap(user, cap) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+### user.addCap(user, cap) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
 Adds a capability to a user.
 
 **Kind**: instance method of [<code>User</code>](#User)  
-**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code> - The output of the command.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -59,11 +59,11 @@ Adds a capability to a user.
 
 <a name="User+addRole"></a>
 
-### user.addRole(user, role) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+### user.addRole(user, role) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
 Adds a role for a user.
 
 **Kind**: instance method of [<code>User</code>](#User)  
-**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code> - The output of the command.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -72,11 +72,11 @@ Adds a role for a user.
 
 <a name="User+create"></a>
 
-### user.create(options) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+### user.create(options) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
 Creates a new user.
 
 **Kind**: instance method of [<code>User</code>](#User)  
-**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - Retruns newy created User id.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code> - Retruns newy created User id.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -96,11 +96,11 @@ Creates a new user.
 
 <a name="User+delete"></a>
 
-### user.delete(user, [reassign]) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+### user.delete(user, [reassign]) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
 Deletes one or more users from the current site.
 
 **Kind**: instance method of [<code>User</code>](#User)  
-**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code> - The output of the command.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -109,11 +109,11 @@ Deletes one or more users from the current site.
 
 <a name="User+get"></a>
 
-### user.get(user) ⇒ <code>Promise.[&lt;UserGetObject&gt;](./types#UserGetObject)</code>
+### user.get(user) ⇒ <code>Promise.[&lt;UserGetObject&gt;](./types.md#UserGetObject)</code>
 Get user data.
 
 **Kind**: instance method of [<code>User</code>](#User)  
-**Returns**: <code>Promise.[&lt;UserGetObject&gt;](./types#UserGetObject)</code> - Current user data.  
+**Returns**: <code>Promise.[&lt;UserGetObject&gt;](./types.md#UserGetObject)</code> - Current user data.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -121,11 +121,11 @@ Get user data.
 
 <a name="User+list"></a>
 
-### user.list([filters]) ⇒ <code>Promise.&lt;Array.[&lt;UserGetObject&gt;](./types#UserGetObject)&gt;</code>
+### user.list([filters]) ⇒ <code>Promise.&lt;Array.[&lt;UserGetObject&gt;](./types.md#UserGetObject)&gt;</code>
 Return list of users in the wordpress site and there data.
 
 **Kind**: instance method of [<code>User</code>](#User)  
-**Returns**: <code>Promise.&lt;Array.[&lt;UserGetObject&gt;](./types#UserGetObject)&gt;</code> - - List of users in the wordpress site.  
+**Returns**: <code>Promise.&lt;Array.[&lt;UserGetObject&gt;](./types.md#UserGetObject)&gt;</code> - - List of users in the wordpress site.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -145,11 +145,11 @@ Return the user's capabilities
 
 <a name="User+removeCap"></a>
 
-### user.removeCap(user, cap) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+### user.removeCap(user, cap) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
 Removes a user's capability.
 
 **Kind**: instance method of [<code>User</code>](#User)  
-**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code> - The output of the command.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -158,11 +158,11 @@ Removes a user's capability.
 
 <a name="User+removeRole"></a>
 
-### user.removeRole(user, cap) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+### user.removeRole(user, cap) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
 Removes a user's role.
 
 **Kind**: instance method of [<code>User</code>](#User)  
-**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code> - The output of the command.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -171,11 +171,11 @@ Removes a user's role.
 
 <a name="User+setRole"></a>
 
-### user.setRole(user, role) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+### user.setRole(user, role) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
 Sets the user role.
 
 **Kind**: instance method of [<code>User</code>](#User)  
-**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code> - The output of the command.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -184,11 +184,11 @@ Sets the user role.
 
 <a name="User+spam"></a>
 
-### user.spam(user) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+### user.spam(user) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
 Marks one or more users as spam.
 
 **Kind**: instance method of [<code>User</code>](#User)  
-**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The command output  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code> - The command output  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -196,11 +196,11 @@ Marks one or more users as spam.
 
 <a name="User+unspam"></a>
 
-### user.unspam(user) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+### user.unspam(user) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
 Removes one or more users from spam.
 
 **Kind**: instance method of [<code>User</code>](#User)  
-**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The command output  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code> - The command output  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -208,11 +208,11 @@ Removes one or more users from spam.
 
 <a name="User+update"></a>
 
-### user.update(options) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+### user.update(options) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code>
 Updates an existing user.
 
 **Kind**: instance method of [<code>User</code>](#User)  
-**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - the output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types.md#RunInContainerOutput)</code> - the output of the command.  
 
 | Param | Type | Description |
 | --- | --- | --- |

@@ -75,7 +75,7 @@ async function preperdocs () {
     const typesObject = {}
 
     types.forEach(type => {
-      typesObject[type] = `./${files.file}#${type}`
+      typesObject[type] = `./${files.file}.md#${type}`
     })
 
     return typesObject
