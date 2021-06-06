@@ -7,14 +7,14 @@ Manage wordpress theme through wp cli.
 
 * [Theme](#Theme)
     * [new Theme(site)](#new_Theme_new)
-    * [.wpTheme(commands)](#Theme+wpTheme) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
-    * [.activate(theme)](#Theme+activate) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
-    * [.delete(theme, force)](#Theme+delete) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
-    * [.get(theme)](#Theme+get) ⇒ <code>Promise.&lt;ThemeGetObject&gt;</code>
-    * [.install(theme, activate, version)](#Theme+install) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+    * [.wpTheme(commands)](#Theme+wpTheme) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+    * [.activate(theme)](#Theme+activate) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+    * [.delete(theme, force)](#Theme+delete) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+    * [.get(theme)](#Theme+get) ⇒ <code>Promise.[&lt;ThemeGetObject&gt;](./types#ThemeGetObject)</code>
+    * [.install(theme, activate, version)](#Theme+install) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
     * [.isActive(theme)](#Theme+isActive) ⇒ <code>Promise.&lt;boolean&gt;</code>
     * [.isInstalled(theme)](#Theme+isInstalled) ⇒ <code>Promise.&lt;boolean&gt;</code>
-    * [.list([filters])](#Theme+list) ⇒ <code>Promise.&lt;Array.&lt;ThemeListFiltersObject&gt;&gt;</code>
+    * [.list([filters])](#Theme+list) ⇒ <code>Promise.&lt;Array.[&lt;ThemeListFiltersObject&gt;](./types#ThemeListFiltersObject)&gt;</code>
     * [.path(theme)](#Theme+path) ⇒ <code>Promise.&lt;string&gt;</code>
 
 <a name="new_Theme_new"></a>
@@ -29,11 +29,11 @@ Constructor for the Theme object.
 
 <a name="Theme+wpTheme"></a>
 
-### theme.wpTheme(commands) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+### theme.wpTheme(commands) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 Run wp theme command on a wp cli continer that connect to the site provied in the constructor.
 
 **Kind**: instance method of [<code>Theme</code>](#Theme)  
-**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - The output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -41,11 +41,11 @@ Run wp theme command on a wp cli continer that connect to the site provied in th
 
 <a name="Theme+activate"></a>
 
-### theme.activate(theme) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+### theme.activate(theme) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 Activates a theme.
 
 **Kind**: instance method of [<code>Theme</code>](#Theme)  
-**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - The output of the command  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -53,11 +53,11 @@ Activates a theme.
 
 <a name="Theme+delete"></a>
 
-### theme.delete(theme, force) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+### theme.delete(theme, force) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 Deletes one or more themes.
 
 **Kind**: instance method of [<code>Theme</code>](#Theme)  
-**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - The output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command.  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -76,11 +76,11 @@ theme.delete('all')
 ```
 <a name="Theme+get"></a>
 
-### theme.get(theme) ⇒ <code>Promise.&lt;ThemeGetObject&gt;</code>
+### theme.get(theme) ⇒ <code>Promise.[&lt;ThemeGetObject&gt;](./types#ThemeGetObject)</code>
 Get theme data.
 
 **Kind**: instance method of [<code>Theme</code>](#Theme)  
-**Returns**: <code>Promise.&lt;ThemeGetObject&gt;</code> - Current theme data.  
+**Returns**: <code>Promise.[&lt;ThemeGetObject&gt;](./types#ThemeGetObject)</code> - Current theme data.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -88,9 +88,9 @@ Get theme data.
 
 <a name="Theme+install"></a>
 
-### theme.install(theme, activate, version) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+### theme.install(theme, activate, version) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 **Kind**: instance method of [<code>Theme</code>](#Theme)  
-**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - The output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -124,11 +124,11 @@ Checks if a given theme is installed.
 
 <a name="Theme+list"></a>
 
-### theme.list([filters]) ⇒ <code>Promise.&lt;Array.&lt;ThemeListFiltersObject&gt;&gt;</code>
+### theme.list([filters]) ⇒ <code>Promise.&lt;Array.[&lt;ThemeListFiltersObject&gt;](./types#ThemeListFiltersObject)&gt;</code>
 Return list of themes installed in the wordpress site and there data.
 
 **Kind**: instance method of [<code>Theme</code>](#Theme)  
-**Returns**: <code>Promise.&lt;Array.&lt;ThemeListFiltersObject&gt;&gt;</code> - - List of themes installed in the wordpress site.  
+**Returns**: <code>Promise.&lt;Array.[&lt;ThemeListFiltersObject&gt;](./types#ThemeListFiltersObject)&gt;</code> - - List of themes installed in the wordpress site.  
 
 | Param | Type | Description |
 | --- | --- | --- |

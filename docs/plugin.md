@@ -7,17 +7,17 @@ Manage wordpress plugins through wp cli.
 
 * [Plugin](#Plugin)
     * [new Plugin(site)](#new_Plugin_new)
-    * [.wpPlugin(commands)](#Plugin+wpPlugin) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
-    * [.activate(plugin)](#Plugin+activate) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
-    * [.deactivate(plugin, uninstall)](#Plugin+deactivate) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
-    * [.delete(plugin)](#Plugin+delete) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
-    * [.get(plugin)](#Plugin+get) ⇒ <code>Promise.&lt;PluginGetObject&gt;</code>
-    * [.install(plugin, activate, version)](#Plugin+install) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+    * [.wpPlugin(commands)](#Plugin+wpPlugin) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+    * [.activate(plugin)](#Plugin+activate) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+    * [.deactivate(plugin, uninstall)](#Plugin+deactivate) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+    * [.delete(plugin)](#Plugin+delete) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+    * [.get(plugin)](#Plugin+get) ⇒ <code>Promise.[&lt;PluginGetObject&gt;](./types#PluginGetObject)</code>
+    * [.install(plugin, activate, version)](#Plugin+install) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
     * [.isActive(plugin)](#Plugin+isActive) ⇒ <code>Promise.&lt;boolean&gt;</code>
     * [.isInstalled(plugin)](#Plugin+isInstalled) ⇒ <code>Promise.&lt;boolean&gt;</code>
-    * [.list([filters])](#Plugin+list) ⇒ <code>Promise.&lt;Array.&lt;PluginListFiltersObject&gt;&gt;</code>
-    * [.path(plugin)](#Plugin+path) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
-    * [.uninstall(plugin)](#Plugin+uninstall) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+    * [.list([filters])](#Plugin+list) ⇒ <code>Promise.&lt;Array.[&lt;PluginListFiltersObject&gt;](./types#PluginListFiltersObject)&gt;</code>
+    * [.path(plugin)](#Plugin+path) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+    * [.uninstall(plugin)](#Plugin+uninstall) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 
 <a name="new_Plugin_new"></a>
 
@@ -31,11 +31,11 @@ Constructor for the Plugin object
 
 <a name="Plugin+wpPlugin"></a>
 
-### plugin.wpPlugin(commands) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+### plugin.wpPlugin(commands) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 Run wp plugin command on a wp cli continer that connected to the site provied in the constructor.
 
 **Kind**: instance method of [<code>Plugin</code>](#Plugin)  
-**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - The output of the command  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -43,11 +43,11 @@ Run wp plugin command on a wp cli continer that connected to the site provied in
 
 <a name="Plugin+activate"></a>
 
-### plugin.activate(plugin) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+### plugin.activate(plugin) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 Activate one or more plugins.
 
 **Kind**: instance method of [<code>Plugin</code>](#Plugin)  
-**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - The output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -65,11 +65,11 @@ plugin.activate('all')
 ```
 <a name="Plugin+deactivate"></a>
 
-### plugin.deactivate(plugin, uninstall) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+### plugin.deactivate(plugin, uninstall) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 Deactivate one or more plugins.
 
 **Kind**: instance method of [<code>Plugin</code>](#Plugin)  
-**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - The output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -88,11 +88,11 @@ plugin.deactivate('all')
 ```
 <a name="Plugin+delete"></a>
 
-### plugin.delete(plugin) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+### plugin.delete(plugin) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 Deletes one or more plugins.
 
 **Kind**: instance method of [<code>Plugin</code>](#Plugin)  
-**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - The output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -110,11 +110,11 @@ plugin.delete('all')
 ```
 <a name="Plugin+get"></a>
 
-### plugin.get(plugin) ⇒ <code>Promise.&lt;PluginGetObject&gt;</code>
+### plugin.get(plugin) ⇒ <code>Promise.[&lt;PluginGetObject&gt;](./types#PluginGetObject)</code>
 Get plugin data.
 
 **Kind**: instance method of [<code>Plugin</code>](#Plugin)  
-**Returns**: <code>Promise.&lt;PluginGetObject&gt;</code> - Current plugin data.  
+**Returns**: <code>Promise.[&lt;PluginGetObject&gt;](./types#PluginGetObject)</code> - Current plugin data.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -122,11 +122,11 @@ Get plugin data.
 
 <a name="Plugin+install"></a>
 
-### plugin.install(plugin, activate, version) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+### plugin.install(plugin, activate, version) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 Installs one or more plugins.
 
 **Kind**: instance method of [<code>Plugin</code>](#Plugin)  
-**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - The output of the command.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The output of the command.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -160,11 +160,11 @@ Checks if a given plugin is installed.
 
 <a name="Plugin+list"></a>
 
-### plugin.list([filters]) ⇒ <code>Promise.&lt;Array.&lt;PluginListFiltersObject&gt;&gt;</code>
+### plugin.list([filters]) ⇒ <code>Promise.&lt;Array.[&lt;PluginListFiltersObject&gt;](./types#PluginListFiltersObject)&gt;</code>
 Return list of plugin installed in the wordpress site and there data.
 
 **Kind**: instance method of [<code>Plugin</code>](#Plugin)  
-**Returns**: <code>Promise.&lt;Array.&lt;PluginListFiltersObject&gt;&gt;</code> - - List of plugin installed in the wordpress site.  
+**Returns**: <code>Promise.&lt;Array.[&lt;PluginListFiltersObject&gt;](./types#PluginListFiltersObject)&gt;</code> - - List of plugin installed in the wordpress site.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -172,11 +172,11 @@ Return list of plugin installed in the wordpress site and there data.
 
 <a name="Plugin+path"></a>
 
-### plugin.path(plugin) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+### plugin.path(plugin) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 Gets the path to a plugin or to the plugin directory.
 
 **Kind**: instance method of [<code>Plugin</code>](#Plugin)  
-**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - Path to a plugin or to the plugin directory.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - Path to a plugin or to the plugin directory.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -184,11 +184,11 @@ Gets the path to a plugin or to the plugin directory.
 
 <a name="Plugin+uninstall"></a>
 
-### plugin.uninstall(plugin) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+### plugin.uninstall(plugin) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 Uninstalls one or more plugins.
 
 **Kind**: instance method of [<code>Plugin</code>](#Plugin)  
-**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - Path to a plugin or to the plugin directory  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - Path to a plugin or to the plugin directory  
 
 | Param | Type | Description |
 | --- | --- | --- |

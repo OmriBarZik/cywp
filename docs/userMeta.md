@@ -7,11 +7,11 @@ Adds, updates, deletes, and lists user custom fields.
 
 * [UserMeta](#UserMeta)
     * [new UserMeta(user)](#new_UserMeta_new)
-    * [.add(user, key, value)](#UserMeta+add) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
-    * [.delete(user, key)](#UserMeta+delete) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+    * [.add(user, key, value)](#UserMeta+add) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
+    * [.delete(user, key)](#UserMeta+delete) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
     * [.get(user, key)](#UserMeta+get) ⇒ <code>Promise.&lt;any&gt;</code>
     * [.list(user)](#UserMeta+list) ⇒ <code>Promise.&lt;{user\_id: number, meta\_key: string, meta\_value: string}&gt;</code>
-    * [.update(user, key, value)](#UserMeta+update) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+    * [.update(user, key, value)](#UserMeta+update) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 
 <a name="new_UserMeta_new"></a>
 
@@ -25,11 +25,11 @@ Constructor for the UserMeta object.
 
 <a name="UserMeta+add"></a>
 
-### userMeta.add(user, key, value) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+### userMeta.add(user, key, value) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 Adds a meta field.
 
 **Kind**: instance method of [<code>UserMeta</code>](#UserMeta)  
-**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - The command output.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The command output.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -39,11 +39,11 @@ Adds a meta field.
 
 <a name="UserMeta+delete"></a>
 
-### userMeta.delete(user, key) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+### userMeta.delete(user, key) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 Deletes a meta field.
 
 **Kind**: instance method of [<code>UserMeta</code>](#UserMeta)  
-**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - The command output.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The command output.  
 
 | Param | Type | Description |
 | --- | --- | --- |
@@ -77,11 +77,11 @@ Lists all metadata associated with a user.
 
 <a name="UserMeta+update"></a>
 
-### userMeta.update(user, key, value) ⇒ <code>Promise.&lt;RunInContainerOutput&gt;</code>
+### userMeta.update(user, key, value) ⇒ <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code>
 Updates a meta field.
 
 **Kind**: instance method of [<code>UserMeta</code>](#UserMeta)  
-**Returns**: <code>Promise.&lt;RunInContainerOutput&gt;</code> - The command output.  
+**Returns**: <code>Promise.[&lt;RunInContainerOutput&gt;](./types#RunInContainerOutput)</code> - The command output.  
 
 | Param | Type | Description |
 | --- | --- | --- |

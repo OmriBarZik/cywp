@@ -2,7 +2,8 @@
 /* eslint-disable spellcheck/spell-checker */
 
 const { resolve, basename } = require('path')
-const { readdir, readFile, writeFile } = require('fs').promises
+const { existsSync } = require('fs')
+const { readdir, readFile, writeFile, mkdir } = require('fs/promises')
 const jsdoc2md = require('jsdoc-to-markdown')
 
 /**
@@ -82,12 +83,18 @@ async function preperdocs () {
 
   links = Object.assign({}, ...links)
 
+  const docsDir = resolve(process.cwd(), 'docs')
+
+  if (!existsSync(docsDir)) {
+    await mkdir(docsDir)
+  }
+
   const regex = new RegExp(`&lt;(${Object.keys(links).join('|')})&gt;`, 'g')
 
   markdownFiles.forEach(file => {
     file.markdown = file.markdown.replace(regex, (code, type) => `[${code}](${links[type]})`)
 
-    writeFile(`${resolve(process.cwd(), 'docs-tmp', `${file.file}.md`)}`, file.markdown)
+    writeFile(resolve(docsDir, `${file.file}.md`), file.markdown)
   })
 }
 
