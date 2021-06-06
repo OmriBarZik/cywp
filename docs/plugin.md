@@ -168,7 +168,7 @@ Return list of plugin installed in the wordpress site and there data.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [filters] | <code>PluginListFiltersObject</code> | Filter results based on the value of a field. |
+| [filters] | [<code>PluginListFiltersObject</code>](./types.md#PluginListFiltersObject) | Filter results based on the value of a field. |
 
 <a name="Plugin+path"></a>
 

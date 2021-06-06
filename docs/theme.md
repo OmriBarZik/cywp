@@ -132,7 +132,7 @@ Return list of themes installed in the wordpress site and there data.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [filters] | <code>ThemeListFiltersObject</code> | Filter results based on the value of a field. |
+| [filters] | [<code>ThemeListFiltersObject</code>](./types.md#ThemeListFiltersObject) | Filter results based on the value of a field. |
 
 <a name="Theme+path"></a>
 

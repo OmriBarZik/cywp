@@ -21,7 +21,7 @@ Constructor for the UserMeta object.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| user | <code>User</code> | the user object. |
+| user | [<code>User</code>](./user.md#User) | the user object. |
 
 <a name="UserMeta+add"></a>
 

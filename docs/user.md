@@ -129,7 +129,7 @@ Return list of users in the wordpress site and there data.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [filters] | <code>UserGetObject</code> | Filter results based on the value of a field. |
+| [filters] | [<code>UserGetObject</code>](./types.md#UserGetObject) | Filter results based on the value of a field. |
 
 <a name="User+listCaps"></a>
 

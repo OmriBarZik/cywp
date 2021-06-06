@@ -91,19 +91,22 @@ async function preperdocs () {
 
   markdownFiles.push.apply(markdownFiles, await preperWpcliFiles())
 
-  const links = extractLinks()
+  const links = extractLinks(markdownFiles)
 
   const docsDir = resolve(process.cwd(), 'docs')
 
   if (!existsSync(docsDir)) { await mkdir(docsDir) }
 
-  const regex = new RegExp(`&lt;(${Object.keys(links).join('|')})&gt;`, 'g')
+  const regexPromise = new RegExp(`&lt;(${Object.keys(links).join('|')})&gt;`, 'g')
+  const regexType = new RegExp(`(?<!\\[)<code>(${Object.keys(links).join('|')})<\\/code>`, 'g')
 
   markdownFiles.forEach(file => {
-    file.markdown = file.markdown.replace(regex, (code, type) => `[${code}](${links[type]})`)
+    file.markdown = file.markdown.replace(regexPromise, (code, type) => `[${code}](${links[type]})`)
+    file.markdown = file.markdown.replace(regexType, (code, type) => `[${code}](${links[type]})`)
 
     writeFile(resolve(docsDir, `${file.file}.md`), file.markdown)
   })
 }
 
 preperdocs()
+  .catch(console.error)
