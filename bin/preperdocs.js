@@ -34,7 +34,7 @@ async function preperTypeFile () {
 }
 
 /**
- * @returns {Array<{file: string, markdown: Promise<string>}>}
+ * @returns {Promise<Array<{file: string, markdown: string}>>} return file its markdown.
  */
 async function preperWpcliFiles () {
   const wpcliFiles = await getFiles(resolve(process.cwd(), 'src/wp-cli'), ['index.js', 'util.js', 'types.js'])
@@ -48,12 +48,12 @@ async function preperWpcliFiles () {
    */
   const replaceImport = (importPath, className) => className[0].toUpperCase() + className.slice(1)
 
-  return wpcliFiles.map(file => ({
+  return await Promise.all(wpcliFiles.map(async file => ({
     file: basename(file, '.js'),
-    markdown: readFile(file)
+    markdown: await readFile(file)
       .then(fileContent => fileContent.toLocaleString().replace(/import\(.*\/(.+)'\)/g, replaceImport))
       .then(fileContent => jsdoc2md.render({ source: fileContent })),
-  }))
+  })))
 }
 
 /**
@@ -62,24 +62,33 @@ async function preperWpcliFiles () {
 async function preperdocs () {
   const markdownFiles = []
 
-  const typeMarkdownPromise = preperTypeFile()
-
-  markdownFiles.push({ file: 'types', markdown: typeMarkdownPromise })
+  markdownFiles.push({ file: 'types', markdown: await preperTypeFile() })
 
   markdownFiles.push.apply(markdownFiles, await preperWpcliFiles())
 
-  const links = await Promise.all(markdownFiles.map(async files => {
-    const markdown = await files.markdown
+  let links = markdownFiles.map(files => {
+    const markdown = files.markdown
     const types = markdown.match(/<a name="(.*)"><\/a>/g)
       .map(match => match.substring(9, match.length - 6))
 
-    return {
-      file: files.file,
-      types: types,
-    }
-  }))
+    const typesObject = {}
 
-  console.log(links)
+    types.forEach(type => {
+      typesObject[type] = `./${files.file}#${type}`
+    })
+
+    return typesObject
+  })
+
+  links = Object.assign({}, ...links)
+
+  const regex = new RegExp(`&lt;(${Object.keys(links).join('|')})&gt;`, 'g')
+
+  markdownFiles.forEach(file => {
+    file.markdown = file.markdown.replace(regex, (code, type) => `[${code}](${links[type]})`)
+
+    writeFile(`${resolve(process.cwd(), 'docs-tmp', `${file.file}.md`)}`, file.markdown)
+  })
 }
 
 preperdocs()
