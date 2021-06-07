@@ -101,8 +101,10 @@ async function preperdocs () {
   const regexType = new RegExp(`(?<!\\[)<code>(${Object.keys(links).join('|')})<\\/code>`, 'g')
 
   markdownFiles.forEach(file => {
-    file.markdown = file.markdown.replace(regexPromise, (code, type) => `[${code}](${links[type]})`)
-    file.markdown = file.markdown.replace(regexType, (code, type) => `[${code}](${links[type]})`)
+    const setLink = (code, type) => `[${code}](${links[type]})`
+
+    file.markdown = file.markdown.replace(regexPromise, setLink)
+    file.markdown = file.markdown.replace(regexType, setLink)
 
     writeFile(resolve(docsDir, `${file.file}.md`), file.markdown)
   })
