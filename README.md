@@ -29,6 +29,29 @@ cypress-for-wordpress will analyze the plugin configuration and will set the `ba
 
 you can control the wordrpess site and the database right from your tests by using [`cy.task()`](https://docs.cypress.io/api/commands/task).
 
+### General Commands
+You can use the general tasks to control the docker containers. please notest that you can only run one process at a time, no process chaining.
+#### `wordpress`
+the wordpress task connect to the wordpress contianer, execute the given commands and return the stdout and stderr 
+<ins>Examples</ins>
+
+```js
+cy.task('wordpress', ['ls', '/']).then(output => {
+  console.log(output.stdout)
+  console.log(output.stderr)
+})
+```
+#### mysql
+the mysql task connect to the mysql contianer, execute the given commands and return the stdout and stderr 
+<ins>Examples</ins>
+
+```js
+cy.task('mysql', ['ls', '/']).then(output => {
+  console.log(output.stdout)
+  console.log(output.stderr)
+})
+```
+
 #### Examples
 ```js
 describe('wordpress check', () => {
