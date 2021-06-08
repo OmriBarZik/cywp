@@ -65,17 +65,16 @@ async function preperWpcliFiles () {
  */
 function extractLinks (markdownFiles) {
   const links = markdownFiles.map(files => {
-    const markdown = files.markdown
-    const types = markdown.match(/<a name="(.*)"><\/a>/g)
-      .map(match => match.substring(9, match.length - 6))
+    const types = {}
 
-    const typesObject = {}
+    files.markdown.match(/<a name="(.*)"><\/a>/g)
+      .forEach((match) => {
+        match = match.substring(9, match.length - 6)
 
-    types.forEach(type => {
-      typesObject[type] = `./${files.file}.md#${type}`
-    })
+        types[match] = `./${files.file}.md#${match}`
+      })
 
-    return typesObject
+    return types
   })
 
   return Object.assign({}, ...links)
