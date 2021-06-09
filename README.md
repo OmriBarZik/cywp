@@ -54,7 +54,7 @@ cy.task('mysql', ['ls', '/']).then(output => {
 
 #### `wp`
 the wp task create a [wp-cli container](https://hub.docker.com/_/wordpress) that connect to the wordpress container, execute the given commands with the `wp` prefix and return the stdout and stderr.
-wp-cli contianer is a normal wordpress container with the [wp-cli](https://wp-cli.org/) tool available. for more more info about how to use wp cli please see the [documentation site](https://developer.wordpress.org/cli/commands/)
+wp-cli contianer is a normal wordpress container with the [wp-cli](https://wp-cli.org/) tool available. for more more info about how to use wp cli please see the [WP CLI documentation site](https://developer.wordpress.org/cli/commands/)
 ##### Example
 
 ```js
@@ -63,6 +63,16 @@ cy.task('wp', ['cli', 'info']).then(output => {
   console.log(output.stderr)
 })
 ```
+
+### WP-CLI Tasks
+We have made a tasks presets for some of WP-CLI commansds.
+
+there are 3 types of presets
+
+1. general command prestes (plugin, theme, user, etc...) with the prefix `wp:`
+   those commands are like
+#### Plugins
+The `wp:plugin` task will create a wp-cli container with the plugin preset
 
 #### Examples
 ```js
