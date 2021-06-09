@@ -32,8 +32,8 @@ you can control the wordrpess site and the database right from your tests by usi
 ### General Commands
 You can use the general tasks to control the docker containers. please notest that you can only run one process at a time, no process chaining.
 #### `wordpress`
-the wordpress task connect to the wordpress contianer, execute the given commands and return the stdout and stderr 
-##### Examples
+the wordpress task connect to the [wordpress contianer](https://hub.docker.com/_/wordpress), execute the given commands and return the stdout and stderr.
+##### Example
 
 ```js
 cy.task('wordpress', ['ls', '/']).then(output => {
@@ -42,8 +42,8 @@ cy.task('wordpress', ['ls', '/']).then(output => {
 })
 ```
 #### `mysql`
-the mysql task connect to the mysql contianer, execute the given commands and return the stdout and stderr 
-##### Examples
+the mysql task connect to the [mysql contianer](https://hub.docker.com/_/mysql), execute the given commands and return the stdout and stderr.
+##### Example
 
 ```js
 cy.task('mysql', ['ls', '/']).then(output => {
@@ -51,6 +51,20 @@ cy.task('mysql', ['ls', '/']).then(output => {
   console.log(output.stderr)
 })
 ```
+
+#### `wp`
+the wp task create a [wp-cli container](https://hub.docker.com/_/wordpress) that connect to the wordpress container, execute the given commands with the `wp` prefix and return the stdout and stderr.
+wp-cli contianer is a normal wordpress container with the [wp-cli](https://wp-cli.org/) tool available. for more more info about how to use wp cli please see the [documentation site](https://developer.wordpress.org/cli/commands/)
+##### Example
+
+```js
+cy.task('wp', ['cli', 'info']).then(output => {
+  console.log(output.stdout)
+  console.log(output.stderr)
+})
+```
+
+#### `wp:plugin`
 
 #### Examples
 ```js
