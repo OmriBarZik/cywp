@@ -67,27 +67,23 @@ cy.task('wp', ['cli', 'info']).then(output => {
 ### WP-CLI Tasks
 To make your life easier we have some of the WP-CLI commands as cypress tasks. For the full list of commands please see our [docs](docs)
 
-Some of the tasks take one parameter like the task ([`wp:user:get`](docs/user.md#User+get)) that takes only the user name of id, and some take multiple like the task [`wp:plugin:install`](docs/plugin.md#Plugin+install) that takes 
+Some tasks take one parameter and some take multipul parameters, we pass the arguments to the command depended of the namber of parameters.
 
-#### Plugins
-The `wp:plugin` task will create a wp-cli container with the plugin preset
-
-#### Examples
+#### Tasks with one parameter
+When the tasks have only on parameter like the task [`wp:user:get`](docs/user.md#User+get) we pass it like so
 ```js
-describe('wordpress check', () => {
-  it('should execute commands on wordpress',() => {
-
-    cy.task('wordpress', ['ls', '/']).then(files => {
-      cy.log(files);
-    });
-
-    cy.task('wp:plugin:install', {plugin: 'elementor', activate: true})
-
-
-    cy.task('wp:theme:isInstalled', 'twentytwenty')
-  })
+cy.task('wp:user:get', 1)
 ```
-for the full list of apis please check out the [API section](#API)
+
+#### Tasks with multiple parameters
+When the task have multiple parameters we pass each parameter in an object with the name of the parameter as the object propety like in [`wp:plugin:install`](docs/plugin.md#Plugin+install)
+```js
+cy.task('wp:plugin:install', {plugin: 'elementor', activate: true, version: '2.0.0'})
+```
+even if you pass the task only one parameter you need to spesify which one
+```js
+cy.task('wp:plugin:install', {plugin: 'elementor'})
+```
 
 ## Configuration
 
@@ -161,31 +157,3 @@ To skip docker pull just need to set the environment variable `cypress_skip_pull
 ```bash
 cypress_skip_pull=1 npm run test
 ```
-
-## API
-this aria sohw the full list of API avilble.
-### contianers
-Controlling the docker contianers
-#### wordpress
-exsecute commands on the wordpress contianer.
-```js 
-cy.task('wordpress', <commands>)
-```
-##### arguments
-1. {string[]} commands - commands to exsecute on the container
-
-#### mysql
-exsecute commands on the wordpress contianer.
-```js 
-cy.task('mysql', <commands>)
-```
-##### arguments
-1. {string[]} commands - commands to exsecute on the container
-
-#### wp
-create a temperery wp-cli contianer that connect to the wordpress contianer and excexute the give commands. 
-```js 
-cy.task('wp', <commands>)
-```
-##### arguments
-1. {string[]} commands - commands to exsecute on the container
