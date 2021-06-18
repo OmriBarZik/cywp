@@ -24,6 +24,67 @@ module.exports = (on, config) => {
 
 cypress-for-wordpress will analyze the plugin configuration and will set the `baseUrl`. for more info [see Cypress configuration documentation](https://docs.cypress.io/guides/references/configuration#Global).
 
+
+## Usage 
+
+you can control the wordrpess site and the database right from your tests by using [`cy.task()`](https://docs.cypress.io/api/commands/task).
+
+### General Commands
+You can use the general tasks to control the docker containers. please notest that you can only run one command at a time, no process chaining `&`, `&&`, `|`, or `||`).
+#### `wordpress`
+the wordpress task connect to the [wordpress contianer](https://hub.docker.com/_/wordpress), execute the given commands and return the stdout and stderr.
+##### Example
+
+```js
+cy.task('wordpress', ['ls', '/']).then(output => {
+  console.log(output.stdout)
+  console.log(output.stderr)
+})
+```
+#### `mysql`
+the mysql task connect to the [mysql contianer](https://hub.docker.com/_/mysql), execute the given commands and return the stdout and stderr.
+##### Example
+
+```js
+cy.task('mysql', ['ls', '/']).then(output => {
+  console.log(output.stdout)
+  console.log(output.stderr)
+})
+```
+
+#### `wp`
+the wp task create a [wp-cli container](https://hub.docker.com/_/wordpress) that connect to the wordpress container, execute the given commands with the `wp` prefix and return the stdout and stderr.
+wp-cli contianer is a normal wordpress container with the [wp-cli](https://wp-cli.org/) tool available. for more more info about how to use wp cli please see the [WP CLI documentation site](https://developer.wordpress.org/cli/commands/)
+##### Example
+
+```js
+cy.task('wp', ['cli', 'info']).then(output => {
+  console.log(output.stdout)
+  console.log(output.stderr)
+})
+```
+
+### WP-CLI Tasks
+To make your life easier we have some of the WP-CLI commands as cypress tasks. For the full list of commands please see our [docs](docs)
+
+Some tasks take one parameter and some take multipul parameters, we pass the arguments to the command depended of the namber of parameters.
+
+#### Tasks with one parameter
+When the tasks have only on parameter like the task [`wp:user:get`](docs/user.md#User+get) we pass it like so
+```js
+cy.task('wp:user:get', 1)
+```
+
+#### Tasks with multiple parameters
+When the task have multiple parameters we pass each parameter in an object with the name of the parameter as the object propety like in [`wp:plugin:install`](docs/plugin.md#Plugin+install)
+```js
+cy.task('wp:plugin:install', {plugin: 'elementor', activate: true, version: '2.0.0'})
+```
+even if you pass the task only one parameter you need to spesify which one
+```js
+cy.task('wp:plugin:install', {plugin: 'elementor'})
+```
+
 ## Configuration
 
 You can configure your site by using the following configuration in your `cypress.json` file.
@@ -90,9 +151,9 @@ You add remote plugins bypassing the wanted version.
   }
 }
 ```
+
 ### Docker Pull Skip
 To skip docker pull just need to set the environment variable `cypress_skip_pull` to 1.
 ```bash
 cypress_skip_pull=1 npm run test
 ```
-

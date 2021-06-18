@@ -165,7 +165,7 @@ class Container {
    * Run commands in a running container.
    *
    * @param {Array} commands - Commands to run.
-   * @returns {Promise<Container>} Return the current container.
+   * @returns {Promise<RunInContainerOutput>} Return the current container.
    */
   exec (commands) {
     if (!Array.isArray(commands)) {
@@ -178,8 +178,8 @@ class Container {
 
     execArgs.push.apply(execArgs, commands)
 
-    return this.dockerContainer(execArgs, () => {
-      return this
+    return this.dockerContainer(execArgs, (stdout, stderr) => {
+      return { stdout: stdout, stderr: stderr }
     })
   }
 }
