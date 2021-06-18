@@ -1,88 +1,7 @@
 require('./types')
 const { CreateWordpressCliContainer } = require('../docker/presets/containers')
 const { FormatToWordpressDate, CheckIfArrayOrString } = require('./util')
-
-/**
- * Adds, updates, deletes, and lists user custom fields.
- */
-class UserMeta {
-  /**
-   * Constructor for the UserMeta object.
-   *
-   * @param {User} user - the user object.
-   */
-  constructor (user) {
-    /** @type {(commands: string[]) => Promise<RunInContainerOutput>} */
-    this.wpUserMeta = (commands) => user.wpUser(['meta', ...commands])
-  }
-
-  /**
-   * Adds a meta field.
-   *
-   * @param {string|number} user - The user login, user email, or user ID of the user to add metadata for.
-   * @param {string} key - The metadata key.
-   * @param {string} value - The new metadata value.
-   * @returns {Promise<RunInContainerOutput>} The command output.
-   */
-  add (user, key, value) {
-    const addArgs = ['add', user, key, value]
-
-    return this.wpUserMeta(addArgs)
-  }
-
-  /**
-   * Deletes a meta field.
-   *
-   * @param {string|number} user - The user login, user email, or user ID of the user to delete metadata from.
-   * @param {string} key - he metadata key.
-   * @returns {Promise<RunInContainerOutput>} The command output.
-   */
-  delete (user, key) {
-    const deleteArgs = ['delete', user, key]
-
-    return this.wpUserMeta(deleteArgs)
-  }
-
-  /**
-   * Gets meta field value.
-   *
-   * @param {string|number} user - The user login, user email, or user ID of the user to get metadata for.
-   * @param {string} key - The metadata key.
-   * @returns {Promise<any>} The command output.
-   */
-  get (user, key) {
-    const getArgs = ['get', '--format=json', user, key]
-
-    return this.wpUserMeta(getArgs)
-      .then(output => JSON.parse(output.stdout))
-  }
-
-  /**
-   * Lists all metadata associated with a user.
-   *
-   * @param {string|number} user - The user login, user email, or user ID of the user to get metadata for.
-   * @returns {Promise<{user_id: number, meta_key: string, meta_value: string}>} list of the user metadata
-   */
-  list (user) {
-    const listArgs = ['list', '--format=json', user]
-
-    return this.wpUserMeta(listArgs)
-      .then(output => JSON.parse(output.stdout))
-  }
-
-  /**
-   * Updates a meta field.
-   *
-   * @param {string|number} user - The user login, user email, or user ID of the user to update metadata for.
-   * @param {string} key - The metadata key.
-   * @param {string} value - The new metadata value.
-   */
-  update (user, key, value) {
-    const updateArgs = ['update', user, key, value]
-
-    this.wpUserMeta(updateArgs)
-  }
-}
+const UserMeta = require('./userMeta')
 
 /**
  * Manages users, along with their roles, capabilities, and meta.
@@ -268,7 +187,7 @@ class User {
    * Return the user's capabilities
    *
    * @param {string|number} user - User to check
-   * @returns {Promise<{name: string}[]>} List of the user capabilities.
+   * @returns {Promise<Array<{name: string}>>} List of the user capabilities.
    */
   listCaps (user) {
     const listCapsArgs = ['list-caps', '--format=json', user]

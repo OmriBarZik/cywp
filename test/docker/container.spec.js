@@ -182,7 +182,8 @@ describe('Container', () => {
       container.exec(['command'])
 
       expect(container.dockerContainer.mock.calls[0][0]).toEqual(['exec', container.options.id, 'command'])
-      expect(container.dockerContainer.mock.calls[0][1]()).toBe(container)
+      expect(container.dockerContainer.mock.calls[0][1]()).toHaveProperty('stdout')
+      expect(container.dockerContainer.mock.calls[0][1]()).toHaveProperty('stderr')
     })
 
     it('should throw error if commands in not an array', async () => {

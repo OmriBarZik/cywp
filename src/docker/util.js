@@ -24,7 +24,7 @@ function ReturnPromise (process, callback) {
   return new Promise((resolve, reject) => {
     process.on('close', (code) => {
       if (code) {
-        reject(stderr)
+        reject(new Error(`stdout: ${stdout}\nstderr: ${stderr}`))
         return
       }
 

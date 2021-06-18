@@ -176,14 +176,7 @@ class Container {
    * the comamnds stdout and stderr are available at exec().stdout and exec().stderr
    *
    * @param {Array} commands - Commands to run.
-   * @returns {Promise<Container>} Return the current container.
-   * @example
-   * ```js
-   * exec().then(container => {
-   *  console.log(container.stdout)
-   *  console.error(container.stderr)
-   * })
-   * ```
+   * @returns {Promise<RunInContainerOutput>} Return the current container.
    */
   exec (commands) {
     if (!Array.isArray(commands)) {
@@ -197,10 +190,7 @@ class Container {
     execArgs.push.apply(execArgs, commands)
 
     return this.dockerContainer(execArgs, (stdout, stderr) => {
-      this.stdout = stdout
-      this.stderr = stderr
-
-      return this
+      return { stdout: stdout, stderr: stderr }
     })
   }
 }
