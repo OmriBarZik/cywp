@@ -65,14 +65,10 @@ cy.task('wp', ['cli', 'info']).then(output => {
 ```
 
 ### WP-CLI Tasks
-Some of the WP-CLI commands have a spesific tasks.
+To make your life easier we have some of the WP-CLI commands as cypress tasks. For the full list of commands please see our [docs](docs)
 
-to use those 
+Some of the tasks take one parameter like the task ([`wp:user:get`](docs/user.md#User+get)) that takes only the user name of id, and some take multiple like the task [`wp:plugin:install`](docs/plugin.md#Plugin+install) that takes 
 
-there are 3 types of presets
-
-1. general command prestes (plugin, theme, user, etc...) with the prefix `wp:`
-   those commands are like
 #### Plugins
 The `wp:plugin` task will create a wp-cli container with the plugin preset
 
