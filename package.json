@@ -71,6 +71,9 @@
     "e2e",
     "test"
   ],
+  "release": {
+    "branch": "main"
+  },
   "jest": {
     "coverageDirectory": "coverage",
     "coverageReporters": [
