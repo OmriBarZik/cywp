@@ -1,4 +1,4 @@
-# cypress-for-wordpress [![Test](https://github.com/OmriBarZik/cywp/actions/workflows/tests.yml/badge.svg)](https://github.com/OmriBarZik/cywp/actions/workflows/tests.yml)[![Known Vulnerabilities](https://snyk.io/test/github/OmriBarZik/cywp/badge.svg)](https://snyk.io/test/github/OmriBarZik/cywp)
+# cypress-for-wordpress [![Test](https://github.com/OmriBarZik/cywp/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/OmriBarZik/cywp/actions/workflows/tests.yml) [![Known Vulnerabilities](https://snyk.io/test/github/OmriBarZik/cywp/badge.svg)](https://snyk.io/test/github/OmriBarZik/cywp)
 
 Cypress-for-wordpres helps you create testing environments for your WordPress plugins and themes.
 
