@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ['10.x', '12.x']
+        node-version: ['10.x', '12.x', '14.x']
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -46,7 +46,7 @@ jobs:
         run: npm run coverage
 
       - name: Uplode coverage
-        if: ${{ matrix.node-version == '12.x' }}
+        if: ${{ matrix.node-version == '14.x' }}
         uses: codecov/codecov-action@v1
         with:
           directory:  ./coverage
