@@ -1,6 +1,6 @@
 {
   "name": "cypress-for-wordpress",
-  "version": "0.1.1",
+  "version": "0.0.0-development",
   "description": "cypress environment builder for wordpress",
   "author": "Omri BarZik <omri@bar-zik.com>",
   "main": "index.js",
@@ -36,7 +36,8 @@
     "lint:fix": "eslint . --fix",
     "pre-push": "run-p coverage lint snyk",
     "prepare": "husky install",
-    "docs": "node bin/preperdocs.js"
+    "docs": "node bin/preperdocs.js",
+    "semantic-release": "semantic-release"
   },
   "peerDependencies": {
     "cypress": ">=6.7.x"
@@ -60,7 +61,8 @@
     "jest": "^26.5.2",
     "jsdoc-to-markdown": "^7.0.1",
     "npm-run-all": "^4.1.5",
-    "snyk": "^1.563.0"
+    "snyk": "^1.563.0",
+    "semantic-release": "^17.4.4"
   },
   "keywords": [
     "wordpress",
@@ -69,6 +71,9 @@
     "e2e",
     "test"
   ],
+  "release": {
+    "branch": "main"
+  },
   "jest": {
     "coverageDirectory": "coverage",
     "coverageReporters": [
