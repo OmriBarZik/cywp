@@ -51,6 +51,7 @@ module.exports = {
           'stderr',
           'ps',
           'wordpress',
+          'wpcli',
           'mysql',
           'twentyseventeen',
           'twentytwenty',
