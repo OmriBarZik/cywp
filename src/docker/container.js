@@ -93,8 +93,6 @@ class Container {
   /**
    * Return the container logs
    *
-   * the comamnds stdout and stderr are available at logs().stdout and logs().stderr
-   *
    * @param {object} options - options object for logs.
    * @param {string} options.since - Show logs since timestamp (e.g. 2020-01-02T13:23:37) or relative (e.g. 42m for 42 minutes)
    * @param {string} options.tail - Number of lines to show from the end of the logs (default "all")
