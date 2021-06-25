@@ -1,7 +1,7 @@
 const checkConfig = require('./config')
 const { SetupDatabase, SetupSite, setupNetwork } = require('./workflow/environment')
 const { unsafeVerify } = require('./verify')
-const { Docker } = require('../docker/docker')
+const { Docker } = require('./docker/docker')
 const Plugin = require('./wp-cli/plugin')
 const Theme = require('./wp-cli/theme')
 const User = require('./wp-cli/user')
