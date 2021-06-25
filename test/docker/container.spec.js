@@ -79,7 +79,7 @@ describe('Container', () => {
       return container.logs().then((logs) => {
         expect(logs.stdout).toEqual(expect.stringContaining('docker'))
         expect(logs.stderr).toBeFalsy()
-        expect(logs).toBe(container)
+        expect(logs.container).toBe(container)
       })
     })
 
@@ -89,7 +89,7 @@ describe('Container', () => {
       return container.logs({ tail: 2 }).then(logs => {
         expect(logs.stdout).toEqual(' https://docs.docker.com/get-started/\n\n')
         expect(logs.stderr).toBeFalsy()
-        expect(logs).toBe(container)
+        expect(logs.container).toBe(container)
       })
     })
 
@@ -103,7 +103,7 @@ describe('Container', () => {
       return container.logs({ timeStamps: true }).then(logs => {
         expect(logs.stdout).toEqual(expect.stringContaining(time.toISOString().substr(0, 17)))
         expect(logs.stderr).toBeFalsy()
-        expect(logs).toBe(container)
+        expect(logs.container).toBe(container)
       })
     })
 
@@ -117,7 +117,7 @@ describe('Container', () => {
       return container.logs({ since: time.toISOString() }).then(logs => {
         expect(logs.stdout).toBeTruthy()
         expect(logs.stderr).toBeFalsy()
-        expect(logs).toBe(container)
+        expect(logs.container).toBe(container)
       })
     })
 
@@ -131,7 +131,7 @@ describe('Container', () => {
       return container.logs({ since: time.toISOString() }).then(logs => {
         expect(logs.stdout).toBeFalsy()
         expect(logs.stderr).toBeFalsy()
-        expect(logs).toBe(container)
+        expect(logs.container).toBe(container)
       })
     })
   })
