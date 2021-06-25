@@ -43,7 +43,8 @@
     "cypress": ">=6.7.x"
   },
   "dependencies": {
-    "command-exists": "1.2.9"
+    "command-exists": "1.2.9",
+    "commander": "^7.2.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.14",
