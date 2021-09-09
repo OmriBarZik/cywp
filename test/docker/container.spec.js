@@ -87,7 +87,8 @@ describe('Container', () => {
       const container = await CreateContainer({ image: 'hello-world' }, true)
 
       return container.logs({ tail: 2 }).then(logs => {
-        expect(logs.stdout).toEqual(' https://docs.docker.com/get-started/\n\n')
+        expect(logs.stdout).toContain('https://docs.docker.com')
+        expect(logs.stdout.split('\n')).toHaveLength(3)
         expect(logs.stderr).toBeFalsy()
         expect(logs.container).toBe(container)
       })
