@@ -1,4 +1,13 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.19.0
-ignore: {}
+version: v1.22.1
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  SNYK-JS-REQUEST-1314897:
+    - semantic-release > @semantic-release/npm > npm > @npmcli/arborist > @npmcli/metavuln-calculator > pacote > @npmcli/run-script > node-gyp > request:
+        reason: None given
+        expires: '2021-10-09T08:20:49.588Z'
+  SNYK-JS-TRIMOFFNEWLINES-1296850:
+    - semantic-release > @semantic-release/commit-analyzer > conventional-commits-parser > trim-off-newlines:
+        reason: None given
+        expires: '2021-10-09T08:20:49.588Z'
 patch: {}
