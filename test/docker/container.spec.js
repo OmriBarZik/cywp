@@ -88,6 +88,7 @@ describe('Container', () => {
 
       return container.logs({ tail: 2 }).then(logs => {
         expect(logs.stdout).toContain('https://docs.docker.com')
+        expect(logs.stdout.split('\n')).toHaveLength(3)
         expect(logs.stderr).toBeFalsy()
         expect(logs.container).toBe(container)
       })
