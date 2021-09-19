@@ -15,7 +15,7 @@ async function getFiles (dir, exclude = []) {
   const dirents = await readdir(dir, { withFileTypes: true })
   const files = await Promise.all(dirents.map((dirent) => {
     const res = resolve(dir, dirent.name)
-    if ('.' === dirent.name[0] || exclude.find(dir => dir === dirent.name)) { return }
+    if ('.' === dirent.name[0] || exclude.find(dir => dir === dirent.name)) { return 0 }
     return dirent.isDirectory() ? getFiles(res, exclude) : res
   }))
     .then(files => files.filter(file => file))

@@ -89,7 +89,6 @@ class Plugin {
    *
    * @param {string|string[]|'all'} plugin - One or more plugins to delete, use 'all' to delete all plugins.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
-   *
    * @example ```js
    * const plugin = new Plugin(WordPress)
    *

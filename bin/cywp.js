@@ -211,7 +211,8 @@ function getConfig () {
 
   if (!fs.existsSync(cypressPath)) {
     const errorMassage = `cypress.json was not found in ${path.dirname(cypressPath)}!`
-    const userHelper = program.project ? 'please check the \'--project\' path!'
+    const userHelper = program.project
+      ? 'please check the \'--project\' path!'
       : 'create cypress.json or use --path to direct to a valid cypress project'
 
     console.error(`${errorMassage}\n${userHelper}`)
