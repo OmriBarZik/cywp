@@ -30,7 +30,7 @@ program
 
 program.command('rm [container]')
   .description('removes all stopped containers, networks and volumes of the project', {
-    container: 'remove a specific container (wordpress|mysql|phpmyadmin)',
+    container: 'remove a specific container (wordpress|mysql)',
   })
   .option('-a, --all', 'remove all containers, networks and volumes that starts with \'cywp-\' prefix')
   .option('-f, --force', 'removes all containers, networks and volumes, even running once')
