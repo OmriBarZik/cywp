@@ -2,12 +2,14 @@
 version: v1.22.1
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  SNYK-JS-REQUEST-1314897:
-    - semantic-release > @semantic-release/npm > npm > @npmcli/arborist > @npmcli/metavuln-calculator > pacote > @npmcli/run-script > node-gyp > request:
+  SNYK-JS-ANSIREGEX-1583908:
+    - semantic-release > @semantic-release/npm > npm > cli-table3 > string-width > strip-ansi > ansi-regex:
         reason: None given
-        expires: '2021-10-09T08:20:49.588Z'
-  SNYK-JS-TRIMOFFNEWLINES-1296850:
-    - semantic-release > @semantic-release/commit-analyzer > conventional-commits-parser > trim-off-newlines:
+        expires: '2021-10-19T17:20:28.530Z'
+    - semantic-release > @semantic-release/npm > npm > @npmcli/arborist > @npmcli/metavuln-calculator > pacote > @npmcli/run-script > node-gyp > npmlog > gauge > string-width > strip-ansi > ansi-regex:
         reason: None given
-        expires: '2021-10-09T08:20:49.588Z'
+        expires: '2021-10-19T17:20:28.530Z'
+    - semantic-release > @semantic-release/npm > npm > @npmcli/arborist > @npmcli/metavuln-calculator > pacote > @npmcli/run-script > node-gyp > npmlog > gauge > wide-align > string-width > strip-ansi > ansi-regex:
+        reason: None given
+        expires: '2021-10-19T17:20:28.530Z'
 patch: {}
