@@ -43,7 +43,6 @@ class Theme {
    * @param {string|string[]|'all'} theme - One or more themes to delete, use 'all' to delete all except active theme.
    * @param {boolean} force - To delete active theme use this.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
-   *
    * @example ```js
    * const theme = new Theme(WordPress)
    *

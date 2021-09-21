@@ -71,7 +71,6 @@ class User {
    * @param {string} [options.lastName] - The user’s last name.
    * @param {string} [options.description] - A string containing content about the user.
    * @param {string} [options.userEmail] - The email address of the user to create. default: `${options.userLogin}@cywp.local`
-   *
    * @returns {Promise<RunInContainerOutput>} Retruns newy created User id.
    */
   create (options = {}) {
@@ -291,7 +290,6 @@ class User {
    * @param {string} [options.description] -A string containing content about the user.
    * @param {Date} [options.userRegistered] - The date the user registered.
    * @param {'administrator'|'editor'|'author'|'contributor'|'subscriber'} [options.role] - A string used to set the user’s role.
-   *
    * @returns {Promise<RunInContainerOutput>} the output of the command.
    */
   update (options = {}) {
