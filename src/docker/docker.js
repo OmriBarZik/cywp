@@ -136,7 +136,6 @@ class Docker {
    * the option must includ NAME or ID else the method will return NULL
    *
    * @param {ContainerOptions} options - the option of the container you want to attach to.
-   *
    * @returns {Promise<Container>} - return the first maching container.
    */
   AttachContainer (options) {
@@ -410,7 +409,6 @@ function processCreateContainerOptions (options, run, detach) {
 
 /**
  * @param {ContainerOptions} options - the option of the container you want to attach to.
- *
  * @returns {string[]} Array of arguments
  */
 function processAttachContainerOptions (options) {
@@ -439,7 +437,6 @@ function processAttachContainerOptions (options) {
  * clean and extract the id's from the output of the docker command.
  *
  * @param {string} stdout - the raw output of a docker command.
- *
  * @returns {string[]} the clean output.
  */
 function cleanID (stdout) {

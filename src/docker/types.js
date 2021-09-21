@@ -27,7 +27,8 @@
  * @property {string} grope - Sets group name or GID, must be used with user.
  */
 
-/** @typedef RunInContainerOutput
+/**
+ * @typedef RunInContainerOutput
  * @type {object}
  * @property {string} stdout - Container output from log stream.
  * @property {string} stderr - Container output from error stream.
