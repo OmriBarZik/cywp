@@ -19,39 +19,38 @@ program
 
 program
   .command('exec')
+  .description('execute command on a specified container')
   .passThroughOptions(true)
-  .arguments('<container> <command> [args...]')
-  .description('execute command on a specified container', {
-    container: 'Container to run the command. (wordpress|mysql|wpcli)',
-    command: 'command to run on the container',
-    args: 'command arguments',
-  })
+  .argument('<container>', 'Container to run the command. (wordpress|mysql|wpcli)')
+  .argument('<command>', 'command to run on the container.')
+  .argument('[args...]', 'command arguments.')
   .action(exec)
 
-program.command('rm [container]')
-  .description('removes all stopped containers, networks and volumes of the project', {
-    container: 'remove a specific container (wordpress|mysql)',
-  })
+program
+  .command('rm')
+  .argument('[container]', 'remove a specific container (wordpress|mysql)')
+  .description('removes all stopped containers, networks and volumes of the project')
   .option('-a, --all', 'remove all containers, networks and volumes that starts with \'cywp-\' prefix')
   .option('-f, --force', 'removes all containers, networks and volumes, even running once')
   .option('--no-volumes', 'do not delete connected volumes')
   .action(rm)
 
-program.command('start [container]')
-  .description('start cypress-for-wordpress environment', {
-    container: 'if set create and start a specific container (wordpress|mysql)',
-  })
+program
+  .command('start')
+  .description('start cypress-for-wordpress environment')
+  .argument('[container]', 'start cypress-for-wordpress environment')
   .option('-s --skip-pull', 'sets if to skip docker pull')
   .action(start)
 
-program.command('stop [container]')
-  .description('stop all project\'s containers', {
-    container: 'stop a specific container (wordpress|mysql)',
-  })
+program
+  .command('stop')
+  .description('stop all project\'s containers')
+  .argument('[container]', 'stop a specific container (wordpress|mysql)')
   .option('-a, --all', 'stop all containers that starts with \'cywp-\' prefix')
   .action(stop)
 
-program.command('status')
+program
+  .command('status')
   .description('display current containers status.')
   .action(status)
 
@@ -136,11 +135,10 @@ async function start (container, options) {
     case 'wordpress':
       getWordpress()
         .then(wordpress => wordpress.start())
-        .catch(() => {
-          return getMysql
+        .catch(() =>
+          getMysql()
             .catch(() => commandFailed('mysql container must be running to start wordpress'))
-            .then(mysql => CreateWordpress(mysql, config.env))
-        })
+            .then(mysql => CreateWordpress(mysql, config.env)))
       break
     case 'mysql':
       getMysql()

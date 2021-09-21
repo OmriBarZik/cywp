@@ -1,9 +1,9 @@
-const { SetupSite } = require('./workflow/environment')
-const { Docker } = require('./docker/docker')
-const Plugin = require('./wp-cli/plugin')
-const Theme = require('./wp-cli/theme')
-const User = require('./wp-cli/user')
-const WPCLI = require('./wp-cli')
+const { SetupSite } = require('./environment')
+const { Docker } = require('../docker/docker')
+const Plugin = require('../wp-cli/plugin')
+const Theme = require('../wp-cli/theme')
+const User = require('../wp-cli/user')
+const WPCLI = require('../wp-cli')
 
 /**
  * Display a message at the start and the end of each run.
