@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 
 const fs = require('fs')
 const path = require('path')
@@ -213,9 +212,7 @@ function getConfig () {
       ? 'please check the \'--project\' path!'
       : 'create cypress.json or use --path to direct to a valid cypress project'
 
-    console.error(`${errorMassage}\n${userHelper}`)
-
-    process.exit(1)
+    throw new Error(`${errorMassage}\n${userHelper}`)
   }
 
   return checkConfig({ configFile: cypressPath, env: {} }, true)
@@ -253,7 +250,5 @@ function commandFailed (errorMessage) {
     errorMessage = errorMessage.message
   }
 
-  console.error('Error: ' + errorMessage)
-
-  process.exit(1)
+  throw new Error(errorMessage)
 }
