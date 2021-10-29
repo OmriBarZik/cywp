@@ -2,14 +2,8 @@
 version: v1.22.1
 # ignores vulnerabilities until expiry date; change duration by modifying expiry date
 ignore:
-  SNYK-JS-ANSIREGEX-1583908:
-    - semantic-release > @semantic-release/npm > npm > cli-table3 > string-width > strip-ansi > ansi-regex:
+  SNYK-JS-RAMDA-1582370:
+    - cypress > ramda:
         reason: None given
-        expires: '2021-10-19T17:20:28.530Z'
-    - semantic-release > @semantic-release/npm > npm > @npmcli/arborist > @npmcli/metavuln-calculator > pacote > @npmcli/run-script > node-gyp > npmlog > gauge > string-width > strip-ansi > ansi-regex:
-        reason: None given
-        expires: '2021-10-19T17:20:28.530Z'
-    - semantic-release > @semantic-release/npm > npm > @npmcli/arborist > @npmcli/metavuln-calculator > pacote > @npmcli/run-script > node-gyp > npmlog > gauge > wide-align > string-width > strip-ansi > ansi-regex:
-        reason: None given
-        expires: '2021-10-19T17:20:28.530Z'
+        expires: '2021-11-28T13:44:00.686Z'
 patch: {}
