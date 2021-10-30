@@ -5,18 +5,14 @@ module.exports = {
     'plugin:jsdoc/recommended',
     'plugin:jest/style',
     'plugin:jest/recommended',
+    'plugin:node/recommended-script',
   ],
-  parserOptions: {
-    ecmaVersion: 2018,
-    sourceType: 'module',
-  },
   plugins: [
     'jest',
     'jsdoc',
     'spellcheck',
   ],
   env: {
-    es6: true,
     node: true,
     'jest/globals': true,
   },

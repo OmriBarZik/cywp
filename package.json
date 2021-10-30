@@ -14,17 +14,20 @@
     "type": "git",
     "url": "https://github.com/OmriBarZik/cywp.git"
   },
+  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/OmriBarZik/cywp/issues"
   },
   "files": [
     "src/**",
-    "bin/**"
+    "bin/cywp.js"
   ],
   "directories": {
     "lib": "./src ",
-    "test": "./test",
-    "bin": "./bin"
+    "test": "./test"
+  },
+  "bin": {
+    "cywp": "bin/cywp.js"
   },
   "scripts": {
     "start": "node index",
@@ -41,6 +44,9 @@
   },
   "peerDependencies": {
     "cypress": ">=6.7.x"
+  },
+  "engines": {
+    "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
   },
   "dependencies": {
     "command-exists": "1.2.9",

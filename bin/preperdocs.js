@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /* eslint-disable spellcheck/spell-checker */
 
 const { resolve, basename } = require('path')
