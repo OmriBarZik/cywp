@@ -20,12 +20,14 @@
   },
   "files": [
     "src/**",
-    "bin/**"
+    "bin/cywp.js"
   ],
   "directories": {
     "lib": "./src ",
-    "test": "./test",
-    "bin": "./bin"
+    "test": "./test"
+  },
+  "bin": {
+    "cywp": "bin/cywp.js"
   },
   "scripts": {
     "start": "node index",
