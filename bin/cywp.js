@@ -213,7 +213,7 @@ function getConfig () {
       ? 'please check the \'--project\' path!'
       : 'create cypress.json or use --path to direct to a valid cypress project'
 
-    throw new Error(`${errorMassage}\n${userHelper}`)
+    commandFailed(`${errorMassage}\n${userHelper}`)
   }
 
   return checkConfig({ configFile: cypressPath, env: {} }, true)
