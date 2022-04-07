@@ -3,18 +3,34 @@
     "standard",
     "plugin:jsdoc/recommended",
     "plugin:jest/style",
-    "plugin:jest/recommended",
-    "plugin:node/recommended-script"
+    "plugin:node/recommended-script",
+    "plugin:promise/recommended"
   ],
   "plugins": [
-    "jest",
     "jsdoc",
-    "spellcheck"
+    "spellcheck",
+    "promise"
   ],
   "env": {
-    "node": true,
-    "jest/globals": true
+    "node": true
   },
+  "overrides": [
+    {
+      "extends": "plugin:jest/recommended",
+      "files": [
+        "**/*.spec.js"
+      ],
+      "env": {
+        "jest/globals": true
+      },
+      "plugins": [
+        "jest"
+      ],
+      "rules": {
+        "promise/always-return": "off"
+      }
+    }
+  ],
   "rules": {
     "yoda": [
       "error",

@@ -165,7 +165,7 @@ class Plugin {
   isActive (plugin) {
     return this.wpPlugin(['is-active', plugin])
       .then(() => true)
-      .catch(() => Promise.resolve(false))
+      .catch(() => false)
   }
 
   /**
@@ -177,7 +177,7 @@ class Plugin {
   isInstalled (plugin) {
     return this.wpPlugin(['is-installed', plugin])
       .then(() => true)
-      .catch(() => Promise.resolve(false))
+      .catch(() => false)
   }
 
   /**

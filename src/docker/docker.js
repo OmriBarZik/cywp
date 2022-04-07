@@ -165,69 +165,68 @@ class Docker {
 
       const attachContainer = new Container(attachOptions)
 
-      return attachContainer.inspect().then(info => {
-        attachContainer.options.status = info.State.Status
-        attachContainer.options.network = info.HostConfig.NetworkMode
-        attachContainer.options.image = info.Config.Image
+      const info = attachContainer.inspect()
+      attachContainer.options.status = info.State.Status
+      attachContainer.options.network = info.HostConfig.NetworkMode
+      attachContainer.options.image = info.Config.Image
 
-        if (info.Path) {
-          attachContainer.options.commands = [info.Path]
-        }
+      if (info.Path) {
+        attachContainer.options.commands = [info.Path]
+      }
 
-        if (info.Args) {
-          attachContainer.options.commands.push
-            .apply(attachContainer.options.commands, info.Args)
-        }
+      if (info.Args) {
+        attachContainer.options.commands.push
+          .apply(attachContainer.options.commands, info.Args)
+      }
 
-        if (info.HostConfig.PortBindings) {
-          Object.keys(info.HostConfig.PortBindings).forEach(port => {
-            attachContainer.options.exposePorts.push({
-              docker: port.split('/')[0],
-              host: info.HostConfig.PortBindings[port][0].HostPort,
+      if (info.HostConfig.PortBindings) {
+        Object.keys(info.HostConfig.PortBindings).forEach(port => {
+          attachContainer.options.exposePorts.push({
+            docker: port.split('/')[0],
+            host: info.HostConfig.PortBindings[port][0].HostPort,
+          })
+        })
+      }
+
+      if (info.Config.Env) {
+        info.Config.Env.forEach(env => {
+          const envInfo = env.split('=')
+          attachContainer.options.environmentVariables.push({
+            name: envInfo[0],
+            value: envInfo[1],
+          })
+        })
+      }
+
+      if (info.Mounts) {
+        info.Mounts.filter(mount => !attachContainer.options.volumes.find(volume => volume.docker === mount.Destination))
+          .forEach(mount => {
+            if ('volume' !== mount.Type) {
+              return
+            }
+            attachContainer.options.volumes.push({
+              docker: mount.Destination,
+              host: mount.Name,
             })
           })
-        }
+      }
 
-        if (info.Config.Env) {
-          info.Config.Env.forEach(env => {
-            const envInfo = env.split('=')
-            attachContainer.options.environmentVariables.push({
-              name: envInfo[0],
-              value: envInfo[1],
-            })
-          })
-        }
+      const healthCheck = info.Config.Healthcheck // eslint-disable-line spellcheck/spell-checker
+      if (healthCheck) {
+        attachContainer.options.health.command = healthCheck.Test ? healthCheck.Test[1] : undefined
+        attachContainer.options.health.interval = healthCheck.Interval ? (healthCheck.Interval % 1000000) + 'ms' : undefined
+        attachContainer.options.health.startPeriod = healthCheck.StartPeriod ? (healthCheck.StartPeriod % 1000000) + 'ms' : undefined
+        attachContainer.options.health.timeout = healthCheck.Timeout ? (healthCheck.Timeout % 1000000) + 'ms' : undefined
+        attachContainer.options.health.retries = healthCheck.Retries ? healthCheck.Retries : undefined
+      }
 
-        if (info.Mounts) {
-          info.Mounts.filter(mount => !attachContainer.options.volumes.find(volume => volume.docker === mount.Destination))
-            .forEach(mount => {
-              if ('volume' !== mount.Type) {
-                return
-              }
-              attachContainer.options.volumes.push({
-                docker: mount.Destination,
-                host: mount.Name,
-              })
-            })
-        }
-
-        const healthCheck = info.Config.Healthcheck // eslint-disable-line spellcheck/spell-checker
-        if (healthCheck) {
-          attachContainer.options.health.command = healthCheck.Test ? healthCheck.Test[1] : undefined
-          attachContainer.options.health.interval = healthCheck.Interval ? (healthCheck.Interval % 1000000) + 'ms' : undefined
-          attachContainer.options.health.startPeriod = healthCheck.StartPeriod ? (healthCheck.StartPeriod % 1000000) + 'ms' : undefined
-          attachContainer.options.health.timeout = healthCheck.Timeout ? (healthCheck.Timeout % 1000000) + 'ms' : undefined
-          attachContainer.options.health.retries = healthCheck.Retries ? healthCheck.Retries : undefined
-        }
-
-        return Promise.all(attachContainer.options.volumes.map(({ ...volume }) => this.AttachVolume(volume.host)))
-          .then(volumes => volumes.filter(volume => volume))
-          .then(volumes => {
-            attachContainer.volumes = volumes
-            return attachContainer
-          })
-      })
-    }).catch(() => null)
+      return Promise.all(attachContainer.options.volumes.map(({ ...volume }) => this.AttachVolume(volume.host)))
+        .then(volumes => volumes.filter(volume => volume))
+        .then(volumes => {
+          attachContainer.volumes = volumes
+          return attachContainer
+        })
+    })
   }
 
   /**

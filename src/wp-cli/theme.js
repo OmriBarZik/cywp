@@ -119,7 +119,7 @@ class Theme {
   isActive (theme) {
     return this.wpTheme(['is-active', theme])
       .then(() => true)
-      .catch(() => Promise.resolve(false))
+      .catch(() => false)
   }
 
   /**
@@ -131,7 +131,7 @@ class Theme {
   isInstalled (theme) {
     return this.wpTheme(['is-installed', theme])
       .then(() => true)
-      .catch(() => Promise.resolve(false))
+      .catch(() => false)
   }
 
   /**
