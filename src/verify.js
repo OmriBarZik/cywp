@@ -10,7 +10,9 @@ const { spawn } = require('child_process')
 function verifyDocker () {
   return commandExists('docker')
     .then(() => true)
-    .catch(() => Promise.reject(new Error('Docker is\'t installed on this system! Please install docker and try again.')))
+    .catch(() => {
+      throw new Error('Docker is\'t installed on this system! Please install docker and try again.')
+    })
 }
 
 /**
@@ -23,7 +25,9 @@ function verifyDockerRunning () {
 
   return ReturnPromise(stats, () => { })
     .then(() => true)
-    .catch(() => Promise.reject(new Error('Docker is\'t running! please start docker and try again.')))
+    .catch(() => {
+      throw new Error('Docker is\'t running! please start docker and try again.')
+    })
 }
 
 /**

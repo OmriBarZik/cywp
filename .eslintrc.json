@@ -1,0 +1,86 @@
+{
+  "extends": [
+    "standard",
+    "plugin:jsdoc/recommended",
+    "plugin:jest/style",
+    "plugin:node/recommended-script",
+    "plugin:promise/recommended"
+  ],
+  "plugins": [
+    "jsdoc",
+    "spellcheck",
+    "promise"
+  ],
+  "env": {
+    "node": true
+  },
+  "overrides": [
+    {
+      "extends": "plugin:jest/recommended",
+      "files": [
+        "**/*.spec.js"
+      ],
+      "env": {
+        "jest/globals": true
+      },
+      "plugins": [
+        "jest"
+      ],
+      "rules": {
+        "promise/always-return": "off"
+      }
+    }
+  ],
+  "rules": {
+    "yoda": [
+      "error",
+      "always"
+    ],
+    "function-call-argument-newline": [
+      "error",
+      "never"
+    ],
+    "function-paren-newline": [
+      "error",
+      "never"
+    ],
+    "comma-dangle": [
+      "error",
+      {
+        "arrays": "always-multiline",
+        "objects": "always-multiline"
+      }
+    ],
+    "jsdoc/no-undefined-types": "off",
+    "jsdoc/valid-types": "off",
+    "spellcheck/spell-checker": [
+      "warn",
+      {
+        "skipWords": [
+          "cywp",
+          "stdout",
+          "stderr",
+          "ps",
+          "wordpress",
+          "wpcli",
+          "mysql",
+          "twentyseventeen",
+          "twentytwenty",
+          "spwan",
+          "usr",
+          "cmd",
+          "wp",
+          "uri",
+          "php",
+          "nicename",
+          "unspam",
+          "gmt",
+          "guid",
+          "fs",
+          "ro",
+          "phpmyadmin"
+        ]
+      }
+    ]
+  }
+}
