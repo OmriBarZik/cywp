@@ -46,7 +46,7 @@ jobs:
         run: npm run coverage
 
       - name: Uplode coverage
-        if: ${{ matrix.node-version == '14.x' }}
+        if: ${{ matrix.node-version == '16.x' }}
         uses: codecov/codecov-action@v1
         with:
           directory:  ./coverage
@@ -87,7 +87,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v1
         with:
-          node-version: 14
+          node-version: 16
 
       - name: Get npm cache directory path
         id: npm-cache-dir-path
@@ -108,4 +108,4 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npx semantic-release
+        run: npx semantic-release@latest
