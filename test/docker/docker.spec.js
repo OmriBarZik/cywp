@@ -312,7 +312,7 @@ describe('Docker', () => {
       containerIds.push(container.options.id)
 
       expect(containerCheck.stdout).not.toHaveLength(0)
-      expect(container.options.status).toEqual('created')
+      expect(container.options.status).toBe('created')
     })
 
     it('should create running docker container', async () => {
@@ -322,7 +322,7 @@ describe('Docker', () => {
       containerIds.push(container.options.id)
 
       expect(containerCheck.stdout).not.toHaveLength(0)
-      expect(container.options.status).toEqual('started')
+      expect(container.options.status).toBe('started')
     })
 
     it('should create and remove automatically docker container', async () => {
@@ -330,7 +330,7 @@ describe('Docker', () => {
 
       containerIds.push(container.options.id)
 
-      expect(container.options.status).toEqual('removed')
+      expect(container.options.status).toBe('removed')
     })
 
     afterAll(() => {
@@ -398,7 +398,7 @@ describe('Docker', () => {
       networkIds.push(network.options.id)
 
       expect(networkCheck.stdout).not.toHaveLength(0)
-      expect(network.options.status).toEqual('alive')
+      expect(network.options.status).toBe('alive')
     })
 
     it('should create docker network with string', async () => {
@@ -408,7 +408,7 @@ describe('Docker', () => {
       networkIds.push(network.options.id)
 
       expect(networkCheck.stdout).not.toHaveLength(0)
-      expect(network.options.status).toEqual('alive')
+      expect(network.options.status).toBe('alive')
     })
 
     afterAll(() => {
