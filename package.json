@@ -43,10 +43,10 @@
     "semantic-release": "semantic-release"
   },
   "peerDependencies": {
-    "cypress": ">=6.7.x"
+    "cypress": "^6.7.x || ^7.x.x || ^8.x.x || ^9.x.x"
   },
   "engines": {
-    "node": "^12.22.0 || ^14.17.0 || >=16.0.0"
+    "node": "^12.22.0 || ^14.17.0 || ^16.0.0"
   },
   "dependencies": {
     "command-exists": "1.2.9",
