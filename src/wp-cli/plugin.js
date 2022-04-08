@@ -11,7 +11,7 @@ class Plugin {
    *
    * @param {import('../docker/container')} site - the wordpress site to work on.
    */
-  constructor (site) {
+  constructor(site) {
     this.site = site
   }
 
@@ -21,7 +21,7 @@ class Plugin {
    * @param {string[]} commands - commands passing to wp plugin
    * @returns {Promise<RunInContainerOutput>} The output of the command
    */
-  wpPlugin (commands) {
+  wpPlugin(commands) {
     const args = ['wp', 'plugin'].concat(commands)
 
     return CreateWordpressCliContainer(this.site, args)
@@ -42,12 +42,14 @@ class Plugin {
    * plugin.activate('all')
    * ```
    */
-  activate (plugin) {
+  activate(plugin) {
     plugin = CheckIfArrayOrString(plugin, 'plugin')
 
     const activateArgs = ['activate']
 
-    if ('all' === plugin[0]) { plugin = ['--all'] }
+    if ('all' === plugin[0]) {
+      plugin = ['--all']
+    }
 
     activateArgs.push.apply(activateArgs, plugin)
 
@@ -70,14 +72,18 @@ class Plugin {
    * plugin.deactivate('all')
    * ```
    */
-  deactivate (plugin, uninstall) {
+  deactivate(plugin, uninstall) {
     plugin = CheckIfArrayOrString(plugin, 'plugin')
 
     const deactivateArgs = ['deactivate']
 
-    if (uninstall) { deactivateArgs.push('--uninstall') }
+    if (uninstall) {
+      deactivateArgs.push('--uninstall')
+    }
 
-    if ('all' === plugin[0]) { plugin = ['--all'] }
+    if ('all' === plugin[0]) {
+      plugin = ['--all']
+    }
 
     deactivateArgs.push.apply(deactivateArgs, plugin)
 
@@ -99,12 +105,14 @@ class Plugin {
    * plugin.delete('all')
    * ```
    */
-  delete (plugin) {
+  delete(plugin) {
     plugin = CheckIfArrayOrString(plugin, 'plugin')
 
     const deleteArgs = ['delete']
 
-    if ('all' === plugin[0]) { plugin = ['--all'] }
+    if ('all' === plugin[0]) {
+      plugin = ['--all']
+    }
 
     deleteArgs.push.apply(deleteArgs, plugin)
 
@@ -117,9 +125,10 @@ class Plugin {
    * @param {string} plugin - The plugin to get.
    * @returns {Promise<PluginGetObject>} Current plugin data.
    */
-  get (plugin) {
-    return this.wpPlugin(['get', '--format=json', plugin])
-      .then((output) => JSON.parse(output.stdout))
+  get(plugin) {
+    return this.wpPlugin(['get', '--format=json', plugin]).then((output) =>
+      JSON.parse(output.stdout)
+    )
   }
 
   /**
@@ -130,14 +139,16 @@ class Plugin {
    * @param {string} version - Get that particular version from wordpress.org, instead of the stable version.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
-  install (plugin, activate, version) {
+  install(plugin, activate, version) {
     plugin = CheckIfArrayOrString(plugin, 'plugin')
 
     const installArgs = ['install', '--force']
 
     if (activate) {
       if (1 < plugin.length) {
-        throw new Error('To use activate there must be at only one plugin given.')
+        throw new Error(
+          'To use activate there must be at only one plugin given.'
+        )
       }
 
       installArgs.push('--activate')
@@ -145,7 +156,9 @@ class Plugin {
 
     if (version) {
       if (1 < plugin.length) {
-        throw new Error('To use version there must be at only one plugin given.')
+        throw new Error(
+          'To use version there must be at only one plugin given.'
+        )
       }
 
       installArgs.push(`--version=${version}`)
@@ -162,7 +175,7 @@ class Plugin {
    * @param {string} plugin - The plugin to check.
    * @returns {Promise<boolean>} Whether plugin is active
    */
-  isActive (plugin) {
+  isActive(plugin) {
     return this.wpPlugin(['is-active', plugin])
       .then(() => true)
       .catch(() => false)
@@ -174,7 +187,7 @@ class Plugin {
    * @param {string} plugin - The plugin to check.
    * @returns {Promise<boolean>} Whether plugin is installed
    */
-  isInstalled (plugin) {
+  isInstalled(plugin) {
     return this.wpPlugin(['is-installed', plugin])
       .then(() => true)
       .catch(() => false)
@@ -186,11 +199,11 @@ class Plugin {
    * @param {PluginListFiltersObject} [filters] - Filter results based on the value of a field.
    * @returns {Promise<PluginListFiltersObject[]>} - List of plugin installed in the wordpress site.
    */
-  list (filters = {}) {
+  list(filters = {}) {
     const listArgs = [
       'list',
       '--fields=name,status,update,version,update_version,update_package,update_id,title,description,file',
-      '--format=json',
+      '--format=json'
     ]
 
     if ('object' !== typeof filters) {
@@ -201,8 +214,7 @@ class Plugin {
       listArgs.push(`--${filtersField}=${filters[filtersField]}`)
     }
 
-    return this.wpPlugin(listArgs)
-      .then((output) => JSON.parse(output.stdout))
+    return this.wpPlugin(listArgs).then((output) => JSON.parse(output.stdout))
   }
 
   /**
@@ -211,10 +223,12 @@ class Plugin {
    * @param {string} plugin - The plugin to get the path to.
    * @returns {Promise<RunInContainerOutput>} Path to a plugin or to the plugin directory.
    */
-  path (plugin) {
+  path(plugin) {
     const pathArgs = ['path']
 
-    if (plugin) { pathArgs.push('--dir', plugin) }
+    if (plugin) {
+      pathArgs.push('--dir', plugin)
+    }
 
     return this.wpPlugin(pathArgs)
   }
@@ -234,12 +248,14 @@ class Plugin {
    * plugin.uninstall('all')
    * ```
    */
-  uninstall (plugin) {
+  uninstall(plugin) {
     plugin = CheckIfArrayOrString(plugin, 'plugin')
 
     const deleteArgs = ['delete', '--deactivate']
 
-    if ('all' === plugin[0]) { plugin = ['--all'] }
+    if ('all' === plugin[0]) {
+      plugin = ['--all']
+    }
 
     deleteArgs.push.apply(deleteArgs, plugin)
 

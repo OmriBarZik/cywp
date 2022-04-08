@@ -12,7 +12,7 @@ const WPCLI = require('../wp-cli')
  * @param {Function} callback - function to run.
  * @returns {any} - callback data
  */
-async function logger (message, callback) {
+async function logger(message, callback) {
   let data
   try {
     console.log(`started:\t${message}`)
@@ -33,9 +33,15 @@ async function logger (message, callback) {
  * @param {import('./wp-cli/plugin')} plugin - the site to install the plugin.
  * @param {{name: string, version: string}[]} pluginList - list of plugins to install.
  */
-async function installPlugins (plugin, pluginList) {
+async function installPlugins(plugin, pluginList) {
   for (const item of pluginList) {
-    await logger(`Installing ${item.name}`, () => plugin.install(item.name, true, 'latest' === item.version ? '' : item.version))
+    await logger(`Installing ${item.name}`, () =>
+      plugin.install(
+        item.name,
+        true,
+        'latest' === item.version ? '' : item.version
+      )
+    )
   }
 }
 
@@ -46,18 +52,22 @@ async function installPlugins (plugin, pluginList) {
  * @param {boolean} skipPull - if to skip docker images pull.
  * @returns {void}
  */
-async function pullDockerImages (cywpWordpressVersion, skipPull) {
+async function pullDockerImages(cywpWordpressVersion, skipPull) {
   if (skipPull) {
     return console.log('status:\t\tskipped docker pull')
   }
 
   const docker = new Docker()
-  const finishedPullCallback = (image) => { console.log('pulled:\t\t' + image) }
+  const finishedPullCallback = (image) => {
+    console.log('pulled:\t\t' + image)
+  }
 
   await Promise.all([
-    docker.pullImage(`wordpress:${cywpWordpressVersion}`).then(finishedPullCallback),
+    docker
+      .pullImage(`wordpress:${cywpWordpressVersion}`)
+      .then(finishedPullCallback),
     docker.pullImage('mysql:5.7').then(finishedPullCallback),
-    docker.pullImage('wordpress:cli').then(finishedPullCallback),
+    docker.pullImage('wordpress:cli').then(finishedPullCallback)
   ])
 }
 
@@ -68,9 +78,15 @@ async function pullDockerImages (cywpWordpressVersion, skipPull) {
  * @param {object} config - cywp config.
  * @returns {import('./docker/container')} fully setup wordpress container.
  */
-async function CreateWordpress (mysql, config) {
+async function CreateWordpress(mysql, config) {
   const volumes = config.cywpPlugins.local.concat(config.cywpThemePath)
-  const wordpress = await SetupSite(config.cywpTheme, config.cywpWordpressPort, mysql, config.cywpWordpressVersion, volumes)
+  const wordpress = await SetupSite(
+    config.cywpTheme,
+    config.cywpWordpressPort,
+    mysql,
+    config.cywpWordpressVersion,
+    volumes
+  )
 
   const plugin = new Plugin(wordpress)
   const theme = new Theme(wordpress)
@@ -80,11 +96,17 @@ async function CreateWordpress (mysql, config) {
       return theme.activate(config.cywpTheme)
     }
 
-    return theme.install(config.cywpTheme, true, 'latest' === config.cywpThemeVersion ? '' : config.cywpThemeVersion)
+    return theme.install(
+      config.cywpTheme,
+      true,
+      'latest' === config.cywpThemeVersion ? '' : config.cywpThemeVersion
+    )
   })
 
   if (config.cywpPlugins.remote.length) {
-    await logger('Installing Remote Plugins', () => installPlugins(plugin, config.cywpPlugins.remote))
+    await logger('Installing Remote Plugins', () =>
+      installPlugins(plugin, config.cywpPlugins.remote)
+    )
   }
 
   if (config.cywpPlugins.local.length) {
@@ -103,7 +125,7 @@ async function CreateWordpress (mysql, config) {
  * @param {import('./docker/container')} mysql the site to work on.
  * @returns {object} object containing all tasks api.
  */
-function preperTasks (wordpress, mysql) {
+function preperTasks(wordpress, mysql) {
   const wp = new WPCLI(wordpress)
 
   const tasks = {
@@ -113,42 +135,62 @@ function preperTasks (wordpress, mysql) {
     'wp:plugin': (commands) => wp.plugin.wpPlugin(commands),
     'wp:theme': (commands) => wp.theme.wpTheme(commands),
     'wp:user': (commands) => wp.user.wpUser(commands),
-    'wp:user:meta': (commands) => wp.user.Meta.wpUserMeta(commands),
+    'wp:user:meta': (commands) => wp.user.Meta.wpUserMeta(commands)
   }
 
   const filter = (param) => 'constructor' !== param
 
-  Object.getOwnPropertyNames(Plugin.prototype).filter(filter).forEach((item) => {
-    tasks[`wp:plugin:${item}`] = (...args) => wp.plugin[item](...args)
-  })
+  Object.getOwnPropertyNames(Plugin.prototype)
+    .filter(filter)
+    .forEach((item) => {
+      tasks[`wp:plugin:${item}`] = (...args) => wp.plugin[item](...args)
+    })
 
-  tasks['wp:plugin:install'] = ({ plugin, activate, version }) => wp.plugin.install(plugin, activate, version)
-  tasks['wp:plugin:deactivate'] = ({ plugin, uninstall }) => wp.plugin.deactivate(plugin, uninstall)
+  tasks['wp:plugin:install'] = ({ plugin, activate, version }) =>
+    wp.plugin.install(plugin, activate, version)
+  tasks['wp:plugin:deactivate'] = ({ plugin, uninstall }) =>
+    wp.plugin.deactivate(plugin, uninstall)
 
-  Object.getOwnPropertyNames(Theme.prototype).filter(filter).forEach((item) => {
-    tasks[`wp:theme:${item}`] = (...args) => wp.theme[item](...args)
-  })
+  Object.getOwnPropertyNames(Theme.prototype)
+    .filter(filter)
+    .forEach((item) => {
+      tasks[`wp:theme:${item}`] = (...args) => wp.theme[item](...args)
+    })
 
   tasks['wp:theme:delete'] = ({ theme, force }) => wp.theme.delete(theme, force)
-  tasks['wp:theme:install'] = ({ theme, activate, version }) => wp.theme.install(theme, activate, version)
+  tasks['wp:theme:install'] = ({ theme, activate, version }) =>
+    wp.theme.install(theme, activate, version)
 
-  Object.getOwnPropertyNames(User.prototype).filter(filter).forEach((item) => {
-    tasks[`wp:user:${item}`] = (...args) => wp.user[item](...args)
-  })
+  Object.getOwnPropertyNames(User.prototype)
+    .filter(filter)
+    .forEach((item) => {
+      tasks[`wp:user:${item}`] = (...args) => wp.user[item](...args)
+    })
 
   tasks['wp:user:addCap'] = ({ user, cap }) => wp.user.addCap(user, cap)
   tasks['wp:user:addRole'] = ({ user, role }) => wp.user.addRole(user, role)
-  tasks['wp:user:delete'] = ({ user, reassign }) => wp.user.delete(user, reassign)
+  tasks['wp:user:delete'] = ({ user, reassign }) =>
+    wp.user.delete(user, reassign)
   tasks['wp:user:removeCap'] = ({ user, cap }) => wp.user.removeCap(user, cap)
-  tasks['wp:user:removeRole'] = ({ user, role }) => wp.user.removeRole(user, role)
+  tasks['wp:user:removeRole'] = ({ user, role }) =>
+    wp.user.removeRole(user, role)
 
-  tasks['wp:user:meta:add'] = ({ user, key, value }) => wp.user.Meta.add(user, key, value)
-  tasks['wp:user:meta:delete'] = ({ user, key }) => wp.user.Meta.delete(user, key)
+  tasks['wp:user:meta:add'] = ({ user, key, value }) =>
+    wp.user.Meta.add(user, key, value)
+  tasks['wp:user:meta:delete'] = ({ user, key }) =>
+    wp.user.Meta.delete(user, key)
   tasks['wp:user:meta:get'] = ({ user, key }) => wp.user.Meta.get(user, key)
   tasks['wp:user:meta:list'] = (user) => wp.user.Meta.add(user)
-  tasks['wp:user:meta:update'] = ({ user, key, value }) => wp.user.Meta.update(user, key, value)
+  tasks['wp:user:meta:update'] = ({ user, key, value }) =>
+    wp.user.Meta.update(user, key, value)
 
   return tasks
 }
 
-module.exports = { CreateWordpress, installPlugins, logger, preperTasks, pullDockerImages }
+module.exports = {
+  CreateWordpress,
+  installPlugins,
+  logger,
+  preperTasks,
+  pullDockerImages
+}

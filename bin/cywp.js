@@ -6,7 +6,7 @@ const { program } = require('commander')
 
 const { Docker } = require('../src/docker/docker')
 const {
-  CreateWordpressCliContainer,
+  CreateWordpressCliContainer
 } = require('../src/docker/presets/containers')
 const { SetupDatabase } = require('../src/workflow/environment')
 const { CreateWordpress } = require('../src/workflow/util')
@@ -23,7 +23,10 @@ program
   .command('exec')
   .description('execute command on a specified container')
   .passThroughOptions(true)
-  .argument('<container>', 'Container to run the command. (wordpress|mysql|wpcli)')
+  .argument(
+    '<container>',
+    'Container to run the command. (wordpress|mysql|wpcli)'
+  )
   .argument('<command>', 'command to run on the container.')
   .argument('[args...]', 'command arguments.')
   .action(exec)
@@ -31,9 +34,17 @@ program
 program
   .command('rm')
   .argument('[container]', 'remove a specific container (wordpress|mysql)')
-  .description('removes all stopped containers, networks and volumes of the project')
-  .option('-a, --all', "remove all containers, networks and volumes that starts with 'cywp-' prefix")
-  .option('-f, --force', 'removes all containers, networks and volumes, even running once')
+  .description(
+    'removes all stopped containers, networks and volumes of the project'
+  )
+  .option(
+    '-a, --all',
+    "remove all containers, networks and volumes that starts with 'cywp-' prefix"
+  )
+  .option(
+    '-f, --force',
+    'removes all containers, networks and volumes, even running once'
+  )
   .option('--no-volumes', 'do not delete connected volumes')
   .action(rm)
 
@@ -65,7 +76,7 @@ program.parse()
  * @param {string} command command to pass to the container.
  * @param {string[]} args command arguments.
  */
-async function exec (container, command, args) {
+async function exec(container, command, args) {
   const execContainer = (attachedContainer) => {
     return attachedContainer
       .exec([command].concat(args))
@@ -83,14 +94,20 @@ async function exec (container, command, args) {
     case 'wpcli':
       getWordpress()
         .catch(() =>
-          commandFailed('wordpress not running! please start wordpress to use wpcli'))
+          commandFailed(
+            'wordpress not running! please start wordpress to use wpcli'
+          )
+        )
         .then((wordpress) =>
-          CreateWordpressCliContainer(wordpress, [command].concat(args)))
+          CreateWordpressCliContainer(wordpress, [command].concat(args))
+        )
         .then((container) => console.log(container.stdout))
         .catch(commandFailed)
       break
     default:
-      commandFailed("invalid container argument! container must be 'wordpress', 'mysql' or 'wpcli'!")
+      commandFailed(
+        "invalid container argument! container must be 'wordpress', 'mysql' or 'wpcli'!"
+      )
       break
   }
 }
@@ -99,7 +116,7 @@ async function exec (container, command, args) {
  * @param {string} container container name.
  * @param {{all:string, force: boolean, volumes: boolean}} options - clean command option object.
  */
-function rm (container, options) {
+function rm(container, options) {
   switch (container) {
     case 'wordpress':
       getWordpress()
@@ -116,7 +133,9 @@ function rm (container, options) {
       rm('mysql', options)
       break
     default:
-      commandFailed("invalid container argument! container must be 'wordpress' or 'mysql'!")
+      commandFailed(
+        "invalid container argument! container must be 'wordpress' or 'mysql'!"
+      )
       break
   }
 }
@@ -127,7 +146,7 @@ function rm (container, options) {
  * @param {string} container the container type.
  * @param {{skipPull:string}} options - start command option object.
  */
-async function start (container, options) {
+async function start(container, options) {
   const config = getConfig()
 
   config.env.skip_pull =
@@ -144,7 +163,9 @@ async function start (container, options) {
       } catch (e) {
         getMysql()
           .then((mysql) => CreateWordpress(mysql, config.env))
-          .catch(() => commandFailed('mysql container must be running to start wordpress'))
+          .catch(() =>
+            commandFailed('mysql container must be running to start wordpress')
+          )
       }
       break
     }
@@ -157,7 +178,9 @@ async function start (container, options) {
       runner(() => {}, config)
       break
     default:
-      commandFailed("invalid container argument! container must be 'wordpress' or 'mysql'!")
+      commandFailed(
+        "invalid container argument! container must be 'wordpress' or 'mysql'!"
+      )
       break
   }
 }
@@ -168,7 +191,7 @@ async function start (container, options) {
  * @param {string} container container name
  * @param {object} options cli options
  */
-function stop (container, options) {
+function stop(container, options) {
   switch (container) {
     case 'wordpress':
       getWordpress()
@@ -185,7 +208,9 @@ function stop (container, options) {
       stop('mysql', options)
       break
     default:
-      commandFailed("invalid container argument! container must be 'wordpress' or 'mysql'!")
+      commandFailed(
+        "invalid container argument! container must be 'wordpress' or 'mysql'!"
+      )
       break
   }
 }
@@ -195,7 +220,7 @@ function stop (container, options) {
  *
  * @returns {Promise<void>} void
  */
-function status () {
+function status() {
   return Promise.all([
     getWordpress()
       .then((wordpress) => wordpress.status())
@@ -204,9 +229,10 @@ function status () {
     getMysql()
       .then((mysql) => mysql.status())
       .then((status) => ('exited' === status ? 'stopped' : status))
-      .catch(() => 'offline'),
+      .catch(() => 'offline')
   ]).then((status) =>
-    console.log(`wordpress:\t${status[0]}\nmysql:\t\t${status[1]}`))
+    console.log(`wordpress:\t${status[0]}\nmysql:\t\t${status[1]}`)
+  )
 }
 
 /**
@@ -214,11 +240,16 @@ function status () {
  *
  * @returns {object} cypress config
  */
-function getConfig () {
-  const cypressPath = path.join(path.resolve(program.opts().project || process.cwd()), 'cypress.json')
+function getConfig() {
+  const cypressPath = path.join(
+    path.resolve(program.opts().project || process.cwd()),
+    'cypress.json'
+  )
 
   if (!fs.existsSync(cypressPath)) {
-    const errorMassage = `cypress.json was not found in ${path.dirname(cypressPath)}!`
+    const errorMassage = `cypress.json was not found in ${path.dirname(
+      cypressPath
+    )}!`
     const userHelper = program.project
       ? "please check the '--project' path!"
       : 'create cypress.json or use --path to direct to a valid cypress project'
@@ -234,13 +265,15 @@ function getConfig () {
  *
  * @returns {Promise<import('../src/docker/container')>} wordpress container.
  */
-function getWordpress () {
+function getWordpress() {
   const config = getConfig()
 
   return docker
     .AttachContainer({ name: config.env.cywpWordpressName })
-    .then((container) =>
-      container || Promise.reject(new Error('wordpress was not found!')))
+    .then(
+      (container) =>
+        container || Promise.reject(new Error('wordpress was not found!'))
+    )
 }
 
 /**
@@ -248,11 +281,13 @@ function getWordpress () {
  *
  * @returns {Promise<import('../src/docker/container')>} mysql container.
  */
-function getMysql () {
+function getMysql() {
   return docker
     .AttachContainer({ name: 'cywp-main-mysql' })
-    .then((container) =>
-      container || Promise.reject(new Error('mysql was not found!')))
+    .then(
+      (container) =>
+        container || Promise.reject(new Error('mysql was not found!'))
+    )
 }
 
 /**
@@ -260,7 +295,7 @@ function getMysql () {
  *
  * @param {string | Error} errorMessage error message to print
  */
-function commandFailed (errorMessage) {
+function commandFailed(errorMessage) {
   if (errorMessage instanceof Error) {
     errorMessage = errorMessage.message
   }

@@ -1,6 +1,6 @@
 name: Test
 
-on: 
+on:
   push:
     branches:
       - main
@@ -49,7 +49,7 @@ jobs:
         if: ${{ matrix.node-version == '16.x' }}
         uses: codecov/codecov-action@v1
         with:
-          directory:  ./coverage
+          directory: ./coverage
           fail_ci_if_error: true
 
   lint:

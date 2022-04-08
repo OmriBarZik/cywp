@@ -35,8 +35,12 @@
     "snyk": "snyk test",
     "coverage": "jest --coverage",
     "coverage:ci": "npm run coverage && codecov",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "run-p eslint prettier",
+    "lint:fix": "run-p eslint:fix prettier:fix",
+    "eslint": "eslint .",
+    "eslint:fix": "eslint . --fix",
+    "prettier": "prettier --check .",
+    "prettier:fix": "prettier --write .",
     "pre-push": "run-p coverage lint snyk",
     "prepare": "husky install",
     "docs": "node bin/preperdocs.js"
@@ -57,6 +61,7 @@
     "@types/jest": "27.0.1",
     "codecov": "3.8.3",
     "eslint": "^8.12.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-config-standard": "16.0.3",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-jest": "^26.1.3",
@@ -69,6 +74,7 @@
     "jsdoc-to-markdown": "7.0.1",
     "lint-staged": "^11.2.6",
     "npm-run-all": "4.1.5",
+    "prettier": "2.6.2",
     "snyk": "^1.744.0"
   },
   "commitlint": {
@@ -101,6 +107,7 @@
     "testTimeout": 20000
   },
   "lint-staged": {
-    "*.js": "eslint --cache --fix"
+    "*.js": "eslint --cache --fix",
+    "*.{js,md,yml,json}": "prettier --write"
   }
 }

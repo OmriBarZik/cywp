@@ -7,11 +7,13 @@ const { spawn } = require('child_process')
  *
  * @returns {Promise<boolean>} If docker is installed on the system.
  */
-function verifyDocker () {
+function verifyDocker() {
   return commandExists('docker')
     .then(() => true)
     .catch(() => {
-      throw new Error('Docker is\'t installed on this system! Please install docker and try again.')
+      throw new Error(
+        "Docker is't installed on this system! Please install docker and try again."
+      )
     })
 }
 
@@ -20,13 +22,13 @@ function verifyDocker () {
  *
  * @returns {Promise<boolean} If docker is running.
  */
-function verifyDockerRunning () {
+function verifyDockerRunning() {
   const stats = spawn('docker', ['stats', '--no-stream'])
 
-  return ReturnPromise(stats, () => { })
+  return ReturnPromise(stats, () => {})
     .then(() => true)
     .catch(() => {
-      throw new Error('Docker is\'t running! please start docker and try again.')
+      throw new Error("Docker is't running! please start docker and try again.")
     })
 }
 
@@ -36,9 +38,8 @@ function verifyDockerRunning () {
  *
  * @returns {Promise<boolean>} If the system can run cywp.
  */
-function unsafeVerify () {
-  return verifyDocker()
-    .then(verifyDockerRunning)
+function unsafeVerify() {
+  return verifyDocker().then(verifyDockerRunning)
 }
 
 /**
@@ -46,14 +47,18 @@ function unsafeVerify () {
  *
  * @returns {Promise<{ message: string, verified: boolean }>} If the system can run cywp. if not returns error message.
  */
-function verify () {
+function verify() {
   return verifyDocker()
     .then(verifyDockerRunning)
-    .then(() => { return { message: '', verified: true } })
-    .catch(error => { return { message: error.message, verified: false } })
+    .then(() => {
+      return { message: '', verified: true }
+    })
+    .catch((error) => {
+      return { message: error.message, verified: false }
+    })
 }
 
 module.exports = {
   verify,
-  unsafeVerify,
+  unsafeVerify
 }

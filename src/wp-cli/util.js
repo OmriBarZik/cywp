@@ -1,4 +1,3 @@
-
 /**
  * Checks if the given value is an array or string.
  *
@@ -6,7 +5,7 @@
  * @param {string} purpose - use to determent what to throw is the items isn't valid.
  * @returns {Array} Array that contined a vlive item / items.
  */
-function CheckIfArrayOrString (item, purpose) {
+function CheckIfArrayOrString(item, purpose) {
   if ('string' === typeof item) {
     item = [item]
   }
@@ -24,8 +23,8 @@ function CheckIfArrayOrString (item, purpose) {
  * @param {Date} date - the date to format.
  * @returns {string} formatted string.
  */
-function FormatToWordpressDate (date) {
-  const twoDigits = (number) => 10 > number ? '0' + number : number
+function FormatToWordpressDate(date) {
+  const twoDigits = (number) => (10 > number ? '0' + number : number)
 
   return [
     date.getFullYear(),
@@ -33,7 +32,7 @@ function FormatToWordpressDate (date) {
     twoDigits(date.getDate()),
     twoDigits(date.getHours()),
     twoDigits(date.getMinutes()),
-    twoDigits(date.getSeconds()),
+    twoDigits(date.getSeconds())
   ].join('-')
 }
 

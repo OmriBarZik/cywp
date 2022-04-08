@@ -9,7 +9,7 @@ class Container {
    * @param {ContainerOptions} options the docker container options
    * @param {import('./volume')[]} volumes array of docker volumes.
    */
-  constructor (options, volumes) {
+  constructor(options, volumes) {
     this.options = options
     this.volumes = volumes
   }
@@ -19,7 +19,7 @@ class Container {
    * @param {(stdout: string, stderr: string) => any} callback - callback that deterred what to return when the process is successful.
    * @returns {Promise} return what said to return form the callback
    */
-  dockerContainer (args, callback) {
+  dockerContainer(args, callback) {
     args = ['container'].concat(args)
 
     const container = spawn('docker', args)
@@ -32,7 +32,7 @@ class Container {
    *
    * @returns {Promise<Container>} Return the current container.
    */
-  start () {
+  start() {
     const startArgs = ['start', this.options.id]
 
     return this.dockerContainer(startArgs, () => {
@@ -49,11 +49,15 @@ class Container {
    * @param {boolean} externalVolumes Remove external volumes associated with the container.
    * @returns {Promise<Container>} Return the current container.
    */
-  rm (force = false, anonymousVolumes = true, externalVolumes) {
+  rm(force = false, anonymousVolumes = true, externalVolumes) {
     const rmArgs = ['rm']
 
-    if (force) { rmArgs.push('--force') }
-    if (anonymousVolumes) { rmArgs.push('--volumes') }
+    if (force) {
+      rmArgs.push('--force')
+    }
+    if (anonymousVolumes) {
+      rmArgs.push('--volumes')
+    }
 
     rmArgs.push(this.options.id)
 
@@ -61,7 +65,7 @@ class Container {
       this.options.status = 'removed'
 
       if (externalVolumes) {
-        await Promise.all(this.volumes.slice().map(volume => volume.rm()))
+        await Promise.all(this.volumes.slice().map((volume) => volume.rm()))
       }
 
       return this
@@ -74,7 +78,7 @@ class Container {
    * @param {number} time Seconds to wait for stop before stopping the container.
    * @returns {Promise<Container>} Return the current container.
    */
-  stop (time = 10) {
+  stop(time = 10) {
     const stopArgs = ['stop']
 
     if (0 > time) {
@@ -99,12 +103,18 @@ class Container {
    * @param {boolean} options.timeStamps - show time stamps.
    * @returns {Promise<{stdout: string, stderr: string, container: Container}}>} Return Promise for container logs.
    */
-  logs (options = {}) {
+  logs(options = {}) {
     const logsArgs = ['logs']
 
-    if (options.since) { logsArgs.push('--since', options.since) }
-    if (options.tail) { logsArgs.push('--tail', options.tail) }
-    if (options.timeStamps) { logsArgs.push('--timestamps') } // eslint-disable-line spellcheck/spell-checker
+    if (options.since) {
+      logsArgs.push('--since', options.since)
+    }
+    if (options.tail) {
+      logsArgs.push('--tail', options.tail)
+    }
+    if (options.timeStamps) {
+      logsArgs.push('--timestamps') // eslint-disable-line spellcheck/spell-checker
+    }
 
     logsArgs.push(this.options.id)
 
@@ -112,7 +122,7 @@ class Container {
       return {
         stdout: stdout,
         stderr: stderr,
-        container: this,
+        container: this
       }
     })
   }
@@ -123,10 +133,12 @@ class Container {
    * @param {string} [format] - Format the output using the given Go template.
    * @returns {Promise<string|object>} container info.
    */
-  inspect (format) {
+  inspect(format) {
     const inspectArgs = ['inspect']
 
-    if (format) { inspectArgs.push('--format', format) }
+    if (format) {
+      inspectArgs.push('--format', format)
+    }
 
     inspectArgs.push(this.options.id)
 
@@ -140,8 +152,8 @@ class Container {
    *
    * @returns {Promise<string>} the status of the container.
    */
-  status () {
-    return this.inspect('{{.State.Status}}').then(status => {
+  status() {
+    return this.inspect('{{.State.Status}}').then((status) => {
       this.options.status = status
       return status
     })
@@ -152,13 +164,14 @@ class Container {
    *
    * @returns {Promise<boolean>} if the continer is healthy or not
    */
-  isHealthy () {
+  isHealthy() {
     if (!this.options.health) {
       throw new Error('options.health.command must be defined to use IsHealthy')
     }
 
-    return this.inspect('{{.State.Health.Status}}')
-      .then(status => 'healthy' === status)
+    return this.inspect('{{.State.Health.Status}}').then(
+      (status) => 'healthy' === status
+    )
   }
 
   /**
@@ -167,7 +180,7 @@ class Container {
    * @param {Array} commands - Commands to run.
    * @returns {Promise<RunInContainerOutput>} Return the current container.
    */
-  exec (commands) {
+  exec(commands) {
     if (!Array.isArray(commands)) {
       throw new Error('commands must be an array')
     }

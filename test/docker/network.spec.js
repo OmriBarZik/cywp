@@ -16,7 +16,13 @@ describe('Network', () => {
       return network.rm().then((network) => {
         expect(network.options.status).toBe('dead')
 
-        const networkCheck = spawnSync('docker', ['volume', 'ls', '-q', '--filter', `name=${network.options.id}`])
+        const networkCheck = spawnSync('docker', [
+          'volume',
+          'ls',
+          '-q',
+          '--filter',
+          `name=${network.options.id}`
+        ])
         expect(networkCheck.stdout).toHaveLength(0)
       })
     })
@@ -24,19 +30,27 @@ describe('Network', () => {
 
   describe('#inspect()', () => {
     it('should get network info', async () => {
-      const network = await docker.CreateNetwork('cywp-inspect-object-network-test')
+      const network = await docker.CreateNetwork(
+        'cywp-inspect-object-network-test'
+      )
 
       networkIds.push(network.options.id)
 
-      return expect(network.inspect()).resolves.toMatchObject({ Id: network.options.id })
+      return expect(network.inspect()).resolves.toMatchObject({
+        Id: network.options.id
+      })
     })
 
     it('should get network info with filter', async () => {
-      const network = await docker.CreateNetwork('cywp-inspect-filter-network-test')
+      const network = await docker.CreateNetwork(
+        'cywp-inspect-filter-network-test'
+      )
 
       networkIds.push(network.options.id)
 
-      return expect(network.inspect('{{.Id}}')).resolves.toBe(network.options.id)
+      return expect(network.inspect('{{.Id}}')).resolves.toBe(
+        network.options.id
+      )
     })
   })
 

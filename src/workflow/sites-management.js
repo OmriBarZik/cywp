@@ -6,7 +6,7 @@ const { CreateWordpressCliContainer } = require('../docker/presets/containers')
  * @param {import('../docker/container')} wordpress the wordpress container to initialize.
  * @returns {Promise<RunInContainerOutput>} wordpress cli container.
  */
-function InitSite (wordpress) {
+function InitSite(wordpress) {
   return CreateWordpressCliContainer(wordpress, [
     'wp',
     'core',
@@ -16,7 +16,7 @@ function InitSite (wordpress) {
     '--admin_password=password',
     `--admin_email=${wordpress.options.name}@cywp.local`,
     '--skip-email',
-    `--url=http://localhost:${wordpress.options.exposePorts[0].host}`,
+    `--url=http://localhost:${wordpress.options.exposePorts[0].host}`
   ])
 }
 
