@@ -11,7 +11,7 @@ class Theme {
    *
    * @param {import('../docker/container')} site - the wordpress site to work on.
    */
-  constructor (site) {
+  constructor(site) {
     this.site = site
   }
 
@@ -21,7 +21,7 @@ class Theme {
    * @param {string[]} commands - commands passing to wp theme.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
-  wpTheme (commands) {
+  wpTheme(commands) {
     const args = ['wp', 'theme'].concat(commands)
 
     return CreateWordpressCliContainer(this.site, args)
@@ -33,7 +33,7 @@ class Theme {
    * @param {string} theme - The theme to activate.
    * @returns {Promise<RunInContainerOutput>} The output of the command
    */
-  activate (theme) {
+  activate(theme) {
     return this.wpTheme(['activate', theme])
   }
 
@@ -53,14 +53,18 @@ class Theme {
    * theme.delete('all')
    * ```
    */
-  delete (theme, force = false) {
+  delete(theme, force = false) {
     theme = CheckIfArrayOrString(theme, 'theme')
 
     const deleteArgs = ['delete']
 
-    if (force) { deleteArgs.push('--force') }
+    if (force) {
+      deleteArgs.push('--force')
+    }
 
-    if ('all' === theme[0]) { theme = ['--all'] }
+    if ('all' === theme[0]) {
+      theme = ['--all']
+    }
 
     deleteArgs.push.apply(deleteArgs, theme)
 
@@ -73,9 +77,10 @@ class Theme {
    * @param {string} theme - The theme to get.
    * @returns {Promise<ThemeGetObject>}  Current theme data.
    */
-  get (theme) {
-    return this.wpTheme(['get', '--format=json', theme])
-      .then((output) => JSON.parse(output.stdout))
+  get(theme) {
+    return this.wpTheme(['get', '--format=json', theme]).then((output) =>
+      JSON.parse(output.stdout)
+    )
   }
 
   /**
@@ -84,14 +89,16 @@ class Theme {
    * @param {string} version - Get that particular version from wordpress.org, instead of the stable version.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
-  install (theme, activate, version) {
+  install(theme, activate, version) {
     theme = CheckIfArrayOrString(theme, 'theme')
 
     const installArgs = ['install', '--force']
 
     if (activate) {
       if (1 < theme.length) {
-        throw new Error('To use activate there must be at only one theme given.')
+        throw new Error(
+          'To use activate there must be at only one theme given.'
+        )
       }
 
       installArgs.push('--activate')
@@ -116,7 +123,7 @@ class Theme {
    * @param {string} theme - The theme to check.
    * @returns {Promise<boolean>} Whether theme is active.
    */
-  isActive (theme) {
+  isActive(theme) {
     return this.wpTheme(['is-active', theme])
       .then(() => true)
       .catch(() => false)
@@ -128,7 +135,7 @@ class Theme {
    * @param {string} theme - The theme to check.
    * @returns {Promise<boolean>} Whether theme is installed.
    */
-  isInstalled (theme) {
+  isInstalled(theme) {
     return this.wpTheme(['is-installed', theme])
       .then(() => true)
       .catch(() => false)
@@ -140,11 +147,11 @@ class Theme {
    * @param {ThemeListFiltersObject} [filters] - Filter results based on the value of a field.
    * @returns {Promise<ThemeListFiltersObject[]>} - List of themes installed in the wordpress site.
    */
-  list (filters = {}) {
+  list(filters = {}) {
     const listArgs = [
       'list',
       '--fields=name,status,update,version,update_version,update_package,update_id,title,description',
-      '--format=json',
+      '--format=json'
     ]
 
     if ('object' !== typeof filters) {
@@ -155,8 +162,7 @@ class Theme {
       listArgs.push(`--${filtersField}=${filters[filtersField]}`)
     }
 
-    return this.wpTheme(listArgs)
-      .then((output) => JSON.parse(output.stdout))
+    return this.wpTheme(listArgs).then((output) => JSON.parse(output.stdout))
   }
 
   /**
@@ -165,10 +171,12 @@ class Theme {
    * @param {string} theme - The theme to get the path to.
    * @returns {Promise<string>} Path to a theme or to the theme directory.
    */
-  path (theme) {
+  path(theme) {
     const pathArgs = ['path']
 
-    if (theme) { pathArgs.push('--dir', theme) }
+    if (theme) {
+      pathArgs.push('--dir', theme)
+    }
 
     return this.wpTheme(pathArgs)
   }

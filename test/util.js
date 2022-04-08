@@ -13,7 +13,7 @@ let originalCreateContainer
  * @param {string} suiteName - Test suites name.
  * @returns {TestCreateContainer} - the modified function of CreateContainer.
  */
-function InitTestCreateContainer (suiteName) {
+function InitTestCreateContainer(suiteName) {
   originalCreateContainer = Docker.prototype.CreateContainer
   originalCreateContainer = originalCreateContainer.bind(new Docker())
 
@@ -32,7 +32,10 @@ function InitTestCreateContainer (suiteName) {
     containerIds[suiteName].push(container.options.id)
 
     if (container.options.volumes) {
-      volumeIds[suiteName].push.apply(volumeIds[suiteName], container.options.volumes.map(item => item.host))
+      volumeIds[suiteName].push.apply(
+        volumeIds[suiteName],
+        container.options.volumes.map((item) => item.host)
+      )
     }
 
     return container
@@ -46,7 +49,7 @@ function InitTestCreateContainer (suiteName) {
 /**
  * @param {string} suiteName - Test suites name.
  */
-function CleanTestCreateContainer (suiteName) {
+function CleanTestCreateContainer(suiteName) {
   DeleteContainers(suiteName)
 
   Docker.prototype.CreateContainer = originalCreateContainer
@@ -57,7 +60,7 @@ function CleanTestCreateContainer (suiteName) {
  *
  * @param {string} suiteName - name of the test run.
  */
-function DeleteContainers (suiteName) {
+function DeleteContainers(suiteName) {
   spawnSync('docker', ['rm', '-f', '-v'].concat(GetContainerIds(suiteName)))
   spawnSync('docker', ['volume', 'rm', '-f'].concat(volumeIds[suiteName]))
 }
@@ -68,8 +71,13 @@ function DeleteContainers (suiteName) {
  * @param {string} suiteName - Test suites name.
  * @returns {Array} The containers ids array
  */
-function GetContainerIds (suiteName) {
+function GetContainerIds(suiteName) {
   return containerIds[suiteName]
 }
 
-module.exports = { GetContainerIds: GetContainerIds, DeleteContainers, CleanTestCreateContainer, InitTestCreateContainer }
+module.exports = {
+  GetContainerIds: GetContainerIds,
+  DeleteContainers,
+  CleanTestCreateContainer,
+  InitTestCreateContainer
+}

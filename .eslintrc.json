@@ -4,53 +4,28 @@
     "plugin:jsdoc/recommended",
     "plugin:jest/style",
     "plugin:node/recommended-script",
-    "plugin:promise/recommended"
+    "plugin:promise/recommended",
+    "prettier"
   ],
-  "plugins": [
-    "jsdoc",
-    "spellcheck",
-    "promise"
-  ],
+  "plugins": ["jsdoc", "spellcheck", "promise"],
   "env": {
     "node": true
   },
   "overrides": [
     {
       "extends": "plugin:jest/recommended",
-      "files": [
-        "**/*.spec.js"
-      ],
+      "files": ["**/*.spec.js"],
       "env": {
         "jest/globals": true
       },
-      "plugins": [
-        "jest"
-      ],
+      "plugins": ["jest"],
       "rules": {
         "promise/always-return": "off"
       }
     }
   ],
   "rules": {
-    "yoda": [
-      "error",
-      "always"
-    ],
-    "function-call-argument-newline": [
-      "error",
-      "never"
-    ],
-    "function-paren-newline": [
-      "error",
-      "never"
-    ],
-    "comma-dangle": [
-      "error",
-      {
-        "arrays": "always-multiline",
-        "objects": "always-multiline"
-      }
-    ],
+    "yoda": ["error", "always"],
     "jsdoc/no-undefined-types": "off",
     "jsdoc/valid-types": "off",
     "spellcheck/spell-checker": [

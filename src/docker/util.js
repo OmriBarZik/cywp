@@ -5,7 +5,7 @@
  * @param {(stdout: string, stderr: string) => any} callback - callback that deterred what to return when the process is successful.
  * @returns {Promise} return what said to return form the callback
  */
-function ReturnPromise (process, callback) {
+function ReturnPromise(process, callback) {
   if ('function' !== typeof callback) {
     throw new TypeError('callback must be a function')
   }
@@ -40,7 +40,7 @@ function ReturnPromise (process, callback) {
  * @param {number} ms - number of milliseconds.
  * @returns {Promise<void>} - return promise.
  */
-function sleep (ms) {
+function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms)
   })
@@ -52,7 +52,7 @@ function sleep (ms) {
  * @param {string} stdout - raw inspect output
  * @returns {string | object} Clean json object or clean string
  */
-function CleanInspect (stdout) {
+function CleanInspect(stdout) {
   stdout = stdout.replace(/\r?\n|\r/g, '')
   try {
     return JSON.parse(stdout)[0]

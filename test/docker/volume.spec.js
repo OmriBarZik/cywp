@@ -10,7 +10,13 @@ describe('Volume', () => {
       await volume.rm()
       expect(volume.options.status).toBe('dead')
 
-      const volumeCheck = spawnSync('docker', ['volume', 'ls', '-q', '--filter', `name=${volume.options.name}`])
+      const volumeCheck = spawnSync('docker', [
+        'volume',
+        'ls',
+        '-q',
+        '--filter',
+        `name=${volume.options.name}`
+      ])
       expect(volumeCheck.stdout).toHaveLength(0)
     })
 
@@ -21,7 +27,13 @@ describe('Volume', () => {
 
       expect(volume.options.status).toBe('dead')
 
-      const volumeCheck = spawnSync('docker', ['volume', 'ls', '-q', '--filter', `name=${volume.options.name}`])
+      const volumeCheck = spawnSync('docker', [
+        'volume',
+        'ls',
+        '-q',
+        '--filter',
+        `name=${volume.options.name}`
+      ])
       expect(volumeCheck.stdout).toHaveLength(0)
     })
   })

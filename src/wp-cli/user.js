@@ -12,7 +12,7 @@ class User {
    *
    * @param {import('../docker/container')} site - the wordpress site to work on.
    */
-  constructor (site) {
+  constructor(site) {
     this.site = site
     this.Meta = new UserMeta(this)
   }
@@ -23,7 +23,7 @@ class User {
    * @param {string[]} commands - commands passing to wp user.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
-  wpUser (commands) {
+  wpUser(commands) {
     const args = ['wp', 'user'].concat(commands)
 
     return CreateWordpressCliContainer(this.site, args)
@@ -36,7 +36,7 @@ class User {
    * @param {string} cap - The capability to add.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
-  addCap (user, cap) {
+  addCap(user, cap) {
     const addCapArgs = ['add-cap', user, cap]
 
     return this.wpUser(addCapArgs)
@@ -49,7 +49,7 @@ class User {
    * @param {string} role - Add the specified role to the user.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
-  addRole (user, role) {
+  addRole(user, role) {
     const addRoleArgs = ['add-role', user, role]
 
     return this.wpUser(addRoleArgs)
@@ -73,7 +73,7 @@ class User {
    * @param {string} [options.userEmail] - The email address of the user to create. default: `${options.userLogin}@cywp.local`
    * @returns {Promise<RunInContainerOutput>} Retruns newy created User id.
    */
-  create (options = {}) {
+  create(options = {}) {
     const createArgs = ['create', '--porcelain']
 
     if (!options.userLogin) {
@@ -99,17 +99,35 @@ class User {
         throw new TypeError('options.userRegistered must be instance of Date!')
       }
 
-      createArgs.push(`--user_registered=${FormatToWordpressDate(options.userRegistered)}`)
+      createArgs.push(
+        `--user_registered=${FormatToWordpressDate(options.userRegistered)}`
+      )
     }
 
-    if (options.role) { createArgs.push(`--role=${options.role}`) }
-    if (options.displayName) { createArgs.push(`--display_name=${options.displayName}`) }
-    if (options.userNicename) { createArgs.push(`--user_nicename=${options.userNicename}`) }
-    if (options.userUrl) { createArgs.push(`--user_url=${options.userUrl}`) }
-    if (options.nickname) { createArgs.push(`--nickname=${options.nickname}`) }
-    if (options.firstName) { createArgs.push(`--first_name=${options.firstName}`) }
-    if (options.lastName) { createArgs.push(`--last_name=${options.lastName}`) }
-    if (options.description) { createArgs.push(`--description=${options.description}`) }
+    if (options.role) {
+      createArgs.push(`--role=${options.role}`)
+    }
+    if (options.displayName) {
+      createArgs.push(`--display_name=${options.displayName}`)
+    }
+    if (options.userNicename) {
+      createArgs.push(`--user_nicename=${options.userNicename}`)
+    }
+    if (options.userUrl) {
+      createArgs.push(`--user_url=${options.userUrl}`)
+    }
+    if (options.nickname) {
+      createArgs.push(`--nickname=${options.nickname}`)
+    }
+    if (options.firstName) {
+      createArgs.push(`--first_name=${options.firstName}`)
+    }
+    if (options.lastName) {
+      createArgs.push(`--last_name=${options.lastName}`)
+    }
+    if (options.description) {
+      createArgs.push(`--description=${options.description}`)
+    }
 
     return this.wpUser(createArgs)
   }
@@ -121,7 +139,7 @@ class User {
    * @param {number} [reassign] -  User ID to reassign the posts to.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
-  delete (user, reassign) {
+  delete(user, reassign) {
     if ('number' === typeof user) {
       user = user.toString()
     }
@@ -145,16 +163,15 @@ class User {
    * @param {string|number} user - The user to get.
    * @returns {Promise<UserGetObject>} Current user data.
    */
-  get (user) {
+  get(user) {
     const getArgs = [
       'get',
       '--format=json',
       '--fields=ID,user_login,display_name,user_email,user_registered,roles,user_pass,user_nicename,user_url,user_activation_key,user_status',
-      user,
+      user
     ]
 
-    return this.wpUser(getArgs)
-      .then(output => JSON.parse(output.stdout))
+    return this.wpUser(getArgs).then((output) => JSON.parse(output.stdout))
   }
 
   /**
@@ -163,11 +180,11 @@ class User {
    * @param {UserGetObject} [filters] - Filter results based on the value of a field.
    * @returns {Promise<UserGetObject[]>} - List of users in the wordpress site.
    */
-  list (filters = {}) {
+  list(filters = {}) {
     const listArgs = [
       'list',
       '--format=json',
-      '--fields=ID,user_login,display_name,user_email,user_registered,roles,user_pass,user_nicename,user_url,user_activation_key,user_status',
+      '--fields=ID,user_login,display_name,user_email,user_registered,roles,user_pass,user_nicename,user_url,user_activation_key,user_status'
     ]
 
     if ('object' !== typeof filters) {
@@ -178,8 +195,7 @@ class User {
       listArgs.push(`--${filtersField}=${filters[filtersField]}`)
     }
 
-    return this.wpUser(listArgs)
-      .then(output => JSON.parse(output.stdout))
+    return this.wpUser(listArgs).then((output) => JSON.parse(output.stdout))
   }
 
   /**
@@ -188,11 +204,10 @@ class User {
    * @param {string|number} user - User to check
    * @returns {Promise<Array<{name: string}>>} List of the user capabilities.
    */
-  listCaps (user) {
+  listCaps(user) {
     const listCapsArgs = ['list-caps', '--format=json', user]
 
-    return this.wpUser(listCapsArgs)
-      .then(output => JSON.parse(output.stdout))
+    return this.wpUser(listCapsArgs).then((output) => JSON.parse(output.stdout))
   }
 
   /**
@@ -202,7 +217,7 @@ class User {
    * @param {string} cap - The capability to be removed.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
-  removeCap (user, cap) {
+  removeCap(user, cap) {
     const removeCapArgs = ['remove-cap', user, cap]
 
     return this.wpUser(removeCapArgs)
@@ -215,7 +230,7 @@ class User {
    * @param {string} cap - A specific role to remove.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
-  removeRole (user, cap) {
+  removeRole(user, cap) {
     const removeRoleArgs = ['remove-role', user, cap]
 
     return this.wpUser(removeRoleArgs)
@@ -228,7 +243,7 @@ class User {
    * @param {string} role - Make the user have the specified role. If not passed, the default role is used.
    * @returns {Promise<RunInContainerOutput>} The output of the command.
    */
-  setRole (user, role) {
+  setRole(user, role) {
     const setRoleArgs = ['set-role', user, role]
 
     return this.wpUser(setRoleArgs)
@@ -240,7 +255,7 @@ class User {
    * @param {string|number|number[]|string[]} user - One or more id's of users to mark as spam.
    * @returns {Promise<RunInContainerOutput>} The command output
    */
-  spam (user) {
+  spam(user) {
     if ('number' === typeof user) {
       user = user.toString()
     }
@@ -260,7 +275,7 @@ class User {
    * @param {string|number|number[]|string[]} user - One or more IDs of users to remove from spam.
    * @returns {Promise<RunInContainerOutput>} The command output
    */
-  unspam (user) {
+  unspam(user) {
     if ('number' === typeof user) {
       user = user.toString()
     }
@@ -292,7 +307,7 @@ class User {
    * @param {'administrator'|'editor'|'author'|'contributor'|'subscriber'} [options.role] - A string used to set the user’s role.
    * @returns {Promise<RunInContainerOutput>} the output of the command.
    */
-  update (options = {}) {
+  update(options = {}) {
     const updateArgs = ['update', '--skip-email']
 
     if (!options.user) {
@@ -312,19 +327,41 @@ class User {
         throw new TypeError('options.userRegistered must be instance of Date!')
       }
 
-      updateArgs.push(`--user_registered=${FormatToWordpressDate(options.userRegistered)}`)
+      updateArgs.push(
+        `--user_registered=${FormatToWordpressDate(options.userRegistered)}`
+      )
     }
 
-    if (options.description) { updateArgs.push(`--description=${options.description}`) }
-    if (options.displayName) { updateArgs.push(`--display_name=${options.displayName}`) }
-    if (options.firstName) { updateArgs.push(`--first_name=${options.firstName}`) }
-    if (options.lastName) { updateArgs.push(`--last_name=${options.lastName}`) }
-    if (options.nickname) { updateArgs.push(`--nickname=${options.nickname}`) }
-    if (options.role) { updateArgs.push(`--role=${options.role}`) }
-    if (options.userEmail) { updateArgs.push(`--user_email=${options.userEmail}`) }
-    if (options.userNicename) { updateArgs.push(`--user_nicename=${options.userNicename}`) }
-    if (options.userPass) { updateArgs.push(`--user_pass=${options.userPass}`) }
-    if (options.userUrl) { updateArgs.push(`--user_url=${options.userUrl}`) }
+    if (options.description) {
+      updateArgs.push(`--description=${options.description}`)
+    }
+    if (options.displayName) {
+      updateArgs.push(`--display_name=${options.displayName}`)
+    }
+    if (options.firstName) {
+      updateArgs.push(`--first_name=${options.firstName}`)
+    }
+    if (options.lastName) {
+      updateArgs.push(`--last_name=${options.lastName}`)
+    }
+    if (options.nickname) {
+      updateArgs.push(`--nickname=${options.nickname}`)
+    }
+    if (options.role) {
+      updateArgs.push(`--role=${options.role}`)
+    }
+    if (options.userEmail) {
+      updateArgs.push(`--user_email=${options.userEmail}`)
+    }
+    if (options.userNicename) {
+      updateArgs.push(`--user_nicename=${options.userNicename}`)
+    }
+    if (options.userPass) {
+      updateArgs.push(`--user_pass=${options.userPass}`)
+    }
+    if (options.userUrl) {
+      updateArgs.push(`--user_url=${options.userUrl}`)
+    }
 
     return this.wpUser(updateArgs)
   }

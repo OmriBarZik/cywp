@@ -10,14 +10,20 @@ const jsdoc2md = require('jsdoc-to-markdown')
  * @param {string[]} exclude - what directories to exclude.
  * @returns {Promise<Array<string>>} array with all the file name in a directory.
  */
-async function getFiles (dir, exclude = []) {
+async function getFiles(dir, exclude = []) {
   const dirents = await readdir(dir, { withFileTypes: true })
-  const files = await Promise.all(dirents.map((dirent) => {
-    const res = resolve(dir, dirent.name)
-    if ('.' === dirent.name[0] || exclude.find(dir => dir === dirent.name)) { return 0 }
-    return dirent.isDirectory() ? getFiles(res, exclude) : res
-  }))
-    .then(files => files.filter(file => file))
+  const files = await Promise.all(
+    dirents.map((dirent) => {
+      const res = resolve(dir, dirent.name)
+      if (
+        '.' === dirent.name[0] ||
+        exclude.find((dir) => dir === dirent.name)
+      ) {
+        return 0
+      }
+      return dirent.isDirectory() ? getFiles(res, exclude) : res
+    })
+  ).then((files) => files.filter((file) => file))
   return Array.prototype.concat(...files)
 }
 
@@ -26,9 +32,13 @@ async function getFiles (dir, exclude = []) {
  *
  * @returns {Promise<string>} rendered markdown for types.
  */
-async function preperTypeFile () {
-  const allFiles = await getFiles(process.cwd(), ['node_modules', 'test', 'coverage'])
-  const typsFiles = allFiles.filter(file => 'types' === basename(file, '.js'))
+async function preperTypeFile() {
+  const allFiles = await getFiles(process.cwd(), [
+    'node_modules',
+    'test',
+    'coverage'
+  ])
+  const typsFiles = allFiles.filter((file) => 'types' === basename(file, '.js'))
 
   return jsdoc2md.render({ files: typsFiles })
 }
@@ -36,8 +46,12 @@ async function preperTypeFile () {
 /**
  * @returns {Promise<Array<{file: string, markdown: string}>>} return file its markdown.
  */
-async function preperWpcliFiles () {
-  const wpcliFiles = await getFiles(resolve(process.cwd(), 'src/wp-cli'), ['index.js', 'util.js', 'types.js'])
+async function preperWpcliFiles() {
+  const wpcliFiles = await getFiles(resolve(process.cwd(), 'src/wp-cli'), [
+    'index.js',
+    'util.js',
+    'types.js'
+  ])
 
   /**
    * expect to get type import path and return the only file name capitalize.
@@ -46,14 +60,21 @@ async function preperWpcliFiles () {
    * @param {string} className only the name of the import class
    * @returns {string} import file name capitalize.
    */
-  const replaceImport = (importPath, className) => className[0].toUpperCase() + className.slice(1)
+  const replaceImport = (importPath, className) =>
+    className[0].toUpperCase() + className.slice(1)
 
-  return await Promise.all(wpcliFiles.map(async file => ({
-    file: basename(file, '.js'),
-    markdown: await readFile(file)
-      .then(fileContent => fileContent.toLocaleString().replace(/import\(.*\/(.+)'\)/g, replaceImport))
-      .then(fileContent => jsdoc2md.render({ source: fileContent })),
-  })))
+  return await Promise.all(
+    wpcliFiles.map(async (file) => ({
+      file: basename(file, '.js'),
+      markdown: await readFile(file)
+        .then((fileContent) =>
+          fileContent
+            .toLocaleString()
+            .replace(/import\(.*\/(.+)'\)/g, replaceImport)
+        )
+        .then((fileContent) => jsdoc2md.render({ source: fileContent }))
+    }))
+  )
 }
 
 /**
@@ -62,16 +83,15 @@ async function preperWpcliFiles () {
  * @param {Array<{file: string, markdown: string}>} markdownFiles nulinked markdown files
  * @returns {object} object of links
  */
-function extractLinks (markdownFiles) {
-  const links = markdownFiles.map(files => {
+function extractLinks(markdownFiles) {
+  const links = markdownFiles.map((files) => {
     const types = {}
 
-    files.markdown.match(/<a name="(.*)"><\/a>/g)
-      .forEach((match) => {
-        match = match.substring(9, match.length - 6)
+    files.markdown.match(/<a name="(.*)"><\/a>/g).forEach((match) => {
+      match = match.substring(9, match.length - 6)
 
-        types[match] = `./${files.file}.md#${match}`
-      })
+      types[match] = `./${files.file}.md#${match}`
+    })
 
     return types
   })
@@ -82,7 +102,7 @@ function extractLinks (markdownFiles) {
 /**
  * the main function of the cli.
  */
-async function preperdocs () {
+async function preperdocs() {
   const markdownFiles = []
 
   markdownFiles.push({ file: 'types', markdown: await preperTypeFile() })
@@ -93,12 +113,20 @@ async function preperdocs () {
 
   const docsDir = resolve(process.cwd(), 'docs')
 
-  if (!existsSync(docsDir)) { await mkdir(docsDir) }
+  if (!existsSync(docsDir)) {
+    await mkdir(docsDir)
+  }
 
-  const regexPromise = new RegExp(`&lt;(${Object.keys(links).join('|')})&gt;`, 'g')
-  const regexType = new RegExp(`(?<!\\[)<code>(${Object.keys(links).join('|')})<\\/code>`, 'g')
+  const regexPromise = new RegExp(
+    `&lt;(${Object.keys(links).join('|')})&gt;`,
+    'g'
+  )
+  const regexType = new RegExp(
+    `(?<!\\[)<code>(${Object.keys(links).join('|')})<\\/code>`,
+    'g'
+  )
 
-  markdownFiles.forEach(file => {
+  markdownFiles.forEach((file) => {
     const setLink = (code, type) => `[${code}](${links[type]})`
 
     file.markdown = file.markdown.replace(regexPromise, setLink)
@@ -108,5 +136,4 @@ async function preperdocs () {
   })
 }
 
-preperdocs()
-  .catch(console.error)
+preperdocs().catch(console.error)

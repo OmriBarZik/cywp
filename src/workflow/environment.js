@@ -1,5 +1,8 @@
 const { Docker } = require('../docker/docker')
-const { CreateMysqlContainer, CreateWordpressContainer } = require('../docker/presets/containers')
+const {
+  CreateMysqlContainer,
+  CreateWordpressContainer
+} = require('../docker/presets/containers')
 const { InitSite } = require('./sites-management')
 const { sleep } = require('../docker/util')
 
@@ -10,7 +13,7 @@ const docker = new Docker()
  *
  * @returns {Promise<import('../docker/network')>} the main cywp network.
  */
-function setupNetwork () {
+function setupNetwork() {
   return docker.CreateNetwork('cywp-network')
 }
 
@@ -23,17 +26,19 @@ function setupNetwork () {
  *  const mysql = await setupDatabase(3306);
  * }
  */
-async function SetupDatabase () {
+async function SetupDatabase() {
   const mysql = await CreateMysqlContainer('main', true)
 
-  if ('running' !== await mysql.status()) {
+  if ('running' !== (await mysql.status())) {
     await mysql.start()
   }
 
   let mysqlReady = false
 
   while (!mysqlReady) {
-    if (await mysql.isHealthy()) { mysqlReady = true }
+    if (await mysql.isHealthy()) {
+      mysqlReady = true
+    }
 
     await sleep(1000)
   }
@@ -54,22 +59,42 @@ async function SetupDatabase () {
  * const wordpress = await SetupSite('my-site', 8000, mysql)
  * }
  */
-async function SetupSite (name, port, mysql, version, volumes) {
-  const wordpress = await CreateWordpressContainer(name, port, mysql, version, volumes, true)
+async function SetupSite(name, port, mysql, version, volumes) {
+  const wordpress = await CreateWordpressContainer(
+    name,
+    port,
+    mysql,
+    version,
+    volumes,
+    true
+  )
 
-  if ('running' !== await wordpress.status()) {
+  if ('running' !== (await wordpress.status())) {
     await wordpress.start()
   }
 
-  const dbName = wordpress.options.environmentVariables.find(env => 'WORDPRESS_DB_NAME' === env.name).value
-  const mysqlPassword = mysql.options.environmentVariables.find(env => 'MYSQL_ROOT_PASSWORD' === env.name).value
+  const dbName = wordpress.options.environmentVariables.find(
+    (env) => 'WORDPRESS_DB_NAME' === env.name
+  ).value
+  const mysqlPassword = mysql.options.environmentVariables.find(
+    (env) => 'MYSQL_ROOT_PASSWORD' === env.name
+  ).value
 
-  await mysql.exec(['mysql', '-u', 'root', `-p${mysqlPassword}`, '-e', `CREATE DATABASE IF NOT EXISTS \`${dbName}\``])
+  await mysql.exec([
+    'mysql',
+    '-u',
+    'root',
+    `-p${mysqlPassword}`,
+    '-e',
+    `CREATE DATABASE IF NOT EXISTS \`${dbName}\``
+  ])
 
   let wordpressReady = false
 
   while (!wordpressReady) {
-    if (await wordpress.isHealthy()) { wordpressReady = true }
+    if (await wordpress.isHealthy()) {
+      wordpressReady = true
+    }
 
     await sleep(1000)
   }

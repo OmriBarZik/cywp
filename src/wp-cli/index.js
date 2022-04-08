@@ -10,7 +10,7 @@ class WPCLI {
    *
    * @param {import('../docker/container')} site - the wordpress site to work on.
    */
-  constructor (site) {
+  constructor(site) {
     this.site = site
 
     this.plugin = new Plugin(site)
@@ -30,7 +30,7 @@ class WPCLI {
     }
   }
 
-  wp (commands) {
+  wp(commands) {
     const args = ['wp'].concat(commands)
 
     return CreateWordpressCliContainer(this.site, args)

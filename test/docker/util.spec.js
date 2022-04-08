@@ -1,12 +1,12 @@
-
 const { spawn } = require('child_process')
 const { ReturnPromise, CleanInspect } = require('../../src/docker/util')
 
 describe('Util', () => {
   describe('#ReturnPromise()', () => {
     it('should throw error for invalid arguments', async () => {
-      return expect(() => { ReturnPromise('process', 'invalid callback') })
-        .toThrow(new TypeError('callback must be a function'))
+      return expect(() => {
+        ReturnPromise('process', 'invalid callback')
+      }).toThrow(new TypeError('callback must be a function'))
     })
 
     it('should reject for invalid process', async () => {
@@ -22,7 +22,9 @@ describe('Util', () => {
     })
 
     it('should reject for invalid process', () => {
-      expect(CleanInspect('[{"test": "test"}]')).toStrictEqual({ test: 'test' })
+      expect(CleanInspect('[{"test": "test"}]')).toStrictEqual({
+        test: 'test'
+      })
     })
   })
 })

@@ -1,4 +1,7 @@
-const { CheckIfArrayOrString, FormatToWordpressDate } = require('../../src/wp-cli/util')
+const {
+  CheckIfArrayOrString,
+  FormatToWordpressDate
+} = require('../../src/wp-cli/util')
 
 describe('util', () => {
   describe('#CheckIfArrayOrString()', () => {
@@ -12,7 +15,9 @@ describe('util', () => {
     })
 
     it('should throw an error with massage when item is not array or string', () => {
-      expect(() => CheckIfArrayOrString(1, 'fail')).toThrow('fail must be an array or a string')
+      expect(() => CheckIfArrayOrString(1, 'fail')).toThrow(
+        'fail must be an array or a string'
+      )
     })
   })
 

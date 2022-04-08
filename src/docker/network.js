@@ -7,7 +7,7 @@ class Network {
    *
    * @param {NetworkOption} options - the docker network options
    */
-  constructor (options) {
+  constructor(options) {
     this.options = options
   }
 
@@ -16,7 +16,7 @@ class Network {
    *
    * @returns {Promise<Network>} Return the current network.
    */
-  rm () {
+  rm() {
     const rm = spawn('docker', ['network', 'rm', this.options.id])
 
     return ReturnPromise(rm, () => {
@@ -31,10 +31,12 @@ class Network {
    * @param {string} [format] - Format the output using the given Go template.
    * @returns {Promise<string>} Network info.
    */
-  inspect (format) {
+  inspect(format) {
     const inspectArgs = ['network', 'inspect']
 
-    if (format) { inspectArgs.push('--format', format) }
+    if (format) {
+      inspectArgs.push('--format', format)
+    }
 
     inspectArgs.push(this.options.id)
 

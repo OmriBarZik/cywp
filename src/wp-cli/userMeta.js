@@ -9,11 +9,11 @@ class UserMeta {
    *
    * @param {import('./user')} user - the user object.
    */
-  constructor (user) {
+  constructor(user) {
     this.user = user
   }
 
-  wpUserMeta (commands) {
+  wpUserMeta(commands) {
     return this.user.wpUser(['meta', ...commands])
   }
 
@@ -25,7 +25,7 @@ class UserMeta {
    * @param {string} value - The new metadata value.
    * @returns {Promise<RunInContainerOutput>} The command output.
    */
-  add (user, key, value) {
+  add(user, key, value) {
     const addArgs = ['add', user, key, value]
 
     return this.wpUserMeta(addArgs)
@@ -38,7 +38,7 @@ class UserMeta {
    * @param {string} key - he metadata key.
    * @returns {Promise<RunInContainerOutput>} The command output.
    */
-  delete (user, key) {
+  delete(user, key) {
     const deleteArgs = ['delete', user, key]
 
     return this.wpUserMeta(deleteArgs)
@@ -51,11 +51,10 @@ class UserMeta {
    * @param {string} key - The metadata key.
    * @returns {Promise<any>} The command output.
    */
-  get (user, key) {
+  get(user, key) {
     const getArgs = ['get', '--format=json', user, key]
 
-    return this.wpUserMeta(getArgs)
-      .then(output => JSON.parse(output.stdout))
+    return this.wpUserMeta(getArgs).then((output) => JSON.parse(output.stdout))
   }
 
   /**
@@ -64,11 +63,10 @@ class UserMeta {
    * @param {string|number} user - The user login, user email, or user ID of the user to get metadata for.
    * @returns {Promise<{user_id: number, meta_key: string, meta_value: string}>} list of the user metadata
    */
-  list (user) {
+  list(user) {
     const listArgs = ['list', '--format=json', user]
 
-    return this.wpUserMeta(listArgs)
-      .then(output => JSON.parse(output.stdout))
+    return this.wpUserMeta(listArgs).then((output) => JSON.parse(output.stdout))
   }
 
   /**
@@ -79,7 +77,7 @@ class UserMeta {
    * @param {string} value - The new metadata value.
    * @returns {Promise<RunInContainerOutput>} The command output.
    */
-  update (user, key, value) {
+  update(user, key, value) {
     const updateArgs = ['update', user, key, value]
 
     return this.wpUserMeta(updateArgs)

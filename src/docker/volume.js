@@ -7,7 +7,7 @@ class Volume {
    *
    * @param {VolumeOptions} options the docker volume options
    */
-  constructor (options) {
+  constructor(options) {
     this.options = options
   }
 
@@ -16,10 +16,12 @@ class Volume {
    * @param {boolean} force - Force the removal of the volume.
    * @returns {Promise<Volume>} Return the current volume.
    */
-  rm (force) {
+  rm(force) {
     const rmArgs = ['volume', 'rm']
 
-    if (force) { rmArgs.push('--force') }
+    if (force) {
+      rmArgs.push('--force')
+    }
 
     rmArgs.push(this.options.name)
 

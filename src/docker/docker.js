@@ -14,7 +14,7 @@ class Docker {
    * @param {boolean} detach - Should the Promise resolve when the container exits.
    * @returns {Promise<Container>} Return promise for continer object
    */
-  async CreateContainer (options, run = false, detach = true) {
+  async CreateContainer(options, run = false, detach = true) {
     const args = processCreateContainerOptions(options, run, detach)
 
     const container = await this.AttachContainer(options)
@@ -29,13 +29,19 @@ class Docker {
       options.id = cleanID(stdout)[0]
       options.status = run ? 'started' : 'created'
 
-      if (options.rm) { options.status = 'removed' }
+      if (options.rm) {
+        options.status = 'removed'
+      }
 
-      if (!options.volumes) { options.volumes = [] }
+      if (!options.volumes) {
+        options.volumes = []
+      }
 
-      return Promise.all(options.volumes.map(({ ...volume }) => this.AttachVolume(volume.host)))
-        .then(volumes => volumes.filter(volume => volume))
-        .then(volumes => new Container(options, volumes))
+      return Promise.all(
+        options.volumes.map(({ ...volume }) => this.AttachVolume(volume.host))
+      )
+        .then((volumes) => volumes.filter((volume) => volume))
+        .then((volumes) => new Container(options, volumes))
     })
   }
 
@@ -45,13 +51,17 @@ class Docker {
    * @param {ContainerOptions} options - Docker container options.
    * @returns {Promise<RunInContainerOutput>} Container outputs.
    */
-  RunInContainer (options) {
+  RunInContainer(options) {
     if (!options.commands) {
-      throw new TypeError('options.commands must be provided to use RunInContainer.')
+      throw new TypeError(
+        'options.commands must be provided to use RunInContainer.'
+      )
     }
 
     if (!options.rm) {
-      throw new TypeError('options.rm must be true to use RunInContainer. (we don\'t want to leave garbage aroud)')
+      throw new TypeError(
+        "options.rm must be true to use RunInContainer. (we don't want to leave garbage aroud)"
+      )
     }
 
     const args = processCreateContainerOptions(options, true, false)
@@ -69,7 +79,7 @@ class Docker {
    * @param {string} image - Image to pull from docker hub.
    * @returns {Promise<string>} - iamge name when pull successfully.
    */
-  pullImage (image) {
+  pullImage(image) {
     const imagePull = spawn('docker', ['pull', image])
 
     return ReturnPromise(imagePull, () => image)
@@ -81,7 +91,7 @@ class Docker {
    * @param {string} name - Name of the volume.
    * @returns {Promise<Volume>} return promise for volume object.
    */
-  async CreateVolume (name) {
+  async CreateVolume(name) {
     const volume = await this.AttachVolume(name)
 
     if (volume) {
@@ -105,7 +115,7 @@ class Docker {
    * @param {string} name - Name of the network.
    * @returns {Promise<Network>} return promise for network object.
    */
-  async CreateNetwork (name) {
+  async CreateNetwork(name) {
     if (!name) {
       throw new Error('name must be provided!')
     }
@@ -124,7 +134,7 @@ class Docker {
       const options = {
         name: name,
         id: cleanID(stdout)[0],
-        status: 'alive',
+        status: 'alive'
       }
 
       return new Network(options)
@@ -138,7 +148,7 @@ class Docker {
    * @param {ContainerOptions} options - the option of the container you want to attach to.
    * @returns {Promise<Container>} - return the first maching container.
    */
-  AttachContainer (options) {
+  AttachContainer(options) {
     const attachContainerArgs = processAttachContainerOptions(options)
 
     const process = spawn('docker', attachContainerArgs)
@@ -154,14 +164,17 @@ class Docker {
         return null
       }
 
-      const attachOptions = Object.assign({
-        id: ids[0],
-        commands: [],
-        environmentVariables: [],
-        exposePorts: [],
-        volumes: [],
-        health: {},
-      }, options)
+      const attachOptions = Object.assign(
+        {
+          id: ids[0],
+          commands: [],
+          environmentVariables: [],
+          exposePorts: [],
+          volumes: [],
+          health: {}
+        },
+        options
+      )
 
       const attachContainer = new Container(attachOptions)
 
@@ -175,54 +188,74 @@ class Docker {
       }
 
       if (info.Args) {
-        attachContainer.options.commands.push
-          .apply(attachContainer.options.commands, info.Args)
+        attachContainer.options.commands.push.apply(
+          attachContainer.options.commands,
+          info.Args
+        )
       }
 
       if (info.HostConfig.PortBindings) {
-        Object.keys(info.HostConfig.PortBindings).forEach(port => {
+        Object.keys(info.HostConfig.PortBindings).forEach((port) => {
           attachContainer.options.exposePorts.push({
             docker: port.split('/')[0],
-            host: info.HostConfig.PortBindings[port][0].HostPort,
+            host: info.HostConfig.PortBindings[port][0].HostPort
           })
         })
       }
 
       if (info.Config.Env) {
-        info.Config.Env.forEach(env => {
+        info.Config.Env.forEach((env) => {
           const envInfo = env.split('=')
           attachContainer.options.environmentVariables.push({
             name: envInfo[0],
-            value: envInfo[1],
+            value: envInfo[1]
           })
         })
       }
 
       if (info.Mounts) {
-        info.Mounts.filter(mount => !attachContainer.options.volumes.find(volume => volume.docker === mount.Destination))
-          .forEach(mount => {
-            if ('volume' !== mount.Type) {
-              return
-            }
-            attachContainer.options.volumes.push({
-              docker: mount.Destination,
-              host: mount.Name,
-            })
+        info.Mounts.filter(
+          (mount) =>
+            !attachContainer.options.volumes.find(
+              (volume) => volume.docker === mount.Destination
+            )
+        ).forEach((mount) => {
+          if ('volume' !== mount.Type) {
+            return
+          }
+          attachContainer.options.volumes.push({
+            docker: mount.Destination,
+            host: mount.Name
           })
+        })
       }
 
       const healthCheck = info.Config.Healthcheck // eslint-disable-line spellcheck/spell-checker
       if (healthCheck) {
-        attachContainer.options.health.command = healthCheck.Test ? healthCheck.Test[1] : undefined
-        attachContainer.options.health.interval = healthCheck.Interval ? (healthCheck.Interval % 1000000) + 'ms' : undefined
-        attachContainer.options.health.startPeriod = healthCheck.StartPeriod ? (healthCheck.StartPeriod % 1000000) + 'ms' : undefined
-        attachContainer.options.health.timeout = healthCheck.Timeout ? (healthCheck.Timeout % 1000000) + 'ms' : undefined
-        attachContainer.options.health.retries = healthCheck.Retries ? healthCheck.Retries : undefined
+        attachContainer.options.health.command = healthCheck.Test
+          ? healthCheck.Test[1]
+          : undefined
+        attachContainer.options.health.interval = healthCheck.Interval
+          ? (healthCheck.Interval % 1000000) + 'ms'
+          : undefined
+        attachContainer.options.health.startPeriod = healthCheck.StartPeriod
+          ? (healthCheck.StartPeriod % 1000000) + 'ms'
+          : undefined
+        attachContainer.options.health.timeout = healthCheck.Timeout
+          ? (healthCheck.Timeout % 1000000) + 'ms'
+          : undefined
+        attachContainer.options.health.retries = healthCheck.Retries
+          ? healthCheck.Retries
+          : undefined
       }
 
-      return Promise.all(attachContainer.options.volumes.map(({ ...volume }) => this.AttachVolume(volume.host)))
-        .then(volumes => volumes.filter(volume => volume))
-        .then(volumes => {
+      return Promise.all(
+        attachContainer.options.volumes.map(({ ...volume }) =>
+          this.AttachVolume(volume.host)
+        )
+      )
+        .then((volumes) => volumes.filter((volume) => volume))
+        .then((volumes) => {
           attachContainer.volumes = volumes
           return attachContainer
         })
@@ -233,12 +266,19 @@ class Docker {
    * @param {string} name - the name of the network you want to attach.
    * @returns {Promise<Network>} the first network that match the desctiption.
    */
-  AttachNetwork (name) {
+  AttachNetwork(name) {
     if (!name) {
       throw new Error('name must be provided!')
     }
 
-    const args = ['network', 'ls', '--no-trunc', '--quiet', '--filter', `name=^${name}$`]
+    const args = [
+      'network',
+      'ls',
+      '--no-trunc',
+      '--quiet',
+      '--filter',
+      `name=^${name}$`
+    ]
 
     const process = spawn('docker', args)
 
@@ -257,7 +297,7 @@ class Docker {
    * @param {string} name - the name of the volume you want to attach.
    * @returns {Promise<Network>} the first network that match the desctiption.
    */
-  AttachVolume (name) {
+  AttachVolume(name) {
     if (!name) {
       throw new Error('name must be provided!')
     }
@@ -286,7 +326,7 @@ class Docker {
  * @param {boolean} detach - Should the container run with logs attached.
  * @returns {string[]} Array of arguments
  */
-function processCreateContainerOptions (options, run, detach) {
+function processCreateContainerOptions(options, run, detach) {
   const args = run ? ['container', 'run', '--detach'] : ['container', 'create']
 
   if (run && !detach) {
@@ -294,7 +334,9 @@ function processCreateContainerOptions (options, run, detach) {
   }
 
   if (!options || !options.image) {
-    throw new Error('options.image must be provided!\nexample:\nnew Container({image = \'wordpress:latest\'})')
+    throw new Error(
+      "options.image must be provided!\nexample:\nnew Container({image = 'wordpress:latest'})"
+    )
   }
 
   if (options.name) {
@@ -307,7 +349,9 @@ function processCreateContainerOptions (options, run, detach) {
 
   if (options.health) {
     if (!options.health.command) {
-      throw new TypeError('options.health.command must not be defined to use options.health')
+      throw new TypeError(
+        'options.health.command must not be defined to use options.health'
+      )
     }
 
     args.push('--health-cmd', options.health.command)
@@ -338,15 +382,18 @@ function processCreateContainerOptions (options, run, detach) {
   }
 
   if (options.volumes) {
-    const errorExample = 'example:\nnew Container({\n\tvolumes: [\n\t\t{ host: \'./example.js\', docker: \'/usr/bin/example.js\' }\n\t]\n})'
+    const errorExample =
+      "example:\nnew Container({\n\tvolumes: [\n\t\t{ host: './example.js', docker: '/usr/bin/example.js' }\n\t]\n})"
 
     if (!Array.isArray(options.volumes)) {
       throw new Error(`options.volumes must be an array\n${errorExample}`)
     }
 
-    options.volumes.forEach(item => {
+    options.volumes.forEach((item) => {
       if (!item.docker || !item.host) {
-        throw new Error(`options.volumes must contain array of object with docker and host as properties\n${errorExample}`)
+        throw new Error(
+          `options.volumes must contain array of object with docker and host as properties\n${errorExample}`
+        )
       }
 
       args.push('-v', `${item.host}:${item.docker}`)
@@ -354,15 +401,20 @@ function processCreateContainerOptions (options, run, detach) {
   }
 
   if (options.environmentVariables) {
-    const errorExample = 'example:\nnew Container({\n\tenvironmentVariables: [\n\t\t{ name: \'DOCKER_ENV\', value: \'foo\' }\n\t]\n})'
+    const errorExample =
+      "example:\nnew Container({\n\tenvironmentVariables: [\n\t\t{ name: 'DOCKER_ENV', value: 'foo' }\n\t]\n})"
 
     if (!Array.isArray(options.environmentVariables)) {
-      throw new Error(`options.environmentVariables must be an array\n${errorExample}`)
+      throw new Error(
+        `options.environmentVariables must be an array\n${errorExample}`
+      )
     }
 
-    options.environmentVariables.forEach(item => {
+    options.environmentVariables.forEach((item) => {
       if (!item.name || item.value === undefined) {
-        throw new Error(`options.environmentVariables must contain array of object with name and value as properties\n${errorExample}`)
+        throw new Error(
+          `options.environmentVariables must contain array of object with name and value as properties\n${errorExample}`
+        )
       }
 
       args.push('-e', `${item.name}=${item.value}`)
@@ -370,15 +422,18 @@ function processCreateContainerOptions (options, run, detach) {
   }
 
   if (options.exposePorts) {
-    const errorExample = 'example:\nnew Container({\n\texposePorts: [\n\t\t{ host: \'8080\', docker: \'80\' }\n\t]\n})'
+    const errorExample =
+      "example:\nnew Container({\n\texposePorts: [\n\t\t{ host: '8080', docker: '80' }\n\t]\n})"
 
     if (!Array.isArray(options.exposePorts)) {
       throw new Error(`options.exposePorts must be an array\n${errorExample}`)
     }
 
-    options.exposePorts.forEach(item => {
+    options.exposePorts.forEach((item) => {
       if (!item.host || !item.docker) {
-        throw new Error(`options.volumes must contain array of object with docker and host as properties\n${errorExample}`)
+        throw new Error(
+          `options.volumes must contain array of object with docker and host as properties\n${errorExample}`
+        )
       }
 
       args.push('-p', `${item.host}:${item.docker}`)
@@ -390,7 +445,10 @@ function processCreateContainerOptions (options, run, detach) {
   }
 
   if (options.user) {
-    args.push('--user', options.grope ? options.user + ':' + options.grope : options.user)
+    args.push(
+      '--user',
+      options.grope ? options.user + ':' + options.grope : options.user
+    )
   }
 
   args.push(options.image)
@@ -410,7 +468,7 @@ function processCreateContainerOptions (options, run, detach) {
  * @param {ContainerOptions} options - the option of the container you want to attach to.
  * @returns {string[]} Array of arguments
  */
-function processAttachContainerOptions (options) {
+function processAttachContainerOptions(options) {
   const args = ['container', 'ps', '-a', '--no-trunc', '-q']
 
   if (options.image) {
@@ -438,8 +496,12 @@ function processAttachContainerOptions (options) {
  * @param {string} stdout - the raw output of a docker command.
  * @returns {string[]} the clean output.
  */
-function cleanID (stdout) {
+function cleanID(stdout) {
   return stdout.split('\n').filter((id) => !!id)
 }
 
-module.exports = { Docker, processCreateContainerOptions, processAttachContainerOptions }
+module.exports = {
+  Docker,
+  processCreateContainerOptions,
+  processAttachContainerOptions
+}
