@@ -76,7 +76,7 @@ function GetContainerIds(suiteName) {
 }
 
 module.exports = {
-  GetContainerIds: GetContainerIds,
+  GetContainerIds,
   DeleteContainers,
   CleanTestCreateContainer,
   InitTestCreateContainer
