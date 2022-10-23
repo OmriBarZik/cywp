@@ -120,8 +120,8 @@ class Container {
 
     return this.dockerContainer(logsArgs, (stdout, stderr) => {
       return {
-        stdout: stdout,
-        stderr: stderr,
+        stdout,
+        stderr,
         container: this
       }
     })
@@ -192,7 +192,7 @@ class Container {
     execArgs.push.apply(execArgs, commands)
 
     return this.dockerContainer(execArgs, (stdout, stderr) => {
-      return { stdout: stdout, stderr: stderr }
+      return { stdout, stderr }
     })
   }
 }

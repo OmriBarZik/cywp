@@ -69,7 +69,7 @@ class Docker {
     const process = spawn('docker', args)
 
     return ReturnPromise(process, (stdout, stderr) => {
-      return { stdout: stdout, stderr: stderr }
+      return { stdout, stderr }
     })
   }
 
@@ -132,7 +132,7 @@ class Docker {
 
     return ReturnPromise(process, (stdout) => {
       const options = {
-        name: name,
+        name,
         id: cleanID(stdout)[0],
         status: 'alive'
       }
@@ -289,7 +289,7 @@ class Docker {
         return null
       }
 
-      return new Network({ id: ids[0], name: name, status: 'alive' })
+      return new Network({ id: ids[0], name, status: 'alive' })
     })
   }
 
