@@ -11,22 +11,16 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: ['12.x', '14.x', '16.x']
+        node-version: ['14', '16', '18']
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Get npm cache directory path
-        id: npm-cache-dir-path
-        run: echo "::set-output name=dir::$(npm config get cache)"
-
-      - uses: actions/cache@v2
-        id: npm-cache
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          path: ${{ steps.npm-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
+          cache: 'npm'
+          node-version: ${{ matrix.node-version }}
 
       - name: Install Dependencies
         run: npm ci
@@ -37,17 +31,12 @@ jobs:
           docker pull mysql:5.7
           docker pull hello-world
 
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-
       - name: Run tests
         run: npm run coverage
 
       - name: Uplode coverage
         if: ${{ matrix.node-version == '16.x' }}
-        uses: codecov/codecov-action@v1
+        uses: codecov/codecov-action@v3
         with:
           directory: ./coverage
           fail_ci_if_error: true
@@ -56,19 +45,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
-      - name: Get npm cache directory path
-        id: npm-cache-dir-path
-        run: echo "::set-output name=dir::$(npm config get cache)"
-
-      - uses: actions/cache@v2
-        id: npm-cache
+      - name: Setup Node
+        uses: actions/setup-node@v3
         with:
-          path: ${{ steps.npm-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
+          cache: 'npm'
+          node-version: 16
 
       - name: Install Dependencies
         run: npm ci
@@ -82,24 +65,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup Node
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v3
         with:
+          cache: 'npm'
           node-version: 16
-
-      - name: Get npm cache directory path
-        id: npm-cache-dir-path
-        run: echo "::set-output name=dir::$(npm config get cache)"
-
-      - uses: actions/cache@v2
-        id: npm-cache
-        with:
-          path: ${{ steps.npm-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
 
       - name: Install Dependencies
         run: npm ci
